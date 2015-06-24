@@ -1,0 +1,58 @@
+﻿"3.7.1 (created: 2013/05/22 20:32:57)
+"invbookmarks
+"常用映射修改{{{
+noremap d D
+noremap D d
+map J <C-d>
+map K <C-u>
+nnoremap h gT
+nnoremap l gt
+inoremap <C-a> <S-Esc><C-a><S-Esc>
+noremap <C-a> <C-v><C-a>
+noremap <C-c> <C-v><C-c>
+
+"}}}
+
+"map ps1 :se! network.proxy.type=1<CR>
+"map ps2 :se! network.proxy.type=2<CR>
+com! erc js io.run("gvim", "~/_vimperatorrc")
+com! flashon set! plugin.state.flash=2
+com! flashoff set! plugin.state.flash=0
+noremap <F4> :sidebar<Space>Add-ons<CR>
+set gui=nobookmarks,nonavigation
+"set fc=true
+nmap <F2> :set<Space>gui=invnavigation<Return>:set<Space>gui=invbookmarks<Return>
+nmap <A-Down> :set<Space>gui=invbookmarks<Return>
+nmap "\\f" Bookmarks Toolbar-HINTS (current-tab)
+nmap "\\F" Bookmarks Toolbar-HINTS (new-tab)
+
+
+"常用网站设置{{{
+"let mapleader=","
+"nmap s <leader>
+"noremap <leader>n :tabopen<space>http://bt.neu6.edu.cn/forum-44-1.html<CR> 
+"noremap <leader>b :tabopen<space>http://bangumi.tv/<CR>
+"noremap <leader>d :tabopen<space>http://www.bilibili.tv/video/bangumi-two-1.html<CR>
+"}}}
+"固定设置{{{
+set "nextpattern=s*下一页|下一张|下一篇|下页|后页s*,^bnextb,\\bnext\\b,^>$,^(>>|»)$,^(>|»),(>|»)$,\\bmore\\b"
+set "previouspattern=s*上一页|上一张|上一篇|上页|前页s*,^bprev|previousb,\\bprev|previous\\b,^<$,^(<<|«)$,^(<|«),(<|«)$"
+
+"surround com and net可以直接先输入网站名,再用<CTRL>+<ENTER>快捷输入.com/.net
+cnoremap<S-Return> <End>.org<Home><C-Right>www.<CR>
+cnoremap<C-Return> <End>.com<Home><C-Right>www.<CR>
+"}}}
+"set defsearch=Google
+
+source! "C:\\Users\\Alan\\_vimperatorrc.local"
+
+" vim: set ft=vimperator:
+js <<EOF
+// Wiki Selected Text
+google_selected_text = function () {
+str = buffer.getCurrentWord()
+liberator.execute("tabopen google " + str);
+}
+EOF
+nnoremap sg :js google_selected_text() <CR>
+"nnoremap sg :js liberator.plugins.translated <CR>
