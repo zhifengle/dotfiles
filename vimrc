@@ -17,9 +17,10 @@ Bundle "tpope/vim-repeat"
 Plugin 'SirVer/ultisnips'
 Plugin 'honza/vim-snippets'
 Plugin 'Lokaltog/vim-easymotion'
-Plugin 'terryma/vim-multiple-cursors'
+"Plugin 'terryma/vim-multiple-cursors'
 Bundle "vim-scripts/matchit.zip"
-"Bundle "mattn/emmet-vim"
+Bundle "pangloss/vim-javascript"
+Bundle "mattn/emmet-vim"
 "Bundle "scrooloose/nerdcommenter"
 Bundle "vim-scripts/EnhCommentify.vim"
 Bundle "scrooloose/syntastic"
@@ -30,9 +31,16 @@ Bundle "vimwiki/vimwiki"
 Bundle "mattn/calendar-vim"
 "Bundle "Raimondi/delimitMate"
 Bundle "jiangmiao/auto-pairs"
+if has("win32")
+    Bundle "Shougo/neocomplete.vim"
+    "Plugin 'godlygeek/tabular'
+    "Plugin 'plasticboy/vim-markdown'
+endif
 if has("unix")
+"    Bundle "Shougo/neocomplete.vim"
     Bundle "godlygeek/csapprox"
     Bundle "Valloric/YouCompleteMe"
+    Bundle "marijnh/tern_for_vim"
     Bundle 'Valloric/ListToggle'
 endif
 call vundle#end(path)            " required
@@ -42,6 +50,7 @@ filetype plugin indent on    " required
 "let g:mapleader=";"
 set bs=2 "set backspace=indent,eol,start
 filetype plugin on
+"setting for linux {{{
 if has("unix")
     set guifont=DejaVu\ Sans\ Mono\ 11
     let g:vimwiki_use_mouse = 1
@@ -50,10 +59,39 @@ if has("unix")
     \ 'html_header': '~/vimwiki/template/header.tpl',}]
     map <silent> <leader>e :e $HOME/.vim/vimrc<cr>
     let g:syntastic_python_python_exec = '/home/kun/.pyenv/versions/3.4.3/bin'
+    "key binding {{{
+    au BufRead,BufNewFile *.c nmap <F9> :w<CR>:!clang -Wall % -g -o %<.o<CR>
+    au FileType cpp nmap <F9> :w<CR>:!clang++ -Wall % -g -o %<.o<CR>
+    au FileType c,cpp nmap <C-F9> :!./%<.o<CR>
+    "}}}
     autocmd BufRead,BufNewFile *.py nmap <F5> :w<CR>:!python %<CR>
+    autocmd BufRead,BufNewFile *.py nmap <F6> :w<CR>:!/home/kun/.pyenv/versions/3.4.3/bin/python %<CR>
     au BufRead,BufNewFile *.scm nmap <F5> :w<CR>:!mit-scheme --load %<CR>
-    "au GUIEnter * call MaximizeWindow() "最大化窗口
+    autocmd FileType javascript set dictionary=~/.vim/dict/javascript.dict
+    au FileType c set dictionary=~/.vim/dict/c.dict
+    "let g:ycm_path_to_python_interpreter = '/home/kun/.pyenv/versions/3.4.3/bin/python3.4'
+    " YouCompleteMe
+    nnoremap <leader>jd :YcmCompleter GoToDefinitionElseDeclaration<CR>
+    autocmd BufRead,BufNewFile *.cpp,*.c,*.cc nnoremap <F5> :YcmForceCompileAndDiagnostics<CR>
+    "let g:ycm_global_ycm_extra_conf = '~/.ycm_extra_conf.py'
+    "Do not ask when starting vim
+    let g:ycm_confirm_extra_conf = 0
+    let g:syntastic_always_populate_loc_list = 1
+    let g:ycm_filetype_blacklist = {
+          \ 'tagbar' : 1,
+          \ 'qf' : 1,
+          \ 'notes' : 1,
+          \ 'markdown' : 1,
+          \ 'unite' : 1,
+          \ 'text' : 1,
+          \ 'vimwiki' : 1,
+          \ 'pandoc' : 1,
+          \ 'infolog' : 1,
+          \ 'mail' : 1,
+          \ 'python' : 1
+          \}
 endif
+"end of setting for linux}}}
 if has("gui_running")
     " 只显示菜单
     set guioptions=
@@ -68,6 +106,7 @@ if has("gui_running")
     nnoremap <s-k> :tabprev<cr>
     " 高亮光标所在的行
     "set cursorline
+    "setting for windows {{{
     if has("win32")
         " Windows 兼容配置
         set guifont=DejaVu_Sans_Mono:h13:cANSI
@@ -80,18 +119,125 @@ if has("gui_running")
         "set fileformats=dos
         "解决consle输出乱码
         language messages zh_CN.utf-8
-        map <silent> <leader>e :e ~/_vimrc<cr>
         let g:syntastic_python_python_exec = 'C:\\Python34'
+        au BufRead,BufNewFile *.txt setlocal ft=txt "syntax highlight for txt.vim
+        " compile and run {{{
+        func! Interpreter()
+            if &filetype=='scheme'
+                exec "w"
+                exec "!\"D:\\MIT-GNU Scheme\\bin\\mit-scheme.exe\" --library \"d:\\MIT-GNU Scheme\\lib\" --load ".expand("%:p")
+            endif
+        endfunc
+        map <silent> <leader>e :e ~/_vimrc<cr>
         au BufRead,BufNewFile *.py nmap <F6> :w<CR>:!"c:\Python34\python.exe" %<CR>
         au BufRead,BufNewFile *.py nmap <F5> :w<CR>:!"c:\Python27\python.exe" %<CR>
         autocmd BufRead,BufNewFile *.scm map <F5> :w<CR>:call Interpreter()<CR>
         autocmd BufRead,BufNewFile *.rkt,*scm nmap <F6> :w<CR>:!racket %<CR>
+        "autocmd BufRead *.py nmap <C-F5> :w<CR>:!idle.py -r %<CR>
+        autocmd BufRead *.py nmap <C-F5> :w<CR>:!ipython -i %<CR>
+        "autocmd BufRead *.py nmap <S-F5> :w<CR>:!idle.py -e %<CR>
+        au BufRead,BufNewFile *.c nmap <F9> :w<CR>:!gcc -Wall % -g -o %<.exe<CR>
+        au FileType cpp nmap <F9> :w<CR>:!gcc++ -Wall % -g -o %<.exe<CR>
+        au FileType c,cpp nmap <C-F9> :!./%<.exe<CR>
+        " }}}
         "vimwiki
             let g:vimwiki_use_mouse = 1
             let g:vimwiki_list = [{'path': 'F:/vimwiki/',
             \ 'path_html': 'F:/vimwiki/html/',
             \ 'html_header': 'F:/vimwiki/template/header.tpl',}]
-            
+"neocomplete {{{
+" Disable AutoComplPop.
+let g:acp_enableAtStartup = 0
+" Use neocomplete.
+let g:neocomplete#enable_at_startup = 1
+" Use smartcase.
+let g:neocomplete#enable_smart_case = 1
+" Set minimum syntax keyword length.
+let g:neocomplete#sources#syntax#min_keyword_length = 3
+let g:neocomplete#lock_buffer_name_pattern = '\*ku\*'
+
+" Define dictionary.
+let g:neocomplete#sources#dictionary#dictionaries = {
+    \ 'default' : '',
+    \ 'javascript' : '~/vimfiles/dict/javascript.dict',
+    \ 'html' : '~/vimfiles/dict/javascript.dict',
+    \ 'c' : '~/vimfiles/dict/c.dict'
+        \ }
+
+" Define keyword.
+if !exists('g:neocomplete#keyword_patterns')
+    let g:neocomplete#keyword_patterns = {}
+endif
+let g:neocomplete#keyword_patterns['default'] = '\h\w*'
+
+" Plugin key-mappings.
+inoremap <expr><C-g>     neocomplete#undo_completion()
+inoremap <expr><C-l>     neocomplete#complete_common_string()
+
+" Recommended key-mappings.
+" <CR>: close popup and save indent.
+inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+function! s:my_cr_function()
+  return neocomplete#close_popup() . "\<CR>"
+  " For no inserting <CR> key.
+  "return pumvisible() ? neocomplete#close_popup() : "\<CR>"
+endfunction
+" <TAB>: completion.
+inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+" <C-h>, <BS>: close popup and delete backword char.
+inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
+inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
+inoremap <expr><C-y>  neocomplete#close_popup()
+inoremap <expr><C-e>  neocomplete#cancel_popup()
+" Close popup by <Space>.
+"inoremap <expr><Space> pumvisible() ? neocomplete#close_popup() : "\<Space>"
+
+" For cursor moving in insert mode(Not recommended)
+"inoremap <expr><Left>  neocomplete#close_popup() . "\<Left>"
+"inoremap <expr><Right> neocomplete#close_popup() . "\<Right>"
+"inoremap <expr><Up>    neocomplete#close_popup() . "\<Up>"
+"inoremap <expr><Down>  neocomplete#close_popup() . "\<Down>"
+" Or set this.
+"let g:neocomplete#enable_cursor_hold_i = 1
+" Or set this.
+"let g:neocomplete#enable_insert_char_pre = 1
+
+" AutoComplPop like behavior.
+"let g:neocomplete#enable_auto_select = 1
+
+" Shell like behavior(not recommended).
+"set completeopt+=longest
+"let g:neocomplete#enable_auto_select = 1
+"let g:neocomplete#disable_auto_complete = 1
+"inoremap <expr><TAB>  pumvisible() ? "\<Down>" : "\<C-x>\<C-u>"
+
+" Enable omni completion.
+autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
+autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+autocmd FileType python setlocal omnifunc=python3complete#Complete
+"autocmd FileType javascript setlocal omnifunc=tern#Complete
+
+" Enable heavy omni completion.
+if !exists('g:neocomplete#sources#omni#input_patterns')
+  let g:neocomplete#sources#omni#input_patterns = {}
+endif
+"let g:neocomplete#force_omni_input_patterns.javascript = '[^. \t]\.\w*'
+"let g:neocomplete#sources#omni#input_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
+"let g:neocomplete#sources#omni#input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
+"let g:neocomplete#sources#omni#input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
+" support python3
+"autocmd FileType python setlocal omnifunc=jedi#completions
+"let g:neocomplete#enable_auto_select = 0
+"let g:jedi#popup_select_first=0
+"let g:jedi#auto_vim_configuration = 0
+"let g:jedi#popup_on_dot = 0
+"let g:neocomplete#force_omni_input_patterns.python = '\%([^. \t]\.\|^\s*@\)\w*'
+
+"end of neocomplete setting }}}
+        " end of setting for windows }}}
+
     endif
 else
     set background=dark
@@ -116,7 +262,7 @@ set wildmenu
 "set cuc
 set showcmd
 set autochdir
-"set fdm=marker "marker indent
+set fdm=marker "marker indent
 
 set completeopt=longest,menu
 set nobackup "覆盖文件不备份
@@ -179,76 +325,14 @@ inoremap <c-l> <right>
 
 " python setting{{{
 
-"autocmd BufRead *.py nmap <C-F5> :w<CR>:!idle.py -r %<CR>
-autocmd BufRead *.py nmap <C-F5> :w<CR>:!ipython -i %<CR>
-"autocmd BufRead *.py nmap <S-F5> :w<CR>:!idle.py -e %<CR>
-
 let tlist_txt_settings = 'txt;c:content;f:figures;t:tables' "language definition for plain text
-au BufRead,BufNewFile *.txt setlocal ft=txt "syntax highlight for txt.vim
-func! Interpreter()
-    if &filetype=='scheme'
-        exec "w"
-        exec "!\"D:\\MIT-GNU Scheme\\bin\\mit-scheme.exe\" --library \"d:\\MIT-GNU Scheme\\lib\" --load ".expand("%:p")
-    endif
-endfunc
 autocmd FileType python setlocal foldmethod=indent foldlevel=99
 
-" }}}
-
-" c语言设置{{{
-"定义CompileRun函数，用来调用进行编译和运行
-func CompileRun()
-exec "w"
-"C程序
-if &filetype == 'c'
-"    exec "!clang -Wall % -g -o %<.exe"
-    exec "!clang -Wall % -g -o %<.o"
-"c++程序
-elseif &filetype == 'cpp'
-    exec "!clang++ -Wall % -g -o %<.o"
-"Java程序
-elseif &filetype == 'java'
-    exec "!javac %"
-endif
-endfunc
-"结束定义CompileRun
-"定义Run函数
-func Run()
-if &filetype == 'c' || &filetype == 'cpp'
-"    exec "!%<.exe"
-    exec "!./%<.o"
-elseif &filetype == 'java'
-	exec "!java %<"
-endif
-endfunc
-"定义Debug函数，用来调试程序
-func Debug()
-exec "w"
-"C程序
-if &filetype == 'c'
-exec "!clang % -g -o %<.exe"
-exec "!gdb %<.exe"
-elseif &filetype == 'cpp'
-exec "!clang++ % -g -o %<.exe"
-exec "!gdb %<.exe"
-"Java程序
-elseif &filetype == 'java'
-exec "!javac %"
-exec "!jdb %<"
-endif
-endfunc
-"结束定义Debug
-"设置程序的运行和调试的快捷键F9和Ctrl-F9
-au BufRead *.c,*.cpp nmap <F9> :call CompileRun()<CR>
-"au FileType c,cpp nmap <F10> :call Run()<CR>
-au FileType c,cpp nmap <C-F9> :call Run()<CR>
-"au FileType c,cpp nmap <C-F9> :call Debug()<CR>
 " }}}
 
 
 "plugin setting{{{
 "syntastic
-let g:syntastic_python_python_exec = 'C:\\Python34'
 let g:syntastic_python_checkers = ['Pyflakes']
 let g:EasyMotion_leader_key = '<space>'
 "map <Leader> <Plug>(easymotion-prefix)
@@ -282,6 +366,10 @@ let g:jedi#usages_command = "<leader>n"
 let g:jedi#completions_command = "<A-1>"
 let g:jedi#rename_command = "<leader>r"
 let g:jedi#show_call_signatures = "1"
+if has('python3')
+    let g:jedi#force_py_version = 3
+endif
+"let g:jedi#force_py_version = 3
 "html.vim
 :let g:html_indent_inctags = "html,body,head,tbody" 
 "NERDTree,提供查看文件折叠/展开列表功能  
@@ -291,7 +379,8 @@ nmap <F2> :NERDTreeToggle<CR>
 "进行Tlist的设置  
 let Tlist_Show_Menu = 1  
 "TlistUpdate可以更新tags  
-map <F3> :silent! Tlist<CR>  "按下F3就可以呼出Taglist  
+"map <F3> :silent! Tlist<CR>  "按下F3就可以呼出Taglist 
+map <silent> <leader>tl :TlistToggle<cr>
 let Tlist_Ctags_Cmd='ctags' "因为我们放在环境变量里，所以可以直接执行  
 let Tlist_Use_Right_Window=0 "让窗口显示在右边，0的话就是显示在左边  
 let Tlist_Show_One_File=1 "让taglist可以同时展示多个文件的函数列表，如果想只有1个，设置为1  
@@ -335,17 +424,10 @@ func SetTitle()
         call append(line(".")+6, "#include<stdio.h>")  
         call append(line(".")+7, "")  
     endif  
-"   if &filetype == 'java'  
-"       call append(line(".")+6,"public class ".expand("%"))  
-"       call append(line(".")+7,"")  
-"   endif  
     "新建文件后，自动定位到文件末尾  
 endfunc   
 autocmd BufNewFile * normal G 
 " }}}
-function! MaximizeWindow()
-    silent !wmctrl -r :ACTIVE: -b add,maximized_vert,maximized_horz
-endfunction
 "setting for Windows
 set diffexpr=MyDiff()
 function MyDiff()
@@ -388,24 +470,5 @@ endfunction
 let g:AutoPairsFlyMode = 1
 
 "let g:AutoPairsShortcutBackInsert = '<M-b>'
-"let g:ycm_path_to_python_interpreter = '/home/kun/.pyenv/versions/3.4.3/bin/python3.4'
-" YouCompleteMe
-nnoremap <leader>jd :YcmCompleter GoToDefinitionElseDeclaration<CR>
-autocmd BufRead,BufNewFile *.cpp,*.c,*.cc nnoremap <F5> :YcmForceCompileAndDiagnostics<CR>
-"let g:ycm_global_ycm_extra_conf = '~/.ycm_extra_conf.py'
-"Do not ask when starting vim
-let g:ycm_confirm_extra_conf = 0
-let g:syntastic_always_populate_loc_list = 1
-let g:ycm_filetype_blacklist = {
-      \ 'tagbar' : 1,
-      \ 'qf' : 1,
-      \ 'notes' : 1,
-      \ 'markdown' : 1,
-      \ 'unite' : 1,
-      \ 'text' : 1,
-      \ 'vimwiki' : 1,
-      \ 'pandoc' : 1,
-      \ 'infolog' : 1,
-      \ 'mail' : 1,
-      \ 'python' : 1
-      \}
+
+"set complete-=k complete+=k
