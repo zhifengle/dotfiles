@@ -17,7 +17,7 @@ Bundle "tpope/vim-repeat"
 Plugin 'SirVer/ultisnips'
 Plugin 'honza/vim-snippets'
 Plugin 'Lokaltog/vim-easymotion'
-"Plugin 'terryma/vim-multiple-cursors'
+Plugin 'terryma/vim-multiple-cursors'
 Bundle "vim-scripts/matchit.zip"
 Bundle "pangloss/vim-javascript"
 Bundle "mattn/emmet-vim"
@@ -49,14 +49,28 @@ filetype plugin indent on    " required
 "let mapleader=";"
 "let g:mapleader=";"
 set bs=2 "set backspace=indent,eol,start
+"set mouse=a
 filetype plugin on
 "setting for linux {{{
 if has("unix")
     set guifont=DejaVu\ Sans\ Mono\ 11
     let g:vimwiki_use_mouse = 1
-    let g:vimwiki_list = [{'path': '~/vimwiki/',
-    \ 'path_html': '~/vimwiki/html/',
-    \ 'html_header': '~/vimwiki/template/header.tpl',}]
+"    let g:vimwiki_list = [{'path': '~/vimwiki/',
+"    \ 'path_html': '~/vimwiki/html/',
+"    \ 'html_header': '~/vimwiki/template/header.tpl',}]
+    let wiki_1 = {}
+    let wiki_1.path = '~/vimwiki/'
+    let wiki_1.html_template = "~/vimwiki/template/header.tpl"
+    let wiki_1.nested_syntaxes = {'python': 'python', 'c++': 'cpp'}
+    let wiki_1.path_html = '~/vimwiki/html/'
+
+    let wiki_2 = {}
+    let wiki_2.path = '~/my_notes/'
+    let wiki_2.index = 'my_markdown_notes'
+	let wiki_2.syntax = 'markdown'
+	let wiki_2.ext = '.md'
+
+    let g:vimwiki_list = [wiki_2, wiki_1]
     map <silent> <leader>e :e $HOME/.vim/vimrc<cr>
     let g:syntastic_python_python_exec = '/home/kun/.pyenv/versions/3.4.3/bin'
     "key binding {{{
@@ -67,7 +81,7 @@ if has("unix")
     autocmd BufRead,BufNewFile *.py nmap <F5> :w<CR>:!python %<CR>
     autocmd BufRead,BufNewFile *.py nmap <F6> :w<CR>:!/home/kun/.pyenv/versions/3.4.3/bin/python %<CR>
     au BufRead,BufNewFile *.scm nmap <F5> :w<CR>:!mit-scheme --load %<CR>
-    autocmd FileType javascript set dictionary=~/.vim/dict/javascript.dict
+    autocmd FileType javascript,html set dictionary=~/.vim/dict/javascript.dict
     au FileType c set dictionary=~/.vim/dict/c.dict
     "let g:ycm_path_to_python_interpreter = '/home/kun/.pyenv/versions/3.4.3/bin/python3.4'
     " YouCompleteMe
@@ -97,10 +111,6 @@ if has("gui_running")
     set guioptions=
     set background=dark "dark light
     colorscheme solarized"desertEx solarized molokai desert
-    " ctrl+s 保存
-    map <C-S> :update<CR>
-    vmap <C-S> <C-C>:update<CR>
-    imap <C-S> <C-O>:update<CR>
     nnoremap T :tabe<space>
     nnoremap <s-j> :tabnext<cr>
     nnoremap <s-k> :tabprev<cr>
@@ -264,6 +274,12 @@ set showcmd
 set autochdir
 set fdm=marker "marker indent
 
+vmap <C-C> "+y
+" ctrl+s 保存
+map <C-S> :update<CR>
+vmap <C-S> <C-C>:update<CR>
+imap <C-S> <C-O>:update<CR>
+
 set completeopt=longest,menu
 set nobackup "覆盖文件不备份
 set noswapfile "编辑时不产生交换文件
@@ -283,6 +299,7 @@ set expandtab "插入tab时以空格替换et
 set softtabstop=4 "sts
 set smarttab "开启新行的sta
 autocmd FileType python setlocal ts=4 sw=4 et sta sts=4
+autocmd FileType javascript,html,css setlocal ts=2 sw=2 et
 set autoindent "自动缩进
 set smartindent "智能自动缩进
 "}}}
@@ -347,7 +364,7 @@ let g:snips_github="kidl123"
 "let g:user_emmet_leader_key='<C-Z>'
 "let g:user_emmet_expandabbr_key = '<Tab>'
 "let g:user_emmet_install_global = 0
-"autocmd fileType html,css,wiki EmmetInstall
+"autocmd fileType html,css,wiki,markdown EmmetInstall
 " indent_guides随 vim 自启动
 let g:indent_guides_enable_on_vim_startup=0
 " 从第二层开始可视化显示缩进
@@ -460,6 +477,7 @@ endfunction
 "  try to use   "
 """""""""""""""""
 
+"some settings on the testing{{{
 "autocmd BufRead,BufNewFile *.scm,*rkt,*.txt :AutoCloseOff
 "autocmd BufRead,BufNewFile *.scm,*rkt,*.txt let b:delimitMate_autoclose = 0
 "let delimitMate_excluded_ft = "scheme,txt"
@@ -472,3 +490,6 @@ let g:AutoPairsFlyMode = 1
 "let g:AutoPairsShortcutBackInsert = '<M-b>'
 
 "set complete-=k complete+=k
+"autocmd BufRead,BufNewFile *.wiki nmap <F5> :w<CR>:set syntax=markdown<CR>
+let g:vimwiki_valid_html_tags='b,i,s,u,sub,sup,kbd,br,hr,div,del,code'
+"}}}

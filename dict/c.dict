@@ -1,0 +1,39 @@
+
+dotfiles/dotfiles/.vim/dict/c.dict
+@tyru tyru on 20 Oct 2010 files => dotfiles
+
+1 contributor
+executable file 375 lines (368 sloc) 2.617 kB
+EOF
+EXIT_FAILURE
+EXIT_SUCCESS
+NDEBUG
+NULL
+UNICODE
+_UNICODE
+__DATE__
+__FILE__
+__LINE__
+__TIME__
+
+NOTREACHED
+FALLTHROUGH
+
+define
+defined
+endif
+ifdef
+ifndef
+include
+
+_Bool
+_Complex
+_Imaginary
+
+inline
+enum
+continue
+unsigned
+printf
+extern
+typedef
