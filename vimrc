@@ -11,7 +11,7 @@ else
 endif
 " let Vundle manage Vundle, required
 Plugin 'gmarik/Vundle.vim'
-"Plugin 'kien/ctrlp.vim'
+Plugin 'kien/ctrlp.vim'
 Plugin 'tpope/vim-surround'
 Bundle "tpope/vim-repeat"
 Plugin 'SirVer/ultisnips'
@@ -21,20 +21,23 @@ Plugin 'terryma/vim-multiple-cursors'
 Bundle "vim-scripts/matchit.zip"
 Bundle "pangloss/vim-javascript"
 Bundle "mattn/emmet-vim"
-"Bundle "scrooloose/nerdcommenter"
-Bundle "vim-scripts/EnhCommentify.vim"
+Bundle "scrooloose/nerdcommenter"
+"Bundle "vim-scripts/EnhCommentify.vim"
 Bundle "scrooloose/syntastic"
 Bundle "davidhalter/jedi-vim"
 Bundle "vim-scripts/The-NERD-tree"
-Bundle "vim-scripts/taglist.vim"
+"Bundle "vim-scripts/taglist.vim"
 Bundle "vimwiki/vimwiki"
 Bundle "mattn/calendar-vim"
 "Bundle "Raimondi/delimitMate"
 Bundle "jiangmiao/auto-pairs"
+Plugin 'godlygeek/tabular'
+Plugin 'kchmck/vim-coffee-script'
+Plugin 'bling/vim-airline'
+Plugin 'tpope/vim-fugitive'
+Plugin 'majutsushi/tagbar'
 if has("win32")
     Bundle "Shougo/neocomplete.vim"
-    "Plugin 'godlygeek/tabular'
-    "Plugin 'plasticboy/vim-markdown'
 endif
 if has("unix")
 "    Bundle "Shougo/neocomplete.vim"
@@ -73,15 +76,18 @@ if has("unix")
     let g:vimwiki_list = [wiki_2, wiki_1]
     map <silent> <leader>e :e $HOME/.vim/vimrc<cr>
     let g:syntastic_python_python_exec = '/home/kun/.pyenv/versions/3.4.3/bin'
-    "key binding {{{
+    "key binding for compiling or running {{{
     au BufRead,BufNewFile *.c nmap <F9> :w<CR>:!clang -Wall % -g -o %<.o<CR>
     au FileType cpp nmap <F9> :w<CR>:!clang++ -Wall % -g -o %<.o<CR>
     au FileType c,cpp nmap <C-F9> :!./%<.o<CR>
-    "}}}
     autocmd BufRead,BufNewFile *.py nmap <F5> :w<CR>:!python %<CR>
     autocmd BufRead,BufNewFile *.py nmap <F6> :w<CR>:!/home/kun/.pyenv/versions/3.4.3/bin/python %<CR>
+    au BufNewFile,BufRead *.coffee nmap <F5> :w<CR>:!coffee -c %<CR>:!node %<.js <CR>
     au BufRead,BufNewFile *.scm nmap <F5> :w<CR>:!mit-scheme --load %<CR>
-    autocmd FileType javascript,html set dictionary=~/.vim/dict/javascript.dict
+    "}}}
+    autocmd FileType javascript set dictionary=~/.vim/dict/javascript.dict
+    autocmd FileType coffee set dictionary=~/.vim/dict/javascript.dict
+    autocmd FileType html set dictionary=~/.vim/dict/bootstrap.dict
     au FileType c set dictionary=~/.vim/dict/c.dict
     "let g:ycm_path_to_python_interpreter = '/home/kun/.pyenv/versions/3.4.3/bin/python3.4'
     " YouCompleteMe
@@ -299,13 +305,13 @@ set expandtab "插入tab时以空格替换et
 set softtabstop=4 "sts
 set smarttab "开启新行的sta
 autocmd FileType python setlocal ts=4 sw=4 et sta sts=4
-autocmd FileType javascript,html,css setlocal ts=2 sw=2 et
+autocmd FileType javascript,html,css,coffee setlocal ts=2 sw=2 sts=2 et
 set autoindent "自动缩进
 set smartindent "智能自动缩进
 "}}}
 
 "mapping setting{{{
-" F2:NERDTreeToggle  F3:Tlist F4 F6 F7 F8 F9:c F10:c run 
+" F2:NERDTreeToggle  F3:tagbar F4 F6 F7 F8 F9:c F10:c run 
 " 普通模式下 Ctrl+c 复制文件路径
 "nnoremap <c-c> :let @* = expand('%:p')<cr>
 "map <C-Q> :wq!
@@ -389,23 +395,29 @@ endif
 "let g:jedi#force_py_version = 3
 "html.vim
 :let g:html_indent_inctags = "html,body,head,tbody" 
+let g:html_indent_script1 = "inc"
+let g:html_indent_style1 = "inc"
 "NERDTree,提供查看文件折叠/展开列表功能  
 nmap <F2> :NERDTreeToggle<CR>  
 "imap <F2> <ESC> :NERDTreeToggle<CR> 
 
-"进行Tlist的设置  
-let Tlist_Show_Menu = 1  
+"进行Tlist的设置 {{{ 
+"let Tlist_Show_Menu = 1  
 "TlistUpdate可以更新tags  
 "map <F3> :silent! Tlist<CR>  "按下F3就可以呼出Taglist 
-map <silent> <leader>tl :TlistToggle<cr>
-let Tlist_Ctags_Cmd='ctags' "因为我们放在环境变量里，所以可以直接执行  
-let Tlist_Use_Right_Window=0 "让窗口显示在右边，0的话就是显示在左边  
-let Tlist_Show_One_File=1 "让taglist可以同时展示多个文件的函数列表，如果想只有1个，设置为1  
-let Tlist_File_Fold_Auto_Close=1 "非当前文件，函数列表折叠隐藏  
-let Tlist_Exit_OnlyWindow=1 "当taglist是最后一个分割窗口时，自动退出vim  
-let Tlist_Process_File_Always=0 "是否一直处理tags.1:处理;0:不处理  
-let Tlist_Inc_Winwidth=0  
-set tags=./tags,tags;$HOME "设置tags文件路径   
+"map <silent> <leader>tl :TlistToggle<cr>
+"let Tlist_Ctags_Cmd='ctags' "因为我们放在环境变量里，所以可以直接执行  
+"let Tlist_Use_Right_Window=0 "让窗口显示在右边，0的话就是显示在左边  
+"let Tlist_Show_One_File=1 "让taglist可以同时展示多个文件的函数列表，如果想只有1个，设置为1  
+"let Tlist_File_Fold_Auto_Close=1 "非当前文件，函数列表折叠隐藏  
+"let Tlist_Exit_OnlyWindow=1 "当taglist是最后一个分割窗口时，自动退出vim  
+"let Tlist_Process_File_Always=0 "是否一直处理tags.1:处理;0:不处理  
+"let Tlist_Inc_Winwidth=0  
+"set tags=./tags,tags;$HOME "设置tags文件路径   
+"}}}
+nmap <F3> :TagbarToggle<CR>
+let tagbar_left=1
+let g:tagbar_autofocus=1
 "plugin setting end}}}
 
 " 插入文件头{{{
@@ -490,6 +502,14 @@ let g:AutoPairsFlyMode = 1
 "let g:AutoPairsShortcutBackInsert = '<M-b>'
 
 "set complete-=k complete+=k
-"autocmd BufRead,BufNewFile *.wiki nmap <F5> :w<CR>:set syntax=markdown<CR>
+set complete+=k
+autocmd BufRead,BufNewFile *.md nmap <F5> :w<CR>:set syntax=markdown<CR>
 let g:vimwiki_valid_html_tags='b,i,s,u,sub,sup,kbd,br,hr,div,del,code'
+    :let g:vimim_cloud = 'google,sogou,baidu,qq'      
+    :let g:vimim_map = 'tab_as_gi'    
+    let g:ctrlp_custom_ignore = {
+        \ 'dir':  '\v[\/]\.(git|hg|svn)$',
+        \ 'file': '\v\.(exe|so|dll)$',
+        \ 'link': 'SOME_BAD_SYMBOLIC_LINKS',
+        \ }
 "}}}

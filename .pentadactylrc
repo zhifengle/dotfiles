@@ -58,7 +58,9 @@ map -count -modes=c <C-Return> -builtin <End>.com<Home><C-Right>www.<CR>
 "常用网站设置{{{
 "map -count -m=n,v <leader>bi -builtin :tabopen<space>http://www.bilibili.tv/video/bangumi-two-1.html<CR>
 " Feedly
-"set passkeys+='feedly.com':jkrgnp<Space>
+"set passkeys+='feedly.com':rxonpmNPJK<Space>,ga,gl
+set passkeys+='feedly.com':rjknpovmxsetNPJK,gm,ga,gg
+map -count -m=n,v <leader>bgm -builtin :tabopen<space>https://cse.google.com/cse/home?cx=008561732579436191137:pumvqkbpt6w<CR>
 "}}}
 
 map -count -modes=n,v -silent <F2> <count>:<Space>set<Space>go!=BT<Space><Return>
@@ -88,11 +90,14 @@ com! noscripttoggle -js (function() { var p = "noscript.global";prefs.set(p, !pr
     "map x -j var tab = gBrowser.mCurrentTab.boxObject.previousSibling; if(tab) gBrowser.removeTab(tab);
     "map c -j var tab = gBrowser.mCurrentTab.boxObject.nextSibling; if(tab)  gBrowser.removeTab(tab);
 
-command! p5 -d "设置系统代理" -js (function() { var p = "quickproxy.type"; prefs.set(p, 5); dactyl.echo(p+" is now set to "+prefs.get(p)+"\n") })();
+"command! p5 -d "设置系统代理" -js (function() { var p = "quickproxy.type"; prefs.set(p, 5); dactyl.echo(p+" is now set to "+prefs.get(p)+"\n") })();
 "    command! p1 -d "切换代理" -js (function() { var p = "network.proxy.http"; var http_port = "network.proxy.http_port"; var pd = "111.117.111.247"; var pg = "127.0.0.1"; if(prefs.get(p)==pd) { prefs.set(p, pg);prefs.set(http_port, 8087); dactyl.echo(p+" is now set to "+prefs.get(p)+"\n"); } else { prefs.set(p, pd);prefs.set(http_port, 3128); dactyl.echo(p+" is now set to "+prefs.get(p)+"\n"); } })();
-    com! p1 -d "设置代理为GAE" -js (function() { var p = "network.proxy.http"; var http_port = "network.proxy.http_port"; prefs.set(p,"127.0.0.1"); prefs.set(http_port, 8087); prefs.set("network.proxy.type", 1); dactyl.echo(p+" is now set to "+prefs.get(p)+"\n") })();
-    command! p2 -d "设置代理为2" -js (function() { var p = "network.proxy.type"; prefs.set(p, 2); dactyl.echo(p+" is now set to "+prefs.get(p)+"\n") })();
-    command! pf0 -d "关闭代理" -js (function() { var p = "network.proxy.type"; prefs.set(p, 0); dactyl.echo(p+" is now set to "+prefs.get(p)+"\n") })();
+    "com! p1 -d "设置代理为GAE" -js (function() { var p = "network.proxy.sockes"; var http_port = "network.proxy.socks_port"; prefs.set(p,"127.0.0.1"); prefs.set(http_port, 8087); prefs.set("network.proxy.type", 1); dactyl.echo(p+" is now set to "+prefs.get(p)+"\n") })();
+    "command! p2 -d "设置代理为2" -js (function() { var p = "network.proxy.type"; prefs.set(p, 2); dactyl.echo(p+" is now set to "+prefs.get(p)+"\n") })();
+    "command! pf0 -d "关闭代理" -js (function() { var p = "network.proxy.type"; prefs.set(p, 0); dactyl.echo(p+" is now set to "+prefs.get(p)+"\n") })();
+    com! proxyAuto -d "自动模式" exe "se! extensions.autoproxy.proxyMode=auto"
+    com! proxyGlobal -d "global" exe "se! extensions.autoproxy.proxyMode=global"
+    com! proxyDisable -d "disabled" exe "se! extensions.autoproxy.proxyMode=disabled"
 	" 开启和关闭javascript或图片
 	command! jstoggle -js (function() { var p = "javascript.enabled"; prefs.set(p, !prefs.get(p)); dactyl.echo(p+" is now set to "+prefs.get(p)+"\n") })()
 	command! imgtoggle -js (function() { var p = "permissions.default.image"; prefs.set(p, prefs.get(p)==1 ? 2 : 1); dactyl.echo(p+" is now set to "+prefs.get(p)+"\n") })()

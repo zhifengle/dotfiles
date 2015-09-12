@@ -57,6 +57,7 @@ replaceChild
 setAttribute
 setAttributeNode
 setNamedItem
+setTimeout
 encodeURI
 encodeURIComponent
 decodeURI
@@ -147,3 +148,5 @@ History
 Location
 Document
 Elements
+addEventListener
+querySelector
