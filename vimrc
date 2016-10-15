@@ -1,4 +1,28 @@
-﻿set nocompatible              " be iMproved, required
+﻿" readme {{{
+" key bind
+    " F2 nerdtree, F3 tagbar
+    " cpp: F5 make, F6 run demo
+    " python: F5 use python in environment, F6 use user defined python path
+" use config file in another machine need to do some modification
+" linux
+    "font: DejaVu\ Sans\ Mono\
+    "DejaVuSansMono
+    "use fcitx.vim instead of vimim
+    "install ctags
+    "set syntastic
+        "syntastic_python_python_exec="xxx", pyflakes
+    "set python path which installed by pyenv
+    "set youcompleteme
+        "remove python for ycm's blacklist
+        "let g:ycm_python_binary_path = 'python'  // have jedi
+        ".tern-config  // not support multiple tern servers
+        ".ycm_extra_conf.py for cpp
+" window
+    "neocomplete
+    "font: yahei_mono and DejaVu
+
+"}}}
+set nocompatible              " be iMproved, required
 filetype off                  " required
 if has("win32")
     set rtp+=~/vimfiles/bundle/Vundle.vim/
@@ -14,37 +38,46 @@ Plugin 'gmarik/Vundle.vim'
 Plugin 'kien/ctrlp.vim'
 Plugin 'tpope/vim-surround'
 Bundle "tpope/vim-repeat"
-Plugin 'SirVer/ultisnips'
-Plugin 'honza/vim-snippets'
 Plugin 'Lokaltog/vim-easymotion'
-Plugin 'terryma/vim-multiple-cursors'
 Bundle "vim-scripts/matchit.zip"
 Bundle "pangloss/vim-javascript"
 Bundle "mattn/emmet-vim"
 Bundle "scrooloose/nerdcommenter"
-"Bundle "vim-scripts/EnhCommentify.vim"
-Bundle "scrooloose/syntastic"
-Bundle "davidhalter/jedi-vim"
-Bundle "vim-scripts/The-NERD-tree"
-"Bundle "vim-scripts/taglist.vim"
+Bundle "scrooloose/nerdtree"
+
 Bundle "vimwiki/vimwiki"
 Bundle "mattn/calendar-vim"
-"Bundle "Raimondi/delimitMate"
 Bundle "jiangmiao/auto-pairs"
 Plugin 'godlygeek/tabular'
-Plugin 'kchmck/vim-coffee-script'
 Plugin 'bling/vim-airline'
 Plugin 'tpope/vim-fugitive'
 Plugin 'majutsushi/tagbar'
+
+" not using
+"Plugin 'terryma/vim-multiple-cursors'
+"Bundle "Raimondi/delimitMate"
+"Bundle "vim-scripts/EnhCommentify.vim"
+"Bundle "vim-scripts/taglist.vim"
+"Bundle "vim-scripts/The-NERD-tree"
+
+" need dependency {{{
+"Bundle "davidhalter/jedi-vim"
+Bundle "scrooloose/syntastic"
+Plugin 'SirVer/ultisnips'
+Plugin 'honza/vim-snippets'
+"Plugin 'kchmck/vim-coffee-script'
+" }}}
 if has("win32")
     Bundle "Shougo/neocomplete.vim"
 endif
 if has("unix")
 "    Bundle "Shougo/neocomplete.vim"
     Bundle "godlygeek/csapprox"
+" need dependency
     Bundle "Valloric/YouCompleteMe"
-    Bundle "marijnh/tern_for_vim"
+    "Bundle "marijnh/tern_for_vim"
     Bundle 'Valloric/ListToggle'
+    Bundle "lilydjwg/fcitx.vim"
 endif
 call vundle#end(path)            " required
 filetype plugin indent on    " required
@@ -56,7 +89,8 @@ set bs=2 "set backspace=indent,eol,start
 filetype plugin on
 "setting for linux {{{
 if has("unix")
-    set guifont=DejaVu\ Sans\ Mono\ 11
+    "set guifont=DejaVu\ Sans\ Mono\ 13
+    set guifont=Yahei\ Mono\ 13
     let g:vimwiki_use_mouse = 1
 "    let g:vimwiki_list = [{'path': '~/vimwiki/',
 "    \ 'path_html': '~/vimwiki/html/',
@@ -75,28 +109,38 @@ if has("unix")
 
     let g:vimwiki_list = [wiki_2, wiki_1]
     map <silent> <leader>e :e $HOME/.vim/vimrc<cr>
-    let g:syntastic_python_python_exec = '/home/kun/.pyenv/versions/3.4.3/bin'
+    " has gui  gvim
+    let g:syntastic_python_python_exec = '/home/alan/.pyenv/versions/env3.5/bin/python3'
     "key binding for compiling or running {{{
-    au BufRead,BufNewFile *.c nmap <F9> :w<CR>:!clang -Wall % -g -o %<.o<CR>
-    au FileType cpp nmap <F9> :w<CR>:!clang++ -Wall % -g -o %<.o<CR>
+    au BufRead,BufNewFile *.c nmap <F9> :w<CR>:!gcc -Wall % -g -o %<.o<CR>
+    "au FileType cpp nmap <F9> :w<CR>:!g++ -Wall % -g -o %<.o<CR>
+    au FileType cpp nmap <F9> :update<CR>:!g++ -Wall % -g -o demo<CR>
     au FileType c,cpp nmap <C-F9> :!./%<.o<CR>
+    au FileType c,cpp nmap <F5> :update<CR>:make<CR>
+    au FileType c,cpp nmap <F6> :!./demo<CR>
+    au FileType sh nmap <F5> :update<CR>:!bash %<CR>
     autocmd BufRead,BufNewFile *.py nmap <F5> :w<CR>:!python %<CR>
-    autocmd BufRead,BufNewFile *.py nmap <F6> :w<CR>:!/home/kun/.pyenv/versions/3.4.3/bin/python %<CR>
+    autocmd BufRead,BufNewFile *.py nmap <F6> :w<CR>:!$HOME/.pyenv/versions/env3.5/bin/python %<CR>
     au BufNewFile,BufRead *.coffee nmap <F5> :w<CR>:!coffee -c %<CR>:!node %<.js <CR>
-    au BufRead,BufNewFile *.scm nmap <F5> :w<CR>:!mit-scheme --load %<CR>
+    "au BufRead,BufNewFile *.scm nmap <F5> :w<CR>:!mit-scheme --load %<CR>
+    autocmd BufRead,BufNewFile *.rkt,*scm nmap <F5> :update<CR>:!racket %<CR>
     "}}}
     autocmd FileType javascript set dictionary=~/.vim/dict/javascript.dict
     autocmd FileType coffee set dictionary=~/.vim/dict/javascript.dict
     autocmd FileType html set dictionary=~/.vim/dict/bootstrap.dict
     au FileType c set dictionary=~/.vim/dict/c.dict
-    "let g:ycm_path_to_python_interpreter = '/home/kun/.pyenv/versions/3.4.3/bin/python3.4'
-    " YouCompleteMe
+    " YouCompleteMe {{{
+    "nnoremap <Leader>f :YcmCompleter FixIt <CR>
+    "let g:ycm_path_to_python_interpreter = '$HOME/.pyenv/versions/env3.5/bin/python3'
+    let g:ycm_python_binary_path = '/home/alan/.pyenv/versions/env3.5/bin/python3'
+    let g:ycm_global_ycm_extra_conf = '~/.vim/.ycm_extra_conf.py'
     nnoremap <leader>jd :YcmCompleter GoToDefinitionElseDeclaration<CR>
-    autocmd BufRead,BufNewFile *.cpp,*.c,*.cc nnoremap <F5> :YcmForceCompileAndDiagnostics<CR>
-    "let g:ycm_global_ycm_extra_conf = '~/.ycm_extra_conf.py'
+    nnoremap K :YcmCompleter GetDoc<CR>
+    nnoremap <Leader>d :YcmCompleter GoToDefinition <CR>
+    nnoremap <Leader>t :YcmCompleter GetType <CR>
+    "autocmd BufRead,BufNewFile *.cpp,*.c,*.cc nnoremap <F5> :YcmForceCompileAndDiagnostics<CR>
     "Do not ask when starting vim
     let g:ycm_confirm_extra_conf = 0
-    let g:syntastic_always_populate_loc_list = 1
     let g:ycm_filetype_blacklist = {
           \ 'tagbar' : 1,
           \ 'qf' : 1,
@@ -108,9 +152,10 @@ if has("unix")
           \ 'pandoc' : 1,
           \ 'infolog' : 1,
           \ 'mail' : 1,
-          \ 'python' : 1
           \}
+    " the end of setting ycm}}}
 endif
+"'python' : 1
 "end of setting for linux}}}
 if has("gui_running")
     " 只显示菜单
@@ -118,8 +163,10 @@ if has("gui_running")
     set background=dark "dark light
     colorscheme solarized"desertEx solarized molokai desert
     nnoremap T :tabe<space>
-    nnoremap <s-j> :tabnext<cr>
-    nnoremap <s-k> :tabprev<cr>
+    set lines=64
+    set columns=90
+    "nnoremap <s-j> :tabnext<cr>
+    "nnoremap <s-k> :tabprev<cr>
     " 高亮光标所在的行
     "set cursorline
     "setting for windows {{{
@@ -257,16 +304,20 @@ endif
     endif
 else
     set background=dark
-    colorscheme desert"desert evening solarized
+    colorscheme desert"desert evening solarized molokai
+
     "au BufRead *.py map <buffer> <F5> :w<CR>:!/usr/bin/env python % <CR>
-    "终端配色
+    "let terminal support 256 color
     set t_Co=256
+    "for sakura terminal
+    if $COLORTERM == "truecolor"
+        set t_ut=
+    endif
 endif
 
-" 固定设置{{{
+" default setting for me {{{
 "解决中文乱码 ,gb2312,big5,gb18030,cp936
 set enc=utf-8
-"au fileType *.scm, *.rkt setlocal enc=gbk
 "set fileencoding=utf-8 "保存文件时编码
 set fileencodings=utf-8,cs-bom,gbk,cp936
 set number
@@ -279,13 +330,6 @@ set wildmenu
 set showcmd
 set autochdir
 set fdm=marker "marker indent
-
-vmap <C-C> "+y
-" ctrl+s 保存
-map <C-S> :update<CR>
-vmap <C-S> <C-C>:update<CR>
-imap <C-S> <C-O>:update<CR>
-
 set completeopt=longest,menu
 set nobackup "覆盖文件不备份
 set noswapfile "编辑时不产生交换文件
@@ -302,15 +346,30 @@ filetype indent on
 set tabstop=4 "让一个tab等于4个空格
 set shiftwidth=4 "sw=4
 set expandtab "插入tab时以空格替换et
-set softtabstop=4 "sts
+"set softtabstop=4 "sts
 set smarttab "开启新行的sta
-autocmd FileType python setlocal ts=4 sw=4 et sta sts=4
-autocmd FileType javascript,html,css,coffee setlocal ts=2 sw=2 sts=2 et
 set autoindent "自动缩进
 set smartindent "智能自动缩进
+
+autocmd FileType python setlocal ts=4 sw=4 et sta
+autocmd FileType make setlocal ts=8 sw=8 noexpandtab
+autocmd FileType javascript,html,css,coffee setlocal ts=2 sw=2  et
+vmap <C-C> "+y
+" ctrl+s 保存
+map <C-S> :update<CR>
+vmap <C-S> <C-C>:update<CR>
+imap <C-S> <C-O>:update<CR>
+inoremap <C-a> <C-o>^
+inoremap <C-e> <End>
+" 插入模式下上下左右移动光标
+"inoremap <c-h> <left>
+inoremap <c-l> <right>
+"inoremap <c-j> <c-o>gj
+"inoremap <c-k> <c-o>gk
+"set modeline
 "}}}
 
-"mapping setting{{{
+"map setting{{{
 " F2:NERDTreeToggle  F3:tagbar F4 F6 F7 F8 F9:c F10:c run 
 " 普通模式下 Ctrl+c 复制文件路径
 "nnoremap <c-c> :let @* = expand('%:p')<cr>
@@ -319,8 +378,6 @@ set smartindent "智能自动缩进
 "map ;p "+p
 "nmap 1b ^
 "nmap 1e $
-inoremap <C-a> <C-o>^
-inoremap <C-e> <End>
 "inoremap jk <Esc>
 "map <F11> :Voom<CR>
 au BufRead *.wiki map <S-F4> :VimwikiAll2HTML<cr>
@@ -336,14 +393,9 @@ autocmd BufWritePost .vimrc,.gvimrc,_vimrc silent source %
 "nnoremap <c-j> <c-w>j
 "nnoremap <c-k> <c-w>k
 " Buffers/Tab操作快捷方式!
-nnoremap <s-h> :bprevious<cr>
-nnoremap <s-l> :bnext<cr>
+"nnoremap <s-h> :bprevious<cr>
+"nnoremap <s-l> :bnext<cr>
 "nnoremap F :tabe %
-" 插入模式下上下左右移动光标
-"inoremap <c-h> <left>
-inoremap <c-l> <right>
-"inoremap <c-j> <c-o>gj
-"inoremap <c-k> <c-o>gk
 "}}}
 
 " python setting{{{
@@ -356,16 +408,26 @@ autocmd FileType python setlocal foldmethod=indent foldlevel=99
 
 "plugin setting{{{
 "syntastic
-let g:syntastic_python_checkers = ['Pyflakes']
+let g:syntastic_python_checkers = ['pyflakes']
+let g:syntastic_javascript_checkers = ['jshint']
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 0
+let g:syntastic_check_on_open = 0
+let g:syntastic_check_on_wq = 0
+
 let g:EasyMotion_leader_key = '<space>'
 "map <Leader> <Plug>(easymotion-prefix)
 "UltiSnips
 let g:UltiSnipsExpandTrigger="<c-j>"
 let g:UltiSnipsJumpForwardTrigger="<c-j>"
 let g:UltiSnipsJumpBackwardTrigger="<c-b>"
-let g:snips_email="kidl123@163.com"
-let g:snips_author="kidl123"
-let g:snips_github="kidl123"
+let g:snips_email="zhifengle@gmail.com"
+let g:snips_author="22earth"
+let g:snips_github="22earth"
 "emmet
 "let g:user_emmet_leader_key='<C-Z>'
 "let g:user_emmet_expandabbr_key = '<Tab>'
@@ -382,16 +444,16 @@ let g:indent_guides_guide_size=1
 
 "jedi 设置 
 "let g:jedi#auto_initialization = 0
-let g:jedi#goto_assignments_command = "<leader>g"
-let g:jedi#goto_definitions_command = "<leader>d"
-let g:jedi#documentation_command = "K"
-let g:jedi#usages_command = "<leader>n"
-let g:jedi#completions_command = "<A-1>"
-let g:jedi#rename_command = "<leader>r"
-let g:jedi#show_call_signatures = "1"
-if has('python3')
-    let g:jedi#force_py_version = 3
-endif
+"let g:jedi#goto_assignments_command = "<leader>g"
+"let g:jedi#goto_definitions_command = "<leader>d"
+"let g:jedi#documentation_command = "K"
+"let g:jedi#usages_command = "<leader>n"
+"let g:jedi#completions_command = "<A-1>"
+"let g:jedi#rename_command = "<leader>r"
+"let g:jedi#show_call_signatures = "1"
+"if has('python3')
+    "let g:jedi#force_py_version = 3
+"endif
 "let g:jedi#force_py_version = 3
 "html.vim
 :let g:html_indent_inctags = "html,body,head,tbody" 
@@ -438,8 +500,8 @@ func SetTitle()
     else   
         call setline(1, "/*************************************************************************")   
         call append(line("."),   "  > File Name:     ".expand("%"))   
-        call append(line(".")+1, "  > Author:        kidl123")   
-        call append(line(".")+2, "  > Mail:          kidl123@163.com ")   
+        call append(line(".")+1, "  > Author:        alan")   
+        call append(line(".")+2, "  > Mail:          zhifengle@gmail.com ")   
         call append(line(".")+3, "  > Created Time:  ".strftime("%c"))   
         call append(line(".")+4, " ************************************************************************/")   
         call append(line(".")+5, "")  
@@ -457,7 +519,7 @@ func SetTitle()
 endfunc   
 autocmd BufNewFile * normal G 
 " }}}
-"setting for Windows
+"setting for Windows {{{
 set diffexpr=MyDiff()
 function MyDiff()
   let opt = '-a --binary '
@@ -482,6 +544,7 @@ function MyDiff()
   endif
   silent execute '!' . cmd . ' ' . opt . arg1 . ' ' . arg2 . ' > ' . arg3 . eq
 endfunction
+"}}}
 """"""""""""""""
 "  linux or windows   "
 """"""""""""""""
@@ -489,14 +552,14 @@ endfunction
 "  try to use   "
 """""""""""""""""
 
-"some settings on the testing{{{
+"some settings for trying{{{
 "autocmd BufRead,BufNewFile *.scm,*rkt,*.txt :AutoCloseOff
 "autocmd BufRead,BufNewFile *.scm,*rkt,*.txt let b:delimitMate_autoclose = 0
 "let delimitMate_excluded_ft = "scheme,txt"
 "let delimitMate_expand_cr = 1
 "let g:AutoClosePairs_del = "{"
 
-"autocmd BufRead,BufNewFile *.scm,*rkt,*.txt let let g:AutoPairsLoaded = 0
+"au BufRead,BufNewFile *.scm,*rkt let g:AutoPairsLoaded = 0
 let g:AutoPairsFlyMode = 1
 
 "let g:AutoPairsShortcutBackInsert = '<M-b>'
@@ -505,11 +568,14 @@ let g:AutoPairsFlyMode = 1
 set complete+=k
 autocmd BufRead,BufNewFile *.md nmap <F5> :w<CR>:set syntax=markdown<CR>
 let g:vimwiki_valid_html_tags='b,i,s,u,sub,sup,kbd,br,hr,div,del,code'
-    :let g:vimim_cloud = 'google,sogou,baidu,qq'      
-    :let g:vimim_map = 'tab_as_gi'    
-    let g:ctrlp_custom_ignore = {
-        \ 'dir':  '\v[\/]\.(git|hg|svn)$',
-        \ 'file': '\v\.(exe|so|dll)$',
-        \ 'link': 'SOME_BAD_SYMBOLIC_LINKS',
-        \ }
+    ":let g:vimim_cloud = 'google,sogou,baidu,qq'      
+    ":let g:vimim_map = 'tab_as_gi'    
+let g:ctrlp_custom_ignore = {
+    \ 'dir':  '\v[\/]\.(git|hg|svn)$',
+    \ 'file': '\v\.(exe|so|dll)$',
+    \ 'link': 'SOME_BAD_SYMBOLIC_LINKS',
+    \ }
+let g:Modeliner_format = 'ts= sw= et'
+"autocmd FileType python setlocal equalprg="python3 /home/alan/.vim/reindent.py"
+" vim: set et fenc=utf-8 ff=unix sts=4 sw=4 ts=4 :
 "}}}
