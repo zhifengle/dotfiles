@@ -61,7 +61,6 @@ Plugin 'majutsushi/tagbar'
 "Bundle "vim-scripts/The-NERD-tree"
 
 " need dependency {{{
-"Bundle "davidhalter/jedi-vim"
 Bundle "scrooloose/syntastic"
 Plugin 'SirVer/ultisnips'
 Plugin 'honza/vim-snippets'
@@ -69,6 +68,7 @@ Plugin 'honza/vim-snippets'
 " }}}
 if has("win32")
     Bundle "Shougo/neocomplete.vim"
+    Bundle "davidhalter/jedi-vim"
 endif
 if has("unix")
 "    Bundle "Shougo/neocomplete.vim"
@@ -119,11 +119,14 @@ if has("unix")
     au FileType c,cpp nmap <F5> :update<CR>:make<CR>
     au FileType c,cpp nmap <F6> :!./demo<CR>
     au FileType sh nmap <F5> :update<CR>:!bash %<CR>
-    autocmd BufRead,BufNewFile *.py nmap <F5> :w<CR>:!python %<CR>
-    autocmd BufRead,BufNewFile *.py nmap <F6> :w<CR>:!$HOME/.pyenv/versions/env3.5/bin/python %<CR>
-    au BufNewFile,BufRead *.coffee nmap <F5> :w<CR>:!coffee -c %<CR>:!node %<.js <CR>
+    autocmd BufRead,BufNewFile *.py nmap <F5> :update<CR>:!python %<CR>
+    autocmd BufRead,BufNewFile *.py nmap <F6> :update<CR>:!$HOME/.pyenv/versions/env3.5/bin/python %<CR>
+    autocmd BufRead,BufNewFile *.hs nmap <F5> :update<CR>:!runghc %<CR>
+    autocmd BufRead,BufNewFile *.hs nmap <F6> :update<CR>:!ghci %<CR>
+    au BufNewFile,BufRead *.coffee nmap <F5> :update<CR>:!coffee -c %<CR>:!node %<.js <CR>
     "au BufRead,BufNewFile *.scm nmap <F5> :w<CR>:!mit-scheme --load %<CR>
     autocmd BufRead,BufNewFile *.rkt,*scm nmap <F5> :update<CR>:!racket %<CR>
+    autocmd BufRead,BufNewFile *.js nmap <F5> :update<CR>:!node %<CR>
     "}}}
     autocmd FileType javascript set dictionary=~/.vim/dict/javascript.dict
     autocmd FileType coffee set dictionary=~/.vim/dict/javascript.dict
@@ -191,7 +194,7 @@ if has("gui_running")
                 exec "!\"D:\\MIT-GNU Scheme\\bin\\mit-scheme.exe\" --library \"d:\\MIT-GNU Scheme\\lib\" --load ".expand("%:p")
             endif
         endfunc
-        map <silent> <leader>e :e ~/_vimrc<cr>
+        map <silent> <leader>e :e ~/vimfiles/vimrc<cr>
         au BufRead,BufNewFile *.py nmap <F6> :w<CR>:!"c:\Python34\python.exe" %<CR>
         au BufRead,BufNewFile *.py nmap <F5> :w<CR>:!"c:\Python27\python.exe" %<CR>
         autocmd BufRead,BufNewFile *.scm map <F5> :w<CR>:call Interpreter()<CR>
@@ -202,12 +205,26 @@ if has("gui_running")
         au BufRead,BufNewFile *.c nmap <F9> :w<CR>:!gcc -Wall % -g -o %<.exe<CR>
         au FileType cpp nmap <F9> :w<CR>:!gcc++ -Wall % -g -o %<.exe<CR>
         au FileType c,cpp nmap <C-F9> :!./%<.exe<CR>
+        autocmd BufRead,BufNewFile *.js nmap <F5> :update<CR>:!node %<CR>
         " }}}
         "vimwiki
-            let g:vimwiki_use_mouse = 1
-            let g:vimwiki_list = [{'path': 'F:/vimwiki/',
-            \ 'path_html': 'F:/vimwiki/html/',
-            \ 'html_header': 'F:/vimwiki/template/header.tpl',}]
+    let g:vimwiki_use_mouse = 1
+"    let g:vimwiki_list = [{'path': '~/vimwiki/',
+"    \ 'path_html': '~/vimwiki/html/',
+"    \ 'html_header': '~/vimwiki/template/header.tpl',}]
+    let wiki_1 = {}
+    let wiki_1.path = 'F:/vimwiki/'
+    let wiki_1.html_template = "F:/vimwiki/template/header.tpl"
+    let wiki_1.nested_syntaxes = {'python': 'python', 'c++': 'cpp'}
+    let wiki_1.path_html = 'F:/vimwiki/html/'
+
+    let wiki_2 = {}
+    let wiki_2.path = 'F:/my_notes/'
+    let wiki_2.index = 'my_markdown_notes'
+	let wiki_2.syntax = 'markdown'
+	let wiki_2.ext = '.md'
+
+    let g:vimwiki_list = [wiki_2, wiki_1]
 "neocomplete {{{
 " Disable AutoComplPop.
 let g:acp_enableAtStartup = 0
@@ -291,17 +308,34 @@ endif
 "let g:neocomplete#sources#omni#input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
 "let g:neocomplete#sources#omni#input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
 " support python3
-"autocmd FileType python setlocal omnifunc=jedi#completions
+autocmd FileType python setlocal omnifunc=jedi#completions
 "let g:neocomplete#enable_auto_select = 0
 "let g:jedi#popup_select_first=0
-"let g:jedi#auto_vim_configuration = 0
 "let g:jedi#popup_on_dot = 0
-"let g:neocomplete#force_omni_input_patterns.python = '\%([^. \t]\.\|^\s*@\)\w*'
+let g:jedi#completions_enabled = 0
+let g:jedi#auto_vim_configuration = 0
+if !exists('g:neocomplete#force_omni_input_patterns')
+    let g:neocomplete#force_omni_input_patterns = {}
+endif
+let g:neocomplete#force_omni_input_patterns.python = '\%([^. \t]\.\|^\s*@\|^\s*from\s.\+import \|^\s*from \|^\s*import \)\w*'
+
+"if has('python3')
+    "let g:jedi#force_py_version = 3
+"endif
+"let g:jedi#force_py_version = 3
 
 "end of neocomplete setting }}}
-        " end of setting for windows }}}
-
+"jedi 设置
+let g:jedi#auto_initialization = 0
+let g:jedi#goto_assignments_command = "<leader>g"
+let g:jedi#goto_definitions_command = "<leader>d"
+let g:jedi#documentation_command = "K"
+let g:jedi#usages_command = "<leader>n"
+let g:jedi#completions_command = "<A-1>"
+let g:jedi#rename_command = "<leader>r"
+let g:jedi#show_call_signatures = "1"
     endif
+    " end of setting for windows }}}
 else
     set background=dark
     colorscheme desert"desert evening solarized molokai
@@ -393,8 +427,8 @@ autocmd BufWritePost .vimrc,.gvimrc,_vimrc silent source %
 "nnoremap <c-j> <c-w>j
 "nnoremap <c-k> <c-w>k
 " Buffers/Tab操作快捷方式!
-"nnoremap <s-h> :bprevious<cr>
-"nnoremap <s-l> :bnext<cr>
+nnoremap <s-h> :bprevious<cr>
+nnoremap <s-l> :bnext<cr>
 "nnoremap F :tabe %
 "}}}
 
@@ -442,19 +476,6 @@ let g:indent_guides_guide_size=1
 " 快捷键 i 开/关缩进可视化
 ":nmap <silent> <Leader>i <Plug>IndentGuidesToggle
 
-"jedi 设置 
-"let g:jedi#auto_initialization = 0
-"let g:jedi#goto_assignments_command = "<leader>g"
-"let g:jedi#goto_definitions_command = "<leader>d"
-"let g:jedi#documentation_command = "K"
-"let g:jedi#usages_command = "<leader>n"
-"let g:jedi#completions_command = "<A-1>"
-"let g:jedi#rename_command = "<leader>r"
-"let g:jedi#show_call_signatures = "1"
-"if has('python3')
-    "let g:jedi#force_py_version = 3
-"endif
-"let g:jedi#force_py_version = 3
 "html.vim
 :let g:html_indent_inctags = "html,body,head,tbody" 
 let g:html_indent_script1 = "inc"
