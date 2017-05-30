@@ -1,11 +1,13 @@
 " readme {{{
+" put plug.vim in autoload dir
+" https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 " key bind
     " F2 nerdtree, F3 tagbar
     " cpp: F5 make, F6 run demo
     " python: F5 use python in environment, F6 use user defined python path
 " use config file in another machine need to do some modification
 " use eslint
-" need npm install -g eslint_d
+" need npm install -g eslint
 " linux
     "font: DejaVu\ Sans\ Mono\
     "DejaVuSansMono
@@ -21,89 +23,84 @@
         ".ycm_extra_conf.py for cpp
     "add a plugin to support django, but have the influence on speed
 " window
-    "neocomplete
     "font: yahei_mono and DejaVu
 
 "}}}
 set nocompatible              " be iMproved, required
-filetype off                  " required
-if has("win32")
-    set rtp+=~/vimfiles/bundle/Vundle.vim/
-    let path='~/vimfiles/bundle'
-    call vundle#begin(path)
-else
-    set rtp+=~/.vim/bundle/Vundle.vim
-    let path='~/.vim/bundle'
-    call vundle#begin(path)
+" auto install plug-vim {{{
+if empty(glob('~/.vim/autoload/plug.vim')) && has('unix')
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
-" let Vundle manage Vundle, required {{{
-Plugin 'gmarik/Vundle.vim'
-Plugin 'kien/ctrlp.vim'
-Plugin 'tpope/vim-surround'
-Bundle "tpope/vim-repeat"
-Plugin 'Lokaltog/vim-easymotion'
-Bundle "vim-scripts/matchit.zip"
-Bundle "mattn/emmet-vim"
-Bundle "scrooloose/nerdcommenter"
-Bundle "scrooloose/nerdtree"
-Bundle "vimwiki/vimwiki"
-Bundle "mattn/calendar-vim"
-Bundle "jiangmiao/auto-pairs"
-Plugin 'godlygeek/tabular'
-Plugin 'bling/vim-airline'
-Plugin 'tpope/vim-fugitive'
-Plugin 'majutsushi/tagbar'
-Bundle 'Valloric/ListToggle'
-Bundle "Valloric/YouCompleteMe"
-Bundle 'vim-scripts/Modeliner'
-Plugin 'w0rp/ale'
-" Colorscheme
-Bundle 'altercation/vim-colors-solarized'
-" not using {{{
-"Plugin 'terryma/vim-multiple-cursors'
-"Bundle "Raimondi/delimitMate"
-"Bundle "vim-scripts/EnhCommentify.vim"
-"Bundle "vim-scripts/taglist.vim"
-"Bundle "vim-scripts/The-NERD-tree"
-" }}}
-
-" need dependency {{{
-"Bundle "scrooloose/syntastic"
-Plugin 'SirVer/ultisnips'
-Plugin 'honza/vim-snippets'
-"Plugin 'kchmck/vim-coffee-script'
 " }}}
 if has("win32")
-    "Bundle "Shougo/neocomplete.vim"
-    "Bundle "davidhalter/jedi-vim"
+    call plug#begin('~/vimfiles/bundle')
+else
+    call plug#begin('~/.vim/bundle')
+endif
+" packages {{{
+Plug 'kien/ctrlp.vim'
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-repeat'
+Plug 'Lokaltog/vim-easymotion'
+Plug 'vim-scripts/matchit.zip'
+Plug 'mattn/emmet-vim'
+Plug 'scrooloose/nerdcommenter'
+Plug 'scrooloose/nerdtree'
+Plug 'vimwiki/vimwiki'
+Plug 'mattn/calendar-vim'
+Plug 'jiangmiao/auto-pairs'
+Plug 'godlygeek/tabular'
+Plug 'bling/vim-airline'
+Plug 'tpope/vim-fugitive'
+Plug 'majutsushi/tagbar'
+Plug 'Valloric/ListToggle'
+Plug 'vim-scripts/Modeliner'
+Plug 'w0rp/ale'
+Plug 'Shougo/unite.vim'
+" Colorscheme
+Plug 'altercation/vim-colors-solarized'
+
+" lazy load {{{
+Plug 'Valloric/YouCompleteMe', { 'on': [] }
+Plug 'SirVer/ultisnips', { 'on': [] }
+Plug 'honza/vim-snippets', { 'on': [] }
+" }}}
+if has("win32")
+    "Plug "davidhalter/jedi-vim"
 endif
 if has("unix")
-    Bundle "godlygeek/csapprox"
-" need dependency
-    "Bundle "Valloric/YouCompleteMe"
-    "Bundle "marijnh/tern_for_vim"
-    Bundle "lilydjwg/fcitx.vim"
-    Bundle 'tweekmonster/django-plus.vim'
-    Plugin 'eagletmt/ghcmod-vim'
-    Plugin 'eagletmt/neco-ghc'
+    Plug 'godlygeek/csapprox'
+    Plug 'lilydjwg/fcitx.vim'
+    Plug 'tweekmonster/django-plus.vim'
+    Plug 'eagletmt/ghcmod-vim'
+    Plug 'eagletmt/neco-ghc'
 endif
 " web development
-Plugin 'sheerun/vim-polyglot'
-Plugin 'hail2u/vim-css3-syntax'
-"Bundle 'pangloss/vim-javascript'
-"Plugin 'cakebaker/scss-syntax.vim'
-"Plugin 'leafgarland/typescript-vim'
-"Bundle 'mxw/vim-jsx'
-"Plugin 'posva/vim-vue'
-"Plugin 'neovimhaskell/haskell-vim'
+Plug 'sheerun/vim-polyglot'
+Plug 'hail2u/vim-css3-syntax'
+"Plug 'pangloss/vim-javascript'
+"Plug 'cakebaker/scss-syntax.vim'
+"Plug 'leafgarland/typescript-vim'
+"Plug 'mxw/vim-jsx'
+"Plug 'posva/vim-vue'
+"Plug 'neovimhaskell/haskell-vim'
 " typescript
-Plugin 'Shougo/vimproc.vim'
-Plugin 'Quramy/tsuquyomi'
+Plug 'Shougo/vimproc.vim'
+Plug 'Quramy/tsuquyomi'
 " need UltiSnips
-"Bundle 'justinj/vim-react-snippets'
+"Plug 'justinj/vim-react-snippets'
 "}}}
-call vundle#end(path)            " required
-filetype plugin indent on    " required
+call plug#end()
+
+augroup load_us_ycm
+  autocmd!
+  autocmd InsertEnter * call plug#load('ultisnips', 
+              \ 'YouCompleteMe',
+              \ 'vim-snippets')
+              \| autocmd! load_us_ycm
+augroup END
 
 let mapleader="\<Space>"
 "let g:mapleader=";"
@@ -134,7 +131,6 @@ if has("unix")
     let g:vimwiki_list = [wiki_2, wiki_1]
     map <silent> <leader>e :e $HOME/.vim/vimrc<cr>
     " has gui  gvim
-    let g:syntastic_python_python_exec = '/home/alan/.pyenv/versions/env3/bin/python3'
     "key binding for compile or run {{{
     au BufRead,BufNewFile *.c nmap <Leader>5 :w<CR>:!gcc -Wall % -g -o %<<CR>
     au FileType cpp nmap <Leader>5 :update<CR>:!g++ -Wall % -g -o %<<CR>
@@ -184,7 +180,6 @@ if has("gui_running")
         "set fileformats=dos
         "解决consle输出乱码
         language messages zh_CN.utf-8
-        "let g:syntastic_python_python_exec = 'C:\\Python34'
         au BufRead,BufNewFile *.txt setlocal ft=txt "syntax highlight for txt.vim
         " compile and run {{{
         func! Interpreter()
@@ -386,22 +381,8 @@ let g:ycm_complete_in_strings = 1 " Completion in string
 "let g:ale_javascript_eslint_options = '--fix'
 
 "syntastic
-let g:syntastic_python_checkers = ['pyflakes']
-let g:syntastic_javascript_checkers = ['eslint']
-let g:syntastic_javascript_eslint_exec = 'eslint_d'
 " add an autocmd after vim started to execute checktime for *.js files on write
-let g:syntastic_javascript_eslint_args = ['--fix']
-au VimEnter *.js au BufWritePost *.js checktime
-" jshint
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
-
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 0
-let g:syntastic_check_on_open = 0
-let g:syntastic_check_on_wq = 0
-
+"au VimEnter *.js au BufWritePost *.js checktime
 "let g:EasyMotion_leader_key = '<space>'
 "map <Leader> <Plug>(easymotion-prefix)
 "UltiSnips
