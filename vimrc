@@ -1,9 +1,11 @@
-﻿" readme {{{
+" readme {{{
 " key bind
     " F2 nerdtree, F3 tagbar
     " cpp: F5 make, F6 run demo
     " python: F5 use python in environment, F6 use user defined python path
 " use config file in another machine need to do some modification
+" use eslint
+" need npm install -g eslint_d
 " linux
     "font: DejaVu\ Sans\ Mono\
     "DejaVuSansMono
@@ -17,6 +19,7 @@
         "let g:ycm_python_binary_path = 'python'  // have jedi
         ".tern-config  // not support multiple tern servers
         ".ycm_extra_conf.py for cpp
+    "add a plugin to support django, but have the influence on speed
 " window
     "neocomplete
     "font: yahei_mono and DejaVu
@@ -33,18 +36,16 @@ else
     let path='~/.vim/bundle'
     call vundle#begin(path)
 endif
-" let Vundle manage Vundle, required
+" let Vundle manage Vundle, required {{{
 Plugin 'gmarik/Vundle.vim'
 Plugin 'kien/ctrlp.vim'
 Plugin 'tpope/vim-surround'
 Bundle "tpope/vim-repeat"
 Plugin 'Lokaltog/vim-easymotion'
 Bundle "vim-scripts/matchit.zip"
-Bundle "pangloss/vim-javascript"
 Bundle "mattn/emmet-vim"
 Bundle "scrooloose/nerdcommenter"
 Bundle "scrooloose/nerdtree"
-
 Bundle "vimwiki/vimwiki"
 Bundle "mattn/calendar-vim"
 Bundle "jiangmiao/auto-pairs"
@@ -52,37 +53,59 @@ Plugin 'godlygeek/tabular'
 Plugin 'bling/vim-airline'
 Plugin 'tpope/vim-fugitive'
 Plugin 'majutsushi/tagbar'
-
-" not using
+Bundle 'Valloric/ListToggle'
+Bundle "Valloric/YouCompleteMe"
+Bundle 'vim-scripts/Modeliner'
+Plugin 'w0rp/ale'
+" Colorscheme
+Bundle 'altercation/vim-colors-solarized'
+" not using {{{
 "Plugin 'terryma/vim-multiple-cursors'
 "Bundle "Raimondi/delimitMate"
 "Bundle "vim-scripts/EnhCommentify.vim"
 "Bundle "vim-scripts/taglist.vim"
 "Bundle "vim-scripts/The-NERD-tree"
+" }}}
 
 " need dependency {{{
-Bundle "scrooloose/syntastic"
+"Bundle "scrooloose/syntastic"
 Plugin 'SirVer/ultisnips'
 Plugin 'honza/vim-snippets'
 "Plugin 'kchmck/vim-coffee-script'
 " }}}
 if has("win32")
-    Bundle "Shougo/neocomplete.vim"
-    Bundle "davidhalter/jedi-vim"
+    "Bundle "Shougo/neocomplete.vim"
+    "Bundle "davidhalter/jedi-vim"
 endif
 if has("unix")
-"    Bundle "Shougo/neocomplete.vim"
     Bundle "godlygeek/csapprox"
 " need dependency
-    Bundle "Valloric/YouCompleteMe"
+    "Bundle "Valloric/YouCompleteMe"
     "Bundle "marijnh/tern_for_vim"
-    Bundle 'Valloric/ListToggle'
     Bundle "lilydjwg/fcitx.vim"
+    Bundle 'tweekmonster/django-plus.vim'
+    Plugin 'eagletmt/ghcmod-vim'
+    Plugin 'eagletmt/neco-ghc'
 endif
+" web development
+Plugin 'sheerun/vim-polyglot'
+Plugin 'hail2u/vim-css3-syntax'
+"Bundle 'pangloss/vim-javascript'
+"Plugin 'cakebaker/scss-syntax.vim'
+"Plugin 'leafgarland/typescript-vim'
+"Bundle 'mxw/vim-jsx'
+"Plugin 'posva/vim-vue'
+"Plugin 'neovimhaskell/haskell-vim'
+" typescript
+Plugin 'Shougo/vimproc.vim'
+Plugin 'Quramy/tsuquyomi'
+" need UltiSnips
+"Bundle 'justinj/vim-react-snippets'
+"}}}
 call vundle#end(path)            " required
 filetype plugin indent on    " required
 
-"let mapleader=";"
+let mapleader="\<Space>"
 "let g:mapleader=";"
 set bs=2 "set backspace=indent,eol,start
 "set mouse=a
@@ -90,7 +113,8 @@ filetype plugin on
 "setting for linux {{{
 if has("unix")
     "set guifont=DejaVu\ Sans\ Mono\ 13
-    set guifont=Yahei\ Mono\ 13
+    "set guifont=Yahei\ Mono\ 13
+    set guifont=Source\ Code\ Pro\ 13
     let g:vimwiki_use_mouse = 1
 "    let g:vimwiki_list = [{'path': '~/vimwiki/',
 "    \ 'path_html': '~/vimwiki/html/',
@@ -110,53 +134,28 @@ if has("unix")
     let g:vimwiki_list = [wiki_2, wiki_1]
     map <silent> <leader>e :e $HOME/.vim/vimrc<cr>
     " has gui  gvim
-    let g:syntastic_python_python_exec = '/home/alan/.pyenv/versions/env3.5/bin/python3'
-    "key binding for compiling or running {{{
-    au BufRead,BufNewFile *.c nmap <F9> :w<CR>:!gcc -Wall % -g -o %<.o<CR>
-    "au FileType cpp nmap <F9> :w<CR>:!g++ -Wall % -g -o %<.o<CR>
-    au FileType cpp nmap <F9> :update<CR>:!g++ -Wall % -g -o demo<CR>
-    au FileType c,cpp nmap <C-F9> :!./%<.o<CR>
+    let g:syntastic_python_python_exec = '/home/alan/.pyenv/versions/env3/bin/python3'
+    "key binding for compile or run {{{
+    au BufRead,BufNewFile *.c nmap <Leader>5 :w<CR>:!gcc -Wall % -g -o %<<CR>
+    au FileType cpp nmap <Leader>5 :update<CR>:!g++ -Wall % -g -o %<<CR>
+    "au FileType cpp nmap <F9> :update<CR>:!g++ -Wall % -g -o demo<CR>
+    au FileType c,cpp nmap <Leader>6 :!./%<<CR>
     au FileType c,cpp nmap <F5> :update<CR>:make<CR>
     au FileType c,cpp nmap <F6> :!./demo<CR>
-    au FileType sh nmap <F5> :update<CR>:!bash %<CR>
+    au FileType sh nmap <Leader>5 :update<CR>:!bash %<CR>
     autocmd BufRead,BufNewFile *.py nmap <F5> :update<CR>:!python %<CR>
-    autocmd BufRead,BufNewFile *.py nmap <F6> :update<CR>:!$HOME/.pyenv/versions/env3.5/bin/python %<CR>
+    autocmd BufRead,BufNewFile *.py nmap <F6> :update<CR>:!$HOME/.pyenv/versions/env3/bin/python %<CR>
     autocmd BufRead,BufNewFile *.hs nmap <F5> :update<CR>:!runghc %<CR>
     autocmd BufRead,BufNewFile *.hs nmap <F6> :update<CR>:!ghci %<CR>
     au BufNewFile,BufRead *.coffee nmap <F5> :update<CR>:!coffee -c %<CR>:!node %<.js <CR>
     "au BufRead,BufNewFile *.scm nmap <F5> :w<CR>:!mit-scheme --load %<CR>
     autocmd BufRead,BufNewFile *.rkt,*scm nmap <F5> :update<CR>:!racket %<CR>
-    autocmd BufRead,BufNewFile *.js nmap <F5> :update<CR>:!node %<CR>
+    autocmd BufRead,BufNewFile *.js nmap <Leader>5 :update<CR>:!node %<CR>
     "}}}
-    autocmd FileType javascript set dictionary=~/.vim/dict/javascript.dict
-    autocmd FileType coffee set dictionary=~/.vim/dict/javascript.dict
-    autocmd FileType html set dictionary=~/.vim/dict/bootstrap.dict
-    au FileType c set dictionary=~/.vim/dict/c.dict
-    " YouCompleteMe {{{
-    "nnoremap <Leader>f :YcmCompleter FixIt <CR>
-    "let g:ycm_path_to_python_interpreter = '$HOME/.pyenv/versions/env3.5/bin/python3'
-    let g:ycm_python_binary_path = '/home/alan/.pyenv/versions/env3.5/bin/python3'
-    let g:ycm_global_ycm_extra_conf = '~/.vim/.ycm_extra_conf.py'
-    nnoremap <leader>jd :YcmCompleter GoToDefinitionElseDeclaration<CR>
-    nnoremap K :YcmCompleter GetDoc<CR>
-    nnoremap <Leader>d :YcmCompleter GoToDefinition <CR>
-    nnoremap <Leader>t :YcmCompleter GetType <CR>
-    "autocmd BufRead,BufNewFile *.cpp,*.c,*.cc nnoremap <F5> :YcmForceCompileAndDiagnostics<CR>
-    "Do not ask when starting vim
-    let g:ycm_confirm_extra_conf = 0
-    let g:ycm_filetype_blacklist = {
-          \ 'tagbar' : 1,
-          \ 'qf' : 1,
-          \ 'notes' : 1,
-          \ 'markdown' : 1,
-          \ 'unite' : 1,
-          \ 'text' : 1,
-          \ 'vimwiki' : 1,
-          \ 'pandoc' : 1,
-          \ 'infolog' : 1,
-          \ 'mail' : 1,
-          \}
-    " the end of setting ycm}}}
+    "autocmd FileType javascript set dictionary=~/.vim/dict/javascript.dict
+    "autocmd FileType html set dictionary=~/.vim/dict/bootstrap.dict
+    "au FileType c set dictionary=~/.vim/dict/c.dict
+    " test pluins' setting for linux
 endif
 "'python' : 1
 "end of setting for linux}}}
@@ -164,7 +163,7 @@ if has("gui_running")
     " 只显示菜单
     set guioptions=
     set background=dark "dark light
-    colorscheme solarized"desertEx solarized molokai desert
+    colorscheme solarized "desertEx solarized molokai desert hybrid
     nnoremap T :tabe<space>
     set lines=64
     set columns=90
@@ -185,7 +184,7 @@ if has("gui_running")
         "set fileformats=dos
         "解决consle输出乱码
         language messages zh_CN.utf-8
-        let g:syntastic_python_python_exec = 'C:\\Python34'
+        "let g:syntastic_python_python_exec = 'C:\\Python34'
         au BufRead,BufNewFile *.txt setlocal ft=txt "syntax highlight for txt.vim
         " compile and run {{{
         func! Interpreter()
@@ -195,8 +194,8 @@ if has("gui_running")
             endif
         endfunc
         map <silent> <leader>e :e ~/vimfiles/vimrc<cr>
-        au BufRead,BufNewFile *.py nmap <F6> :w<CR>:!"c:\Python34\python.exe" %<CR>
-        au BufRead,BufNewFile *.py nmap <F5> :w<CR>:!"c:\Python27\python.exe" %<CR>
+        au BufRead,BufNewFile *.py nmap <F5> :update<CR>:!python %<CR>
+        au BufRead,BufNewFile *.py nmap <F6> :w<CR>:!"c:\Python27\python.exe" %<CR>
         autocmd BufRead,BufNewFile *.scm map <F5> :w<CR>:call Interpreter()<CR>
         autocmd BufRead,BufNewFile *.rkt,*scm nmap <F6> :w<CR>:!racket %<CR>
         "autocmd BufRead *.py nmap <C-F5> :w<CR>:!idle.py -r %<CR>
@@ -225,128 +224,20 @@ if has("gui_running")
 	let wiki_2.ext = '.md'
 
     let g:vimwiki_list = [wiki_2, wiki_1]
-"neocomplete {{{
-" Disable AutoComplPop.
-let g:acp_enableAtStartup = 0
-" Use neocomplete.
-let g:neocomplete#enable_at_startup = 1
-" Use smartcase.
-let g:neocomplete#enable_smart_case = 1
-" Set minimum syntax keyword length.
-let g:neocomplete#sources#syntax#min_keyword_length = 3
-let g:neocomplete#lock_buffer_name_pattern = '\*ku\*'
-
-" Define dictionary.
-let g:neocomplete#sources#dictionary#dictionaries = {
-    \ 'default' : '',
-    \ 'javascript' : '~/vimfiles/dict/javascript.dict',
-    \ 'html' : '~/vimfiles/dict/javascript.dict',
-    \ 'c' : '~/vimfiles/dict/c.dict'
-        \ }
-
-" Define keyword.
-if !exists('g:neocomplete#keyword_patterns')
-    let g:neocomplete#keyword_patterns = {}
-endif
-let g:neocomplete#keyword_patterns['default'] = '\h\w*'
-
-" Plugin key-mappings.
-inoremap <expr><C-g>     neocomplete#undo_completion()
-inoremap <expr><C-l>     neocomplete#complete_common_string()
-
-" Recommended key-mappings.
-" <CR>: close popup and save indent.
-inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
-function! s:my_cr_function()
-  return neocomplete#close_popup() . "\<CR>"
-  " For no inserting <CR> key.
-  "return pumvisible() ? neocomplete#close_popup() : "\<CR>"
-endfunction
-" <TAB>: completion.
-inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
-" <C-h>, <BS>: close popup and delete backword char.
-inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
-inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
-inoremap <expr><C-y>  neocomplete#close_popup()
-inoremap <expr><C-e>  neocomplete#cancel_popup()
-" Close popup by <Space>.
-"inoremap <expr><Space> pumvisible() ? neocomplete#close_popup() : "\<Space>"
-
-" For cursor moving in insert mode(Not recommended)
-"inoremap <expr><Left>  neocomplete#close_popup() . "\<Left>"
-"inoremap <expr><Right> neocomplete#close_popup() . "\<Right>"
-"inoremap <expr><Up>    neocomplete#close_popup() . "\<Up>"
-"inoremap <expr><Down>  neocomplete#close_popup() . "\<Down>"
-" Or set this.
-"let g:neocomplete#enable_cursor_hold_i = 1
-" Or set this.
-"let g:neocomplete#enable_insert_char_pre = 1
-
-" AutoComplPop like behavior.
-"let g:neocomplete#enable_auto_select = 1
-
-" Shell like behavior(not recommended).
-"set completeopt+=longest
-"let g:neocomplete#enable_auto_select = 1
-"let g:neocomplete#disable_auto_complete = 1
-"inoremap <expr><TAB>  pumvisible() ? "\<Down>" : "\<C-x>\<C-u>"
-
-" Enable omni completion.
-autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
-autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
-autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
-autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
-autocmd FileType python setlocal omnifunc=python3complete#Complete
-"autocmd FileType javascript setlocal omnifunc=tern#Complete
-
-" Enable heavy omni completion.
-if !exists('g:neocomplete#sources#omni#input_patterns')
-  let g:neocomplete#sources#omni#input_patterns = {}
-endif
-"let g:neocomplete#force_omni_input_patterns.javascript = '[^. \t]\.\w*'
-"let g:neocomplete#sources#omni#input_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
-"let g:neocomplete#sources#omni#input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
-"let g:neocomplete#sources#omni#input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
-" support python3
-autocmd FileType python setlocal omnifunc=jedi#completions
-"let g:neocomplete#enable_auto_select = 0
-"let g:jedi#popup_select_first=0
-"let g:jedi#popup_on_dot = 0
-let g:jedi#completions_enabled = 0
-let g:jedi#auto_vim_configuration = 0
-if !exists('g:neocomplete#force_omni_input_patterns')
-    let g:neocomplete#force_omni_input_patterns = {}
-endif
-let g:neocomplete#force_omni_input_patterns.python = '\%([^. \t]\.\|^\s*@\|^\s*from\s.\+import \|^\s*from \|^\s*import \)\w*'
-
-"if has('python3')
-    "let g:jedi#force_py_version = 3
-"endif
-"let g:jedi#force_py_version = 3
-
-"end of neocomplete setting }}}
-"jedi 设置
-let g:jedi#auto_initialization = 0
-let g:jedi#goto_assignments_command = "<leader>g"
-let g:jedi#goto_definitions_command = "<leader>d"
-let g:jedi#documentation_command = "K"
-let g:jedi#usages_command = "<leader>n"
-let g:jedi#completions_command = "<A-1>"
-let g:jedi#rename_command = "<leader>r"
-let g:jedi#show_call_signatures = "1"
     endif
     " end of setting for windows }}}
 else
+    colorscheme desert "solarized8_dark desert evening solarized molokai
+    "let g:solarized_termtrans = 1
     set background=dark
-    colorscheme desert"desert evening solarized molokai
+    "let g:solarized_termcolors=256
 
-    "au BufRead *.py map <buffer> <F5> :w<CR>:!/usr/bin/env python % <CR>
     "let terminal support 256 color
     set t_Co=256
     "for sakura terminal
-    if $COLORTERM == "truecolor"
-        set t_ut=
-    endif
+    "if $COLORTERM == "truecolor"
+        "set t_ut=
+    "endif
 endif
 
 " default setting for me {{{
@@ -387,20 +278,9 @@ set smartindent "智能自动缩进
 
 autocmd FileType python setlocal ts=4 sw=4 et sta
 autocmd FileType make setlocal ts=8 sw=8 noexpandtab
-autocmd FileType javascript,html,css,coffee setlocal ts=2 sw=2  et
-vmap <C-C> "+y
-" ctrl+s 保存
-map <C-S> :update<CR>
-vmap <C-S> <C-C>:update<CR>
-imap <C-S> <C-O>:update<CR>
-inoremap <C-a> <C-o>^
-inoremap <C-e> <End>
-" 插入模式下上下左右移动光标
-"inoremap <c-h> <left>
-inoremap <c-l> <right>
-"inoremap <c-j> <c-o>gj
-"inoremap <c-k> <c-o>gk
-"set modeline
+" indent for wed
+autocmd FileType javascript,html,css,scss,less setlocal ts=2 sw=2  et
+au BufRead *.vue setlocal ts=2 sw=2 et
 "}}}
 
 "map setting{{{
@@ -413,7 +293,6 @@ inoremap <c-l> <right>
 "nmap 1b ^
 "nmap 1e $
 "inoremap jk <Esc>
-"map <F11> :Voom<CR>
 au BufRead *.wiki map <S-F4> :VimwikiAll2HTML<cr>
 au BufRead *.wiki map <F4> :Vimwiki2HTML<cr>
 " calendar
@@ -421,15 +300,32 @@ au BufRead *.wiki map <F8> :Calendar<cr>
 "nnoremap <F6> :GundoToggle<CR>
 " 自动运用设置
 autocmd BufWritePost .vimrc,.gvimrc,_vimrc silent source %
-" 窗口切换
-"nnoremap <c-h> <c-w>h
-"nnoremap <c-l> <c-w>l
-"nnoremap <c-j> <c-w>j
-"nnoremap <c-k> <c-w>k
 " Buffers/Tab操作快捷方式!
 nnoremap <s-h> :bprevious<cr>
 nnoremap <s-l> :bnext<cr>
 "nnoremap F :tabe %
+"vmap <C-C> "+y
+" ctrl+s 保存
+map <C-S> :update<CR>
+vmap <C-S> <C-C>:update<CR>
+imap <C-S> <C-O>:update<CR>
+inoremap <C-a> <C-o>^
+inoremap <C-e> <End>
+" 插入模式下上下左右移动光标
+"inoremap <c-h> <left>
+inoremap <c-l> <right>
+"inoremap <c-j> <c-o>gj
+"inoremap <c-k> <c-o>gk
+"set modeline
+" 复制粘贴
+vmap <Leader>y "+y
+nmap <Leader>p "+p
+nmap <Leader>P "+P
+vmap <Leader>p "+p
+vmap <Leader>P "+P
+" plugin map
+vmap <silent> <Leader>c<Space> <Plug>NERDCommenterToggle
+nmap <silent> <Leader>c<Space> <Plug>NERDCommenterToggle
 "}}}
 
 " python setting{{{
@@ -438,12 +334,65 @@ let tlist_txt_settings = 'txt;c:content;f:figures;t:tables' "language definition
 autocmd FileType python setlocal foldmethod=indent foldlevel=99
 
 " }}}
+" Haskell setting{{{
+" Disable haskell-vim omnifunc
+let g:haskellmode_completion_ghc = 0
+autocmd FileType haskell setlocal omnifunc=necoghc#omnifunc
+            \ ts=8 et sw=4 softtabstop=4 shiftround
+let g:haskell_indent_disable=1
+let g:ycm_semantic_triggers = {'haskell' : ['.']}
+au FileType haskell map <silent> tw :update<CR>:GhcModTypeInsert<CR>
+au FileType haskell map <silent> ts :update<CR>:GhcModSplitFunCase<CR>
+au FileType haskell map <silent> tq :update<CR>:GhcModType<CR>
+au FileType haskell map <silent> te :update<CR>:GhcModTypeClear<CR>
+"au BufRead *.py map <buffer> <F5> :w<CR>:!/usr/bin/env python % <CR>
+" }}}
 
 
 "plugin setting{{{
+" YouCompleteMe {{{
+"nnoremap <Leader>f :YcmCompleter FixIt <CR>
+if has("unix")
+    "let g:ycm_path_to_python_interpreter = '$HOME/.pyenv/versions/env3/bin/python3'
+    let g:ycm_python_binary_path = '/home/alan/.pyenv/versions/env3/bin/python3'
+    let g:ycm_global_ycm_extra_conf = '~/.vim/.ycm_extra_conf.py'
+endif
+nnoremap <leader>jd :YcmCompleter GoToDefinitionElseDeclaration<CR>
+nnoremap K :YcmCompleter GetDoc<CR>
+nnoremap <Leader>d :YcmCompleter GoToDefinition <CR>
+nnoremap <Leader>t :YcmCompleter GetType <CR>
+"autocmd BufRead,BufNewFile *.cpp,*.c,*.cc nnoremap <F5> :YcmForceCompileAndDiagnostics<CR>
+"Do not ask when starting vim
+let g:ycm_confirm_extra_conf = 0
+let g:ycm_filetype_blacklist = {
+            \ 'tagbar' : 1,
+            \ 'qf' : 1,
+            \ 'notes' : 1,
+            \ 'markdown' : 1,
+            \ 'unite' : 1,
+            \ 'text' : 1,
+            \ 'vimwiki' : 1,
+            \ 'pandoc' : 1,
+            \ 'infolog' : 1,
+            \ 'mail' : 1,
+            \}
+let g:ycm_use_ultisnips_completer = 1 " Default 1, just ensure
+"let g:ycm_seed_identifiers_with_syntax = 1 " Completion for programming language's keyword
+let g:ycm_complete_in_comments = 1 " Completion in comments
+let g:ycm_complete_in_strings = 1 " Completion in string
+"}}}
+"ale
+"let g:ale_javascript_eslint_executable = 'eslint_d'
+"let g:ale_javascript_eslint_options = '--fix'
+
 "syntastic
 let g:syntastic_python_checkers = ['pyflakes']
-let g:syntastic_javascript_checkers = ['jshint']
+let g:syntastic_javascript_checkers = ['eslint']
+let g:syntastic_javascript_eslint_exec = 'eslint_d'
+" add an autocmd after vim started to execute checktime for *.js files on write
+let g:syntastic_javascript_eslint_args = ['--fix']
+au VimEnter *.js au BufWritePost *.js checktime
+" jshint
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
@@ -453,7 +402,7 @@ let g:syntastic_auto_loc_list = 0
 let g:syntastic_check_on_open = 0
 let g:syntastic_check_on_wq = 0
 
-let g:EasyMotion_leader_key = '<space>'
+"let g:EasyMotion_leader_key = '<space>'
 "map <Leader> <Plug>(easymotion-prefix)
 "UltiSnips
 let g:UltiSnipsExpandTrigger="<c-j>"
@@ -465,8 +414,8 @@ let g:snips_github="22earth"
 "emmet
 "let g:user_emmet_leader_key='<C-Z>'
 "let g:user_emmet_expandabbr_key = '<Tab>'
-"let g:user_emmet_install_global = 0
-"autocmd fileType html,css,wiki,markdown EmmetInstall
+let g:user_emmet_install_global = 0
+autocmd fileType html,css,wiki,markdown,htmldjango,javascript,vue EmmetInstall
 " indent_guides随 vim 自启动
 let g:indent_guides_enable_on_vim_startup=0
 " 从第二层开始可视化显示缩进
@@ -501,7 +450,7 @@ nmap <F2> :NERDTreeToggle<CR>
 nmap <F3> :TagbarToggle<CR>
 let tagbar_left=1
 let g:tagbar_autofocus=1
-"plugin setting end}}}
+" plugin setting end}}}
 
 " 插入文件头{{{
 "新建.c,.h,.sh,.java文件，自动插入文件头   
@@ -543,27 +492,27 @@ autocmd BufNewFile * normal G
 "setting for Windows {{{
 set diffexpr=MyDiff()
 function MyDiff()
-  let opt = '-a --binary '
-  if &diffopt =~ 'icase' | let opt = opt . '-i ' | endif
-  if &diffopt =~ 'iwhite' | let opt = opt . '-b ' | endif
-  let arg1 = v:fname_in
-  if arg1 =~ ' ' | let arg1 = '"' . arg1 . '"' | endif
-  let arg2 = v:fname_new
-  if arg2 =~ ' ' | let arg2 = '"' . arg2 . '"' | endif
-  let arg3 = v:fname_out
-  if arg3 =~ ' ' | let arg3 = '"' . arg3 . '"' | endif
-  let eq = ''
-  if $VIMRUNTIME =~ ' '
-    if &sh =~ '\<cmd'
-      let cmd = '""' . $VIMRUNTIME . '\diff"'
-      let eq = '"'
+    let opt = '-a --binary '
+    if &diffopt =~ 'icase' | let opt = opt . '-i ' | endif
+    if &diffopt =~ 'iwhite' | let opt = opt . '-b ' | endif
+    let arg1 = v:fname_in
+    if arg1 =~ ' ' | let arg1 = '"' . arg1 . '"' | endif
+    let arg2 = v:fname_new
+    if arg2 =~ ' ' | let arg2 = '"' . arg2 . '"' | endif
+    let arg3 = v:fname_out
+    if arg3 =~ ' ' | let arg3 = '"' . arg3 . '"' | endif
+    let eq = ''
+    if $VIMRUNTIME =~ ' '
+        if &sh =~ '\<cmd'
+            let cmd = '""' . $VIMRUNTIME . '\diff"'
+            let eq = '"'
+        else
+            let cmd = substitute($VIMRUNTIME, ' ', '" ', '') . '\diff"'
+        endif
     else
-      let cmd = substitute($VIMRUNTIME, ' ', '" ', '') . '\diff"'
+        let cmd = $VIMRUNTIME . '\diff'
     endif
-  else
-    let cmd = $VIMRUNTIME . '\diff'
-  endif
-  silent execute '!' . cmd . ' ' . opt . arg1 . ' ' . arg2 . ' > ' . arg3 . eq
+    silent execute '!' . cmd . ' ' . opt . arg1 . ' ' . arg2 . ' > ' . arg3 . eq
 endfunction
 "}}}
 """"""""""""""""
@@ -574,12 +523,6 @@ endfunction
 """""""""""""""""
 
 "some settings for trying{{{
-"autocmd BufRead,BufNewFile *.scm,*rkt,*.txt :AutoCloseOff
-"autocmd BufRead,BufNewFile *.scm,*rkt,*.txt let b:delimitMate_autoclose = 0
-"let delimitMate_excluded_ft = "scheme,txt"
-"let delimitMate_expand_cr = 1
-"let g:AutoClosePairs_del = "{"
-
 "au BufRead,BufNewFile *.scm,*rkt let g:AutoPairsLoaded = 0
 let g:AutoPairsFlyMode = 1
 
@@ -589,14 +532,31 @@ let g:AutoPairsFlyMode = 1
 set complete+=k
 autocmd BufRead,BufNewFile *.md nmap <F5> :w<CR>:set syntax=markdown<CR>
 let g:vimwiki_valid_html_tags='b,i,s,u,sub,sup,kbd,br,hr,div,del,code'
-    ":let g:vimim_cloud = 'google,sogou,baidu,qq'      
-    ":let g:vimim_map = 'tab_as_gi'    
 let g:ctrlp_custom_ignore = {
-    \ 'dir':  '\v[\/]\.(git|hg|svn)$',
-    \ 'file': '\v\.(exe|so|dll)$',
-    \ 'link': 'SOME_BAD_SYMBOLIC_LINKS',
-    \ }
-let g:Modeliner_format = 'ts= sw= et'
-"autocmd FileType python setlocal equalprg="python3 /home/alan/.vim/reindent.py"
+            \ 'dir':  '\v[\/](\.(git|hg|svn))|(node_modules|dist)$',
+            \ 'file': '\v\.(exe|so|dll)$',
+            \ 'link': 'SOME_BAD_SYMBOLIC_LINKS',
+            \ }
+let g:Modeliner_format = 'sts= sw= ts= et'
+"let g:polyglot_disabled = ['css']
+" test setting for web development {{{
+"let g:syntastic_javascript_eslint_exe = '$(npm bin)/eslint'
+func ToggleJsFiletype()
+    if &filetype == 'javascript'
+        setlocal ft=javascript.jsx
+    elseif &filetype == 'javascript.jsx'
+        setlocal ft=javascript
+    endif
+endfunc
+let g:jsx_ext_required = 0
+autocmd BufRead,BufNewFile *.js nmap <F6> :%s/class=/className=/g<CR>
+"autocmd BufRead,BufNewFile *.js nmap <F7> :call ToggleJsFiletype()<CR>
+if !exists("g:ycm_semantic_triggers")
+    let g:ycm_semantic_triggers = {}
+endif
+let g:ycm_semantic_triggers['typescript'] = ['.']
+au BufRead,BufNewFile *.scss set filetype=scss.css
+"autocmd BufRead,BufNewFile *.vue setlocal filetype=vue.html.javascript.css
+" }}}
 " vim: set et fenc=utf-8 ff=unix sts=4 sw=4 ts=4 :
 "}}}
