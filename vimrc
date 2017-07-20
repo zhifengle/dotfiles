@@ -2,43 +2,54 @@
 " put plug.vim in autoload dir
 " https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 " key bind
-    " F2 nerdtree, F3 tagbar
-    " cpp: F5 make, F6 run demo
-    " python: F5 use python in environment, F6 use user defined python path
+" leader 2 nerdtree, leader 3 tagbar
+" cpp: leader 5 make, leader 6 run demo
+" python: F5 use python in environment, F6 use user defined python path
 " use config file in another machine need to do some modification
 " use eslint
-" need npm install -g eslint
-" linux
-    "font: DejaVu\ Sans\ Mono\
-    "DejaVuSansMono
-    "use fcitx.vim instead of vimim
-    "install ctags
-    "set syntastic
-        "syntastic_python_python_exec="xxx", pyflakes
-    "set python path which installed by pyenv
-    "set youcompleteme
-        "remove python for ycm's blacklist
-        "let g:ycm_python_binary_path = 'python'  // have jedi
-        ".tern-config  // not support multiple tern servers
-        ".ycm_extra_conf.py for cpp
-    "add a plugin to support django, but have the influence on speed
-" window
-    "font: yahei_mono and DejaVu
+" JS optional dependency
+" js-beautify eslint_d jsctags
+" linux {{{
+" font: DejaVu\ Sans\ Mono\
+" DejaVuSansMono
+" use fcitx.vim instead of vimim
+" install ctags
+" set syntastic
+" syntastic_python_python_exec="xxx", pyflakes
+" set python path which installed by pyenv
+" set youcompleteme
+" remove python for ycm's blacklist
+" let g:ycm_python_binary_path = 'python'  // have jedi
+" .tern-config  // not support multiple tern servers
+" .ycm_extra_conf.py for cpp
+" add a plugin to support django, but have the influence on speed
+" }}}
+" window {{{
+" font: yahei_mono and DejaVu
+" need config eslint_d path, vimwiki path
+" check executable('cl') use ycm or not
+" }}}
 
 "}}}
 set nocompatible              " be iMproved, required
 " auto install plug-vim {{{
-if empty(glob('~/.vim/autoload/plug.vim')) && has('unix')
-  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
-    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
-endif
-" }}}
 if has("win32")
+    if empty(glob('~/vimfiles/autoload/plug.vim')) &&  executable('curl')
+        cd $HOME
+        silent !curl -fLo vimfiles/autoload/plug.vim --create-dirs
+                    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+        autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+    endif
     call plug#begin('~/vimfiles/bundle')
 else
+    if empty(glob('~/.vim/autoload/plug.vim')) &&  executable('curl')
+        silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+                    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+        autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+    endif
     call plug#begin('~/.vim/bundle')
 endif
+" }}}
 " packages {{{
 Plug 'kien/ctrlp.vim'
 Plug 'tpope/vim-surround'
@@ -47,9 +58,9 @@ Plug 'Lokaltog/vim-easymotion'
 Plug 'vim-scripts/matchit.zip'
 Plug 'mattn/emmet-vim'
 Plug 'scrooloose/nerdcommenter'
-Plug 'scrooloose/nerdtree'
+Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 Plug 'vimwiki/vimwiki'
-Plug 'mattn/calendar-vim'
+Plug 'mattn/calendar-vim', {'for': 'vimwiki'}
 Plug 'jiangmiao/auto-pairs'
 Plug 'godlygeek/tabular'
 Plug 'bling/vim-airline'
@@ -57,29 +68,40 @@ Plug 'tpope/vim-fugitive'
 Plug 'majutsushi/tagbar'
 Plug 'Valloric/ListToggle'
 Plug 'vim-scripts/Modeliner'
-Plug 'w0rp/ale'
+"Plug 'w0rp/ale'
+Plug 'vim-syntastic/syntastic'
 Plug 'Shougo/unite.vim'
 " Colorscheme
-Plug 'altercation/vim-colors-solarized'
+"Plug 'altercation/vim-colors-solarized'
+"Plug 'ericbn/vim-solarized'
+Plug 'lifepillar/vim-solarized8'
 
 " lazy load {{{
-Plug 'Valloric/YouCompleteMe', { 'on': [] }
-Plug 'SirVer/ultisnips', { 'on': [] }
-Plug 'honza/vim-snippets', { 'on': [] }
+Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
 " }}}
+
 if has("win32")
-    "Plug "davidhalter/jedi-vim"
-endif
-if has("unix")
-    Plug 'godlygeek/csapprox'
+    if executable('cl')
+        Plug 'Valloric/YouCompleteMe', { 'on': [] }
+    else
+        Plug 'Shougo/neocomplete.vim'
+        Plug 'davidhalter/jedi-vim'
+        Plug 'ternjs/tern_for_vim'
+    endif
+elseif has("unix")
+    Plug 'Valloric/YouCompleteMe', { 'on': [] }
+    "Plug 'godlygeek/csapprox'
     Plug 'lilydjwg/fcitx.vim'
-    Plug 'tweekmonster/django-plus.vim'
-    Plug 'eagletmt/ghcmod-vim'
-    Plug 'eagletmt/neco-ghc'
+    "Plug 'tweekmonster/django-plus.vim'
+    "Plug 'eagletmt/ghcmod-vim'
+    "Plug 'eagletmt/neco-ghc'
 endif
 " web development
 Plug 'sheerun/vim-polyglot'
 Plug 'hail2u/vim-css3-syntax'
+"Plug 'maksimr/vim-jsbeautify'
+Plug 'Chiel92/vim-autoformat', {'on': 'Autoformat'}
 "Plug 'pangloss/vim-javascript'
 "Plug 'cakebaker/scss-syntax.vim'
 "Plug 'leafgarland/typescript-vim'
@@ -87,20 +109,13 @@ Plug 'hail2u/vim-css3-syntax'
 "Plug 'posva/vim-vue'
 "Plug 'neovimhaskell/haskell-vim'
 " typescript
-Plug 'Shougo/vimproc.vim'
+Plug 'Shougo/vimproc.vim', {'do': 'make'}
 Plug 'Quramy/tsuquyomi'
 " need UltiSnips
 "Plug 'justinj/vim-react-snippets'
 "}}}
 call plug#end()
 
-augroup load_us_ycm
-  autocmd!
-  autocmd InsertEnter * call plug#load('ultisnips', 
-              \ 'YouCompleteMe',
-              \ 'vim-snippets')
-              \| autocmd! load_us_ycm
-augroup END
 
 let mapleader="\<Space>"
 "let g:mapleader=";"
@@ -109,13 +124,13 @@ set bs=2 "set backspace=indent,eol,start
 filetype plugin on
 "setting for linux {{{
 if has("unix")
-    "set guifont=DejaVu\ Sans\ Mono\ 13
+    set guifont=DejaVu\ Sans\ Mono\ 13
     "set guifont=Yahei\ Mono\ 13
-    set guifont=Source\ Code\ Pro\ 13
+    "set guifont=Source\ Code\ Pro\ 13
     let g:vimwiki_use_mouse = 1
-"    let g:vimwiki_list = [{'path': '~/vimwiki/',
-"    \ 'path_html': '~/vimwiki/html/',
-"    \ 'html_header': '~/vimwiki/template/header.tpl',}]
+    "    let g:vimwiki_list = [{'path': '~/vimwiki/',
+    "    \ 'path_html': '~/vimwiki/html/',
+    "    \ 'html_header': '~/vimwiki/template/header.tpl',}]
     let wiki_1 = {}
     let wiki_1.path = '~/vimwiki/'
     let wiki_1.html_template = "~/vimwiki/template/header.tpl"
@@ -125,11 +140,11 @@ if has("unix")
     let wiki_2 = {}
     let wiki_2.path = '~/my_notes/'
     let wiki_2.index = 'my_markdown_notes'
-	let wiki_2.syntax = 'markdown'
-	let wiki_2.ext = '.md'
+    let wiki_2.syntax = 'markdown'
+    let wiki_2.ext = '.md'
 
     let g:vimwiki_list = [wiki_2, wiki_1]
-    map <silent> <leader>e :e $HOME/.vim/vimrc<cr>
+    map <silent> <leader>ee :e $HOME/.vim/vimrc<cr>
     " has gui  gvim
     "key binding for compile or run {{{
     au BufRead,BufNewFile *.c nmap <Leader>5 :w<CR>:!gcc -Wall % -g -o %<<CR>
@@ -139,8 +154,8 @@ if has("unix")
     au FileType c,cpp nmap <F5> :update<CR>:make<CR>
     au FileType c,cpp nmap <F6> :!./demo<CR>
     au FileType sh nmap <Leader>5 :update<CR>:!bash %<CR>
-    autocmd BufRead,BufNewFile *.py nmap <F5> :update<CR>:!python %<CR>
-    autocmd BufRead,BufNewFile *.py nmap <F6> :update<CR>:!$HOME/.pyenv/versions/env3/bin/python %<CR>
+    autocmd BufRead,BufNewFile *.py nmap <Leader>5 :update<CR>:!python %<CR>
+    autocmd BufRead,BufNewFile *.py nmap <Leader>6 :update<CR>:!$HOME/.pyenv/versions/env3/bin/python %<CR>
     autocmd BufRead,BufNewFile *.hs nmap <F5> :update<CR>:!runghc %<CR>
     autocmd BufRead,BufNewFile *.hs nmap <F6> :update<CR>:!ghci %<CR>
     au BufNewFile,BufRead *.coffee nmap <F5> :update<CR>:!coffee -c %<CR>:!node %<.js <CR>
@@ -152,6 +167,11 @@ if has("unix")
     "autocmd FileType html set dictionary=~/.vim/dict/bootstrap.dict
     "au FileType c set dictionary=~/.vim/dict/c.dict
     " test pluins' setting for linux
+    augroup load_us_ycm
+        autocmd!
+        autocmd InsertEnter * call plug#load('YouCompleteMe')
+                    \| autocmd! load_us_ycm
+    augroup END
 endif
 "'python' : 1
 "end of setting for linux}}}
@@ -159,9 +179,9 @@ if has("gui_running")
     " 只显示菜单
     set guioptions=
     set background=dark "dark light
-    colorscheme solarized "desertEx solarized molokai desert hybrid
+    colorscheme solarized8_dark "desertEx solarized molokai desert hybrid
     nnoremap T :tabe<space>
-    set lines=64
+    set lines=44
     set columns=90
     "nnoremap <s-j> :tabnext<cr>
     "nnoremap <s-k> :tabprev<cr>
@@ -188,9 +208,9 @@ if has("gui_running")
                 exec "!\"D:\\MIT-GNU Scheme\\bin\\mit-scheme.exe\" --library \"d:\\MIT-GNU Scheme\\lib\" --load ".expand("%:p")
             endif
         endfunc
-        map <silent> <leader>e :e ~/vimfiles/vimrc<cr>
-        au BufRead,BufNewFile *.py nmap <F5> :update<CR>:!python %<CR>
-        au BufRead,BufNewFile *.py nmap <F6> :w<CR>:!"c:\Python27\python.exe" %<CR>
+        map <silent> <leader>ee :e ~/vimfiles/vimrc<cr>
+        au BufRead,BufNewFile *.py nmap <Leader>5 :update<CR>:!python %<CR>
+        au BufRead,BufNewFile *.py nmap <Leader>6 :w<CR>:!"c:\Python27\python.exe" %<CR>
         autocmd BufRead,BufNewFile *.scm map <F5> :w<CR>:call Interpreter()<CR>
         autocmd BufRead,BufNewFile *.rkt,*scm nmap <F6> :w<CR>:!racket %<CR>
         "autocmd BufRead *.py nmap <C-F5> :w<CR>:!idle.py -r %<CR>
@@ -199,39 +219,161 @@ if has("gui_running")
         au BufRead,BufNewFile *.c nmap <F9> :w<CR>:!gcc -Wall % -g -o %<.exe<CR>
         au FileType cpp nmap <F9> :w<CR>:!gcc++ -Wall % -g -o %<.exe<CR>
         au FileType c,cpp nmap <C-F9> :!./%<.exe<CR>
-        autocmd BufRead,BufNewFile *.js nmap <F5> :update<CR>:!node %<CR>
+        autocmd BufRead,BufNewFile *.js nmap <Leader>5 :update<CR>:!node %<CR>
         " }}}
         "vimwiki
-    let g:vimwiki_use_mouse = 1
-"    let g:vimwiki_list = [{'path': '~/vimwiki/',
-"    \ 'path_html': '~/vimwiki/html/',
-"    \ 'html_header': '~/vimwiki/template/header.tpl',}]
-    let wiki_1 = {}
-    let wiki_1.path = 'F:/vimwiki/'
-    let wiki_1.html_template = "F:/vimwiki/template/header.tpl"
-    let wiki_1.nested_syntaxes = {'python': 'python', 'c++': 'cpp'}
-    let wiki_1.path_html = 'F:/vimwiki/html/'
+        let g:vimwiki_use_mouse = 1
+        "    let g:vimwiki_list = [{'path': '~/vimwiki/',
+        "    \ 'path_html': '~/vimwiki/html/',
+        "    \ 'html_header': '~/vimwiki/template/header.tpl',}]
+        let wiki_1 = {}
+        let wiki_1.path = 'F:/vimwiki/'
+        let wiki_1.html_template = "F:/vimwiki/template/header.tpl"
+        let wiki_1.nested_syntaxes = {'python': 'python', 'c++': 'cpp'}
+        let wiki_1.path_html = 'F:/vimwiki/html/'
 
-    let wiki_2 = {}
-    let wiki_2.path = 'F:/my_notes/'
-    let wiki_2.index = 'my_markdown_notes'
-	let wiki_2.syntax = 'markdown'
-	let wiki_2.ext = '.md'
+        let wiki_2 = {}
+        let wiki_2.path = 'F:/my_notes/'
+        let wiki_2.index = 'my_markdown_notes'
+        let wiki_2.syntax = 'markdown'
+        let wiki_2.ext = '.md'
 
-    let g:vimwiki_list = [wiki_2, wiki_1]
+        let g:vimwiki_list = [wiki_2, wiki_1]
+
+        if executable('cl')
+            augroup load_us_ycm
+                autocmd!
+                autocmd InsertEnter * call plug#load('YouCompleteMe')
+                            \| autocmd! load_us_ycm
+            augroup END
+        endif
+        if !empty(glob("~/vimfiles/bundle/neocomplete.vim/autoload/neocomplete.vim"))
+            " echo "File exists."
+            "neocomplete setting {{{
+            " Disable AutoComplPop.
+            let g:acp_enableAtStartup = 0
+            " Use neocomplete.
+            let g:neocomplete#enable_at_startup = 1
+            " Use smartcase.
+            let g:neocomplete#enable_smart_case = 1
+            " Set minimum syntax keyword length.
+            let g:neocomplete#sources#syntax#min_keyword_length = 3
+            let g:neocomplete#lock_buffer_name_pattern = '\*ku\*'
+
+            " Define dictionary.
+            let g:neocomplete#sources#dictionary#dictionaries = {
+                        \ 'default' : '',
+                        \ 'javascript' : '~/vimfiles/dict/javascript.dict',
+                        \ 'html' : '~/vimfiles/dict/javascript.dict',
+                        \ 'c' : '~/vimfiles/dict/c.dict'
+                        \ }
+
+            " Define keyword.
+            if !exists('g:neocomplete#keyword_patterns')
+                let g:neocomplete#keyword_patterns = {}
+            endif
+            let g:neocomplete#keyword_patterns['default'] = '\h\w*'
+
+            " Plugin key-mappings.
+            inoremap <expr><C-g>     neocomplete#undo_completion()
+            inoremap <expr><C-l>     neocomplete#complete_common_string()
+
+            " Recommended key-mappings.
+            " <CR>: close popup and save indent.
+            inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+            function! s:my_cr_function()
+                return neocomplete#close_popup() . "\<CR>"
+                " For no inserting <CR> key.
+                "return pumvisible() ? neocomplete#close_popup() : "\<CR>"
+            endfunction
+            " <TAB>: completion.
+            inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+            " <C-h>, <BS>: close popup and delete backword char.
+            inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
+            inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
+            inoremap <expr><C-y>  neocomplete#close_popup()
+            inoremap <expr><C-e>  neocomplete#cancel_popup()
+            " Close popup by <Space>.
+            "inoremap <expr><Space> pumvisible() ? neocomplete#close_popup() : "\<Space>"
+
+            " For cursor moving in insert mode(Not recommended)
+            "inoremap <expr><Left>  neocomplete#close_popup() . "\<Left>"
+            "inoremap <expr><Right> neocomplete#close_popup() . "\<Right>"
+            "inoremap <expr><Up>    neocomplete#close_popup() . "\<Up>"
+            "inoremap <expr><Down>  neocomplete#close_popup() . "\<Down>"
+            " Or set this.
+            "let g:neocomplete#enable_cursor_hold_i = 1
+            " Or set this.
+            "let g:neocomplete#enable_insert_char_pre = 1
+
+            " AutoComplPop like behavior.
+            "let g:neocomplete#enable_auto_select = 1
+
+            " Shell like behavior(not recommended).
+            "set completeopt+=longest
+            "let g:neocomplete#enable_auto_select = 1
+            "let g:neocomplete#disable_auto_complete = 1
+            "inoremap <expr><TAB>  pumvisible() ? "\<Down>" : "\<C-x>\<C-u>"
+
+            " Enable omni completion.
+            autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
+            autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+            autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+            autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+            autocmd FileType python setlocal omnifunc=python3complete#Complete
+            "autocmd FileType javascript setlocal omnifunc=tern#Complete
+
+            " Enable heavy omni completion.
+            if !exists('g:neocomplete#sources#omni#input_patterns')
+                let g:neocomplete#sources#omni#input_patterns = {}
+            endif
+            "let g:neocomplete#force_omni_input_patterns.javascript = '[^. \t]\.\w*'
+            "let g:neocomplete#sources#omni#input_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
+            "let g:neocomplete#sources#omni#input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
+            "let g:neocomplete#sources#omni#input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
+            " support python3
+            autocmd FileType python setlocal omnifunc=jedi#completions
+            "let g:neocomplete#enable_auto_select = 0
+            "let g:jedi#popup_select_first=0
+            "let g:jedi#popup_on_dot = 0
+            let g:jedi#completions_enabled = 0
+            let g:jedi#auto_vim_configuration = 0
+            if !exists('g:neocomplete#force_omni_input_patterns')
+                let g:neocomplete#force_omni_input_patterns = {}
+            endif
+            let g:neocomplete#force_omni_input_patterns.python = '\%([^. \t]\.\|^\s*@\|^\s*from\s.\+import \|^\s*from \|^\s*import \)\w*'
+
+            "if has('python3')
+            "let g:jedi#force_py_version = 3
+            "endif
+            "let g:jedi#force_py_version = 3
+
+            "end of neocomplete setting }}}
+            "jedi 设置
+            let g:jedi#auto_initialization = 0
+            let g:jedi#goto_assignments_command = "<leader>g"
+            let g:jedi#goto_definitions_command = "<leader>d"
+            let g:jedi#documentation_command = "K"
+            let g:jedi#usages_command = "<leader>n"
+            let g:jedi#completions_command = "<A-1>"
+            let g:jedi#rename_command = "<leader>r"
+            let g:jedi#show_call_signatures = "1"
+        endif
+
     endif
     " end of setting for windows }}}
 else
-    colorscheme desert "solarized8_dark desert evening solarized molokai
+    set termguicolors
     "let g:solarized_termtrans = 1
     set background=dark
     "let g:solarized_termcolors=256
 
     "let terminal support 256 color
-    set t_Co=256
+    "set t_Co=256
+    colorscheme solarized8_dark "solarized8_dark desert evening solarized molokai
     "for sakura terminal
     "if $COLORTERM == "truecolor"
-        "set t_ut=
+    "set t_ut=
     "endif
 endif
 
@@ -248,16 +390,16 @@ set wildmenu
 "set cul "高亮光标所在行
 "set cuc
 set showcmd
-set autochdir
+"set autochdir
 set fdm=marker "marker indent
 set completeopt=longest,menu
 set nobackup "覆盖文件不备份
 set noswapfile "编辑时不产生交换文件
 set showmatch
-set vb t_vb= "关闭响铃和闪屏 
+set vb t_vb= "关闭响铃和闪屏
 set ruler
 "set nohls "不高亮显示结果
-set hls 
+set hls
 set incsearch "在输入要搜索的文字时，vim会实时匹配
 set fileformats=unix,dos
 
@@ -279,7 +421,7 @@ au BufRead *.vue setlocal ts=2 sw=2 et
 "}}}
 
 "map setting{{{
-" F2:NERDTreeToggle  F3:tagbar F4 F6 F7 F8 F9:c F10:c run 
+" F2:NERDTreeToggle  F3:tagbar F4 F6 F7 F8 F9:c F10:c run
 " 普通模式下 Ctrl+c 复制文件路径
 "nnoremap <c-c> :let @* = expand('%:p')<cr>
 "map <C-Q> :wq!
@@ -318,9 +460,16 @@ nmap <Leader>p "+p
 nmap <Leader>P "+P
 vmap <Leader>p "+p
 vmap <Leader>P "+P
-" plugin map
+
+au FileType javascript nnoremap <leader>es mF:%!~/.nvm/versions/node/v6.11.0/bin/eslint_d -c ~/.eslintrc-fix.json --stdin --fix-to-stdout<CR>`F
+au FileType javascript vnoremap <leader>es :!~/.nvm/versions/node/v6.11.0/bin/eslint_d -c ~/.eslintrc-fix.json --stdin --fix-to-stdout<CR>gv
+" format
+noremap <Leader>ef :Autoformat<CR>
+
 vmap <silent> <Leader>c<Space> <Plug>NERDCommenterToggle
 nmap <silent> <Leader>c<Space> <Plug>NERDCommenterToggle
+nnoremap <Leader>b :Unite buffer<CR>
+
 "}}}
 
 " python setting{{{
@@ -376,11 +525,14 @@ let g:ycm_use_ultisnips_completer = 1 " Default 1, just ensure
 let g:ycm_complete_in_comments = 1 " Completion in comments
 let g:ycm_complete_in_strings = 1 " Completion in string
 "}}}
-"ale
+"" ale
 "let g:ale_javascript_eslint_executable = 'eslint_d'
 "let g:ale_javascript_eslint_options = '--fix'
-
-"syntastic
+"let g:ale_lint_on_text_changed = 'never'
+"let g:ale_lint_on_enter = 0
+"" syntastic
+let g:syntastic_javascript_checkers = ['eslint']
+let g:syntastic_javascript_eslint_exec = 'eslint_d'
 " add an autocmd after vim started to execute checktime for *.js files on write
 "au VimEnter *.js au BufWritePost *.js checktime
 "let g:EasyMotion_leader_key = '<space>'
@@ -407,68 +559,77 @@ let g:indent_guides_guide_size=1
 ":nmap <silent> <Leader>i <Plug>IndentGuidesToggle
 
 "html.vim
-:let g:html_indent_inctags = "html,body,head,tbody" 
+:let g:html_indent_inctags = "html,body,head,tbody"
 let g:html_indent_script1 = "inc"
 let g:html_indent_style1 = "inc"
-"NERDTree,提供查看文件折叠/展开列表功能  
-nmap <F2> :NERDTreeToggle<CR>  
-"imap <F2> <ESC> :NERDTreeToggle<CR> 
+"NERDTree,提供查看文件折叠/展开列表功能
+nmap <Leader>2 :NERDTreeToggle<CR>
+"imap <F2> <ESC> :NERDTreeToggle<CR>
 
-"进行Tlist的设置 {{{ 
-"let Tlist_Show_Menu = 1  
-"TlistUpdate可以更新tags  
-"map <F3> :silent! Tlist<CR>  "按下F3就可以呼出Taglist 
-"map <silent> <leader>tl :TlistToggle<cr>
-"let Tlist_Ctags_Cmd='ctags' "因为我们放在环境变量里，所以可以直接执行  
-"let Tlist_Use_Right_Window=0 "让窗口显示在右边，0的话就是显示在左边  
-"let Tlist_Show_One_File=1 "让taglist可以同时展示多个文件的函数列表，如果想只有1个，设置为1  
-"let Tlist_File_Fold_Auto_Close=1 "非当前文件，函数列表折叠隐藏  
-"let Tlist_Exit_OnlyWindow=1 "当taglist是最后一个分割窗口时，自动退出vim  
-"let Tlist_Process_File_Always=0 "是否一直处理tags.1:处理;0:不处理  
-"let Tlist_Inc_Winwidth=0  
-"set tags=./tags,tags;$HOME "设置tags文件路径   
-"}}}
-nmap <F3> :TagbarToggle<CR>
+nmap <Leader>3 :TagbarToggle<CR>
 let tagbar_left=1
 let g:tagbar_autofocus=1
+let g:ctrlp_custom_ignore = {
+            \ 'dir':  '\v[\/](\.(git|hg|svn))|(node_modules|dist)$',
+            \ 'file': '\v\.(exe|so|dll)$',
+            \ 'link': 'SOME_BAD_SYMBOLIC_LINKS',
+            \ }
+"au BufRead,BufNewFile *.scm,*rkt let g:AutoPairsLoaded = 0
+let g:AutoPairsFlyMode = 1
+" For ack.
+if executable('ack-grep')
+    let g:unite_source_grep_command = 'ack-grep'
+    let g:unite_source_grep_default_opts = '-i --no-heading --no-color -H'
+    let g:unite_source_grep_recursive_opt = ''
+elseif executable('ack')
+    let g:unite_source_grep_command = 'ack'
+    let g:unite_source_grep_default_opts = '-i --no-heading --no-color -H'
+    let g:unite_source_grep_recursive_opt = ''
+elseif executable('ag')
+    let g:unite_source_grep_command = 'ag'
+    let g:unite_source_grep_default_opts =
+                \ '-i --vimgrep --hidden --ignore ' .
+                \ '''.hg'' --ignore ''.svn'' --ignore ''.git'' --ignore ''.bzr'''
+    let g:unite_source_grep_recursive_opt = ''
+endif
 " plugin setting end}}}
 
 " 插入文件头{{{
-"新建.c,.h,.sh,.java文件，自动插入文件头   
-autocmd BufNewFile *.cpp,*.[ch],*.sh,*.java exec ":call SetTitle()"   
-""定义函数SetTitle，自动插入文件头   
-func SetTitle()   
-    "如果文件类型为.sh文件   
-    if &filetype == 'sh'   
-        call setline(1,"\#!/bin/bash")   
-        call append(line("."), "")   
-    elseif &filetype == 'python'  
-        call setline(1,"#!/usr/bin/env python")  
-        call append(line("."),"# coding=utf-8")  
-        call append(line(".")+1, "")   
-    elseif &filetype == 'mkd'  
-        call setline(1,"<head><meta charset=\"UTF-8\"></head>")  
-    else   
-        call setline(1, "/*************************************************************************")   
-        call append(line("."),   "  > File Name:     ".expand("%"))   
-        call append(line(".")+1, "  > Author:        alan")   
-        call append(line(".")+2, "  > Mail:          zhifengle@gmail.com ")   
-        call append(line(".")+3, "  > Created Time:  ".strftime("%c"))   
-        call append(line(".")+4, " ************************************************************************/")   
-        call append(line(".")+5, "")  
-    endif  
-    if &filetype == 'cpp'  
-        call append(line(".")+6, "#include<iostream>")  
-        call append(line(".")+7, "using namespace std;")  
-        call append(line(".")+8, "")  
-    endif  
-    if &filetype == 'c'  
-        call append(line(".")+6, "#include<stdio.h>")  
-        call append(line(".")+7, "")  
-    endif  
-    "新建文件后，自动定位到文件末尾  
-endfunc   
-autocmd BufNewFile * normal G 
+"新建.c,.h,.sh,.java文件，自动插入文件头
+autocmd BufNewFile *.cpp,*.[ch],*.sh,*.java exec ":call SetTitle()"
+""定义函数SetTitle，自动插入文件头
+func SetTitle()
+    "如果文件类型为.sh文件
+    if &filetype == 'sh'
+        call setline(1,"\#!/bin/bash")
+        call append(line("."), "")
+    elseif &filetype == 'python'
+        call setline(1,"#!/usr/bin/env python")
+        call append(line("."),"# coding=utf-8")
+        call append(line(".")+1, "")
+    elseif &filetype == 'mkd'
+        call setline(1,"<head><meta charset=\"UTF-8\"></head>")
+    else
+        call setline(1, "/*************************************************************************")
+        call append(line("."),   "  > File Name:     ".expand("%"))
+        call append(line(".")+1, "  > Author:        alan")
+        call append(line(".")+2, "  > Mail:          zhifengle@gmail.com ")
+        call append(line(".")+3, "  > Created Time:  ".strftime("%c"))
+        call append(line(".")+4, " ************************************************************************/")
+        call append(line(".")+5, "")
+    endif
+    if &filetype == 'cpp'
+        call append(line(".")+6, "#include<iostream>")
+        call append(line(".")+7, "using namespace std;")
+        call append(line(".")+8, "")
+    endif
+    if &filetype == 'c'
+        call append(line(".")+6, "#include<stdio.h>")
+        call append(line(".")+7, "")
+    endif
+    "新建文件后，自动定位到文件末尾
+endfunc
+autocmd BufNewFile * normal G
 " }}}
 "setting for Windows {{{
 set diffexpr=MyDiff()
@@ -504,20 +665,10 @@ endfunction
 """""""""""""""""
 
 "some settings for trying{{{
-"au BufRead,BufNewFile *.scm,*rkt let g:AutoPairsLoaded = 0
-let g:AutoPairsFlyMode = 1
-
 "let g:AutoPairsShortcutBackInsert = '<M-b>'
-
-"set complete-=k complete+=k
-set complete+=k
+"set complete+=k
 autocmd BufRead,BufNewFile *.md nmap <F5> :w<CR>:set syntax=markdown<CR>
 let g:vimwiki_valid_html_tags='b,i,s,u,sub,sup,kbd,br,hr,div,del,code'
-let g:ctrlp_custom_ignore = {
-            \ 'dir':  '\v[\/](\.(git|hg|svn))|(node_modules|dist)$',
-            \ 'file': '\v\.(exe|so|dll)$',
-            \ 'link': 'SOME_BAD_SYMBOLIC_LINKS',
-            \ }
 let g:Modeliner_format = 'sts= sw= ts= et'
 "let g:polyglot_disabled = ['css']
 " test setting for web development {{{
