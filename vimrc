@@ -71,6 +71,8 @@ Plug 'vim-scripts/Modeliner'
 "Plug 'w0rp/ale'
 Plug 'vim-syntastic/syntastic'
 Plug 'Shougo/unite.vim'
+Plug 'roxma/vim-paste-easy'
+"Plug 'Shougo/denite.nvim'
 " Colorscheme
 "Plug 'altercation/vim-colors-solarized'
 "Plug 'ericbn/vim-solarized'
@@ -144,7 +146,7 @@ if has("unix")
     let wiki_2.ext = '.md'
 
     let g:vimwiki_list = [wiki_2, wiki_1]
-    map <silent> <leader>ee :e $HOME/.vim/vimrc<cr>
+    map <silent> <Leader>ee :e $HOME/.vim/vimrc<cr>
     " has gui  gvim
     "key binding for compile or run {{{
     au BufRead,BufNewFile *.c nmap <Leader>5 :w<CR>:!gcc -Wall % -g -o %<<CR>
@@ -180,11 +182,8 @@ if has("gui_running")
     set guioptions=
     set background=dark "dark light
     colorscheme solarized8_dark "desertEx solarized molokai desert hybrid
-    nnoremap T :tabe<space>
     set lines=44
     set columns=90
-    "nnoremap <s-j> :tabnext<cr>
-    "nnoremap <s-k> :tabprev<cr>
     " 高亮光标所在的行
     "set cursorline
     "setting for windows {{{
@@ -208,7 +207,7 @@ if has("gui_running")
                 exec "!\"D:\\MIT-GNU Scheme\\bin\\mit-scheme.exe\" --library \"d:\\MIT-GNU Scheme\\lib\" --load ".expand("%:p")
             endif
         endfunc
-        map <silent> <leader>ee :e ~/vimfiles/vimrc<cr>
+        map <silent> <Leader>ee :e ~/vimfiles/vimrc<cr>
         au BufRead,BufNewFile *.py nmap <Leader>5 :update<CR>:!python %<CR>
         au BufRead,BufNewFile *.py nmap <Leader>6 :w<CR>:!"c:\Python27\python.exe" %<CR>
         autocmd BufRead,BufNewFile *.scm map <F5> :w<CR>:call Interpreter()<CR>
@@ -351,12 +350,12 @@ if has("gui_running")
             "end of neocomplete setting }}}
             "jedi 设置
             let g:jedi#auto_initialization = 0
-            let g:jedi#goto_assignments_command = "<leader>g"
-            let g:jedi#goto_definitions_command = "<leader>d"
+            let g:jedi#goto_assignments_command = "<Leader>g"
+            let g:jedi#goto_definitions_command = "<Leader>d"
             let g:jedi#documentation_command = "K"
-            let g:jedi#usages_command = "<leader>n"
+            let g:jedi#usages_command = "<Leader>n"
             let g:jedi#completions_command = "<A-1>"
-            let g:jedi#rename_command = "<leader>r"
+            let g:jedi#rename_command = "<Leader>r"
             let g:jedi#show_call_signatures = "1"
         endif
 
@@ -424,45 +423,49 @@ au BufRead *.vue setlocal ts=2 sw=2 et
 " F2:NERDTreeToggle  F3:tagbar F4 F6 F7 F8 F9:c F10:c run
 " 普通模式下 Ctrl+c 复制文件路径
 "nnoremap <c-c> :let @* = expand('%:p')<cr>
-"map <C-Q> :wq!
-"map ;y "+y
-"map ;p "+p
-"nmap 1b ^
-"nmap 1e $
 "inoremap jk <Esc>
-au BufRead *.wiki map <S-F4> :VimwikiAll2HTML<cr>
-au BufRead *.wiki map <F4> :Vimwiki2HTML<cr>
+"au BufRead *.wiki map <S-F4> :VimwikiAll2HTML<cr>
+"au BufRead *.wiki map <F4> :Vimwiki2HTML<cr>
 " calendar
 au BufRead *.wiki map <F8> :Calendar<cr>
 "nnoremap <F6> :GundoToggle<CR>
 " 自动运用设置
 autocmd BufWritePost .vimrc,.gvimrc,_vimrc silent source %
 " Buffers/Tab操作快捷方式!
-nnoremap <s-h> :bprevious<cr>
-nnoremap <s-l> :bnext<cr>
+"nnoremap <s-h> :bprevious<cr>
+"nnoremap <s-l> :bnext<cr>
 "nnoremap F :tabe %
 "vmap <C-C> "+y
-" ctrl+s 保存
+" ctrl+s, need set alias vim="stty stop '' -ixoff ; vim"
 map <C-S> :update<CR>
 vmap <C-S> <C-C>:update<CR>
 imap <C-S> <C-O>:update<CR>
+" Insert mode use Emacs key bind
 inoremap <C-a> <C-o>^
 inoremap <C-e> <End>
-" 插入模式下上下左右移动光标
-"inoremap <c-h> <left>
-inoremap <c-l> <right>
-"inoremap <c-j> <c-o>gj
-"inoremap <c-k> <c-o>gk
+inoremap <C-f> <Right>
+inoremap <C-b> <Left>
 "set modeline
-" 复制粘贴
+
+""""""""""""""""""""
+"  Leader key map  "
+""""""""""""""""""""
 vmap <Leader>y "+y
 nmap <Leader>p "+p
 nmap <Leader>P "+P
 vmap <Leader>p "+p
 vmap <Leader>P "+P
 
-au FileType javascript nnoremap <leader>es mF:%!~/.nvm/versions/node/v6.11.0/bin/eslint_d -c ~/.eslintrc-fix.json --stdin --fix-to-stdout<CR>`F
-au FileType javascript vnoremap <leader>es :!~/.nvm/versions/node/v6.11.0/bin/eslint_d -c ~/.eslintrc-fix.json --stdin --fix-to-stdout<CR>gv
+"nnoremap <Leader>te :tabe<space>
+nnoremap <Leader>d :YcmCompleter GoToDefinition <CR>
+nnoremap <Leader>fd :YcmCompleter GoToDefinitionElseDeclaration<CR>
+nnoremap K :YcmCompleter GetDoc<CR>
+nnoremap <Leader>ft :YcmCompleter GetType <CR>
+au FileType javascript,python,typescript nnoremap <Leader>fu :YcmCompleter GoToReferences<CR>
+"autocmd BufRead,BufNewFile *.cpp,*.c,*.cc nnoremap <F5> :YcmForceCompileAndDiagnostics<CR>
+
+au FileType javascript nnoremap <Leader>es mF:%!~/.nvm/versions/node/v6.11.0/bin/eslint_d -c ~/.eslintrc-fix.json --stdin --fix-to-stdout<CR>`F
+au FileType javascript vnoremap <Leader>es :!~/.nvm/versions/node/v6.11.0/bin/eslint_d -c ~/.eslintrc-fix.json --stdin --fix-to-stdout<CR>gv
 " format
 noremap <Leader>ef :Autoformat<CR>
 
@@ -501,11 +504,6 @@ if has("unix")
     let g:ycm_python_binary_path = '/home/alan/.pyenv/versions/env3/bin/python3'
     let g:ycm_global_ycm_extra_conf = '~/.vim/.ycm_extra_conf.py'
 endif
-nnoremap <leader>jd :YcmCompleter GoToDefinitionElseDeclaration<CR>
-nnoremap K :YcmCompleter GetDoc<CR>
-nnoremap <Leader>d :YcmCompleter GoToDefinition <CR>
-nnoremap <Leader>t :YcmCompleter GetType <CR>
-"autocmd BufRead,BufNewFile *.cpp,*.c,*.cc nnoremap <F5> :YcmForceCompileAndDiagnostics<CR>
 "Do not ask when starting vim
 let g:ycm_confirm_extra_conf = 0
 let g:ycm_filetype_blacklist = {
@@ -612,7 +610,7 @@ func SetTitle()
     else
         call setline(1, "/*************************************************************************")
         call append(line("."),   "  > File Name:     ".expand("%"))
-        call append(line(".")+1, "  > Author:        alan")
+        call append(line(".")+1, "  > Author:        22earth")
         call append(line(".")+2, "  > Mail:          zhifengle@gmail.com ")
         call append(line(".")+3, "  > Created Time:  ".strftime("%c"))
         call append(line(".")+4, " ************************************************************************/")
@@ -657,13 +655,9 @@ function MyDiff()
     silent execute '!' . cmd . ' ' . opt . arg1 . ' ' . arg2 . ' > ' . arg3 . eq
 endfunction
 "}}}
-""""""""""""""""
-"  linux or windows   "
-""""""""""""""""
 """""""""""""""""
 "  try to use   "
 """""""""""""""""
-
 "some settings for trying{{{
 "let g:AutoPairsShortcutBackInsert = '<M-b>'
 "set complete+=k
