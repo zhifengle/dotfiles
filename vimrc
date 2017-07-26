@@ -72,6 +72,7 @@ Plug 'vim-scripts/Modeliner'
 Plug 'vim-syntastic/syntastic'
 Plug 'Shougo/unite.vim'
 Plug 'roxma/vim-paste-easy'
+"Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 "Plug 'Shougo/denite.nvim'
 " Colorscheme
 "Plug 'altercation/vim-colors-solarized'
@@ -458,10 +459,12 @@ vmap <Leader>P "+P
 
 "nnoremap <Leader>te :tabe<space>
 nnoremap <Leader>d :YcmCompleter GoToDefinition <CR>
+" grep word under cursor
+nnoremap <Leader>fg :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
 nnoremap <Leader>fd :YcmCompleter GoToDefinitionElseDeclaration<CR>
 nnoremap K :YcmCompleter GetDoc<CR>
 nnoremap <Leader>ft :YcmCompleter GetType <CR>
-au FileType javascript,python,typescript nnoremap <Leader>fu :YcmCompleter GoToReferences<CR>
+au FileType javascript,python,typescript nnoremap <Leader>fr :YcmCompleter GoToReferences<CR>
 "autocmd BufRead,BufNewFile *.cpp,*.c,*.cc nnoremap <F5> :YcmForceCompileAndDiagnostics<CR>
 
 au FileType javascript nnoremap <Leader>es mF:%!~/.nvm/versions/node/v6.11.0/bin/eslint_d -c ~/.eslintrc-fix.json --stdin --fix-to-stdout<CR>`F
@@ -574,20 +577,27 @@ let g:ctrlp_custom_ignore = {
             \ }
 "au BufRead,BufNewFile *.scm,*rkt let g:AutoPairsLoaded = 0
 let g:AutoPairsFlyMode = 1
-" For ack.
-if executable('ack-grep')
+if executable('ag')
+    " Use ag over grep
+    set grepprg=ag\ --nogroup\ --nocolor
+
+    " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
+    "let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+
+    " ag is fast enough that CtrlP doesn't need to cache
+    "let g:ctrlp_use_caching = 0
+    let g:unite_source_grep_command = 'ag'
+    let g:unite_source_grep_default_opts =
+                \ '-i --vimgrep --hidden --ignore ' .
+              \ '''.hg'' --ignore ''.svn'' --ignore ''.git'' --ignore ''.bzr'''
+    let g:unite_source_grep_recursive_opt = ''
+elseif executable('ack-grep')
     let g:unite_source_grep_command = 'ack-grep'
     let g:unite_source_grep_default_opts = '-i --no-heading --no-color -H'
     let g:unite_source_grep_recursive_opt = ''
 elseif executable('ack')
     let g:unite_source_grep_command = 'ack'
     let g:unite_source_grep_default_opts = '-i --no-heading --no-color -H'
-    let g:unite_source_grep_recursive_opt = ''
-elseif executable('ag')
-    let g:unite_source_grep_command = 'ag'
-    let g:unite_source_grep_default_opts =
-                \ '-i --vimgrep --hidden --ignore ' .
-                \ '''.hg'' --ignore ''.svn'' --ignore ''.git'' --ignore ''.bzr'''
     let g:unite_source_grep_recursive_opt = ''
 endif
 " plugin setting end}}}
