@@ -62,15 +62,15 @@ Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' } | Plug '22earth/nerdtree
 Plug 'vimwiki/vimwiki'
 Plug 'mattn/calendar-vim', {'for': 'vimwiki'}
 Plug 'jiangmiao/auto-pairs'
-Plug 'godlygeek/tabular'
+Plug 'godlygeek/tabular', { 'on': 'Tabularize' }
 Plug 'bling/vim-airline'
 Plug 'tpope/vim-fugitive'
 Plug 'majutsushi/tagbar'
 Plug 'Valloric/ListToggle'
-Plug 'vim-scripts/Modeliner'
+Plug 'vim-scripts/Modeliner', { 'on': 'Modeliner' }
 "Plug 'w0rp/ale'
 Plug 'vim-syntastic/syntastic'
-Plug 'Shougo/unite.vim'
+Plug 'Shougo/unite.vim', { 'on': 'Unite' }
 "Plug 'roxma/vim-paste-easy'
 "Plug 'rking/ag.vim'
 "Plug 'gregsexton/gitv'
@@ -85,6 +85,7 @@ Plug 'lifepillar/vim-solarized8'
 " lazy load {{{
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
+Plug 'editorconfig/editorconfig-vim', { 'on': [] }
 " }}}
 
 if has("win32")
@@ -478,6 +479,7 @@ au FileType javascript nnoremap <LocalLeader>es mF:%!~/.nvm/versions/node/v6.11.
 au FileType javascript vnoremap <LocalLeader>es :!~/.nvm/versions/node/v6.11.0/bin/eslint_d -c ~/.eslintrc-fix.json --stdin --fix-to-stdout<CR>gv
 " format
 noremap <Leader>ef :Autoformat<CR>
+noremap <Leader>ec :call plug#load('editorconfig-vim')<CR>:EditorConfigReload<CR>
 
 vmap <silent> <Leader>c<Space> <Plug>NERDCommenterToggle
 nmap <silent> <Leader>c<Space> <Plug>NERDCommenterToggle
@@ -683,6 +685,7 @@ autocmd BufRead,BufNewFile *.md nmap <F5> :w<CR>:set syntax=markdown<CR>
 let g:vimwiki_valid_html_tags='b,i,s,u,sub,sup,kbd,br,hr,div,del,code'
 let g:Modeliner_format = 'sts= sw= ts= et'
 let g:syntastic_rust_checkers = ['rustc']
+let g:EditorConfig_exclude_patterns = ['fugitive://.*']
 "let g:polyglot_disabled = ['css']
 " test setting for web development {{{
 "let g:syntastic_javascript_eslint_exe = '$(npm bin)/eslint'
