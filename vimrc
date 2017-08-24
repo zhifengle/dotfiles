@@ -58,7 +58,7 @@ Plug 'Lokaltog/vim-easymotion'
 Plug 'vim-scripts/matchit.zip'
 Plug 'mattn/emmet-vim'
 Plug 'scrooloose/nerdcommenter'
-Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
+Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' } | Plug '22earth/nerdtree-execute', { 'on':  'NERDTreeToggle' }
 Plug 'vimwiki/vimwiki'
 Plug 'mattn/calendar-vim', {'for': 'vimwiki'}
 Plug 'jiangmiao/auto-pairs'
@@ -71,13 +71,16 @@ Plug 'vim-scripts/Modeliner'
 "Plug 'w0rp/ale'
 Plug 'vim-syntastic/syntastic'
 Plug 'Shougo/unite.vim'
-Plug 'roxma/vim-paste-easy'
+"Plug 'roxma/vim-paste-easy'
+"Plug 'rking/ag.vim'
+"Plug 'gregsexton/gitv'
 "Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 "Plug 'Shougo/denite.nvim'
 " Colorscheme
 "Plug 'altercation/vim-colors-solarized'
 "Plug 'ericbn/vim-solarized'
 Plug 'lifepillar/vim-solarized8'
+"Plug 'w0ng/vim-hybrid'
 
 " lazy load {{{
 Plug 'SirVer/ultisnips'
@@ -116,11 +119,14 @@ Plug 'Shougo/vimproc.vim', {'do': 'make'}
 Plug 'Quramy/tsuquyomi'
 " need UltiSnips
 "Plug 'justinj/vim-react-snippets'
+" Rust
+Plug 'rust-lang/rust.vim'
 "}}}
 call plug#end()
 
 
 let mapleader="\<Space>"
+let maplocalleader="\<Space>"
 "let g:mapleader=";"
 set bs=2 "set backspace=indent,eol,start
 "set mouse=a
@@ -128,6 +134,7 @@ filetype plugin on
 "setting for linux {{{
 if has("unix")
     set guifont=DejaVu\ Sans\ Mono\ 13
+    "set guifont=Fira\ Code\ Medium\ 13
     "set guifont=Yahei\ Mono\ 13
     "set guifont=Source\ Code\ Pro\ 13
     let g:vimwiki_use_mouse = 1
@@ -370,7 +377,7 @@ else
 
     "let terminal support 256 color
     "set t_Co=256
-    colorscheme solarized8_dark "solarized8_dark desert evening solarized molokai
+    colorscheme solarized8_dark "solarized8_dark desert evening solarized molokai hybrid
     "for sakura terminal
     "if $COLORTERM == "truecolor"
     "set t_ut=
@@ -416,8 +423,7 @@ set smartindent "智能自动缩进
 autocmd FileType python setlocal ts=4 sw=4 et sta
 autocmd FileType make setlocal ts=8 sw=8 noexpandtab
 " indent for wed
-autocmd FileType javascript,html,css,scss,less setlocal ts=2 sw=2  et
-au BufRead *.vue setlocal ts=2 sw=2 et
+autocmd FileType vue,javascript,typescript,html,css,scss,less setlocal ts=2 sw=2  et
 "}}}
 
 "map setting{{{
@@ -429,6 +435,7 @@ au BufRead *.vue setlocal ts=2 sw=2 et
 "au BufRead *.wiki map <F4> :Vimwiki2HTML<cr>
 " calendar
 au BufRead *.wiki map <F8> :Calendar<cr>
+au FileType qf nnoremap <buffer> o <CR><C-w>j
 "nnoremap <F6> :GundoToggle<CR>
 " 自动运用设置
 autocmd BufWritePost .vimrc,.gvimrc,_vimrc silent source %
@@ -464,11 +471,11 @@ nnoremap <Leader>fg :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
 nnoremap <Leader>fd :YcmCompleter GoToDefinitionElseDeclaration<CR>
 nnoremap K :YcmCompleter GetDoc<CR>
 nnoremap <Leader>ft :YcmCompleter GetType <CR>
-au FileType javascript,python,typescript nnoremap <Leader>fr :YcmCompleter GoToReferences<CR>
+au FileType javascript,python,typescript nnoremap <LocalLeader>fr :YcmCompleter GoToReferences<CR>
 "autocmd BufRead,BufNewFile *.cpp,*.c,*.cc nnoremap <F5> :YcmForceCompileAndDiagnostics<CR>
 
-au FileType javascript nnoremap <Leader>es mF:%!~/.nvm/versions/node/v6.11.0/bin/eslint_d -c ~/.eslintrc-fix.json --stdin --fix-to-stdout<CR>`F
-au FileType javascript vnoremap <Leader>es :!~/.nvm/versions/node/v6.11.0/bin/eslint_d -c ~/.eslintrc-fix.json --stdin --fix-to-stdout<CR>gv
+au FileType javascript nnoremap <LocalLeader>es mF:%!~/.nvm/versions/node/v6.11.0/bin/eslint_d -c ~/.eslintrc-fix.json --stdin --fix-to-stdout<CR>`F
+au FileType javascript vnoremap <LocalLeader>es :!~/.nvm/versions/node/v6.11.0/bin/eslint_d -c ~/.eslintrc-fix.json --stdin --fix-to-stdout<CR>gv
 " format
 noremap <Leader>ef :Autoformat<CR>
 
@@ -580,6 +587,7 @@ let g:AutoPairsFlyMode = 1
 if executable('ag')
     " Use ag over grep
     set grepprg=ag\ --nogroup\ --nocolor
+    "let g:ackprg = 'ag --nogroup --nocolor --column'
 
     " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
     "let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
@@ -640,7 +648,7 @@ endfunc
 autocmd BufNewFile * normal G
 " }}}
 "setting for Windows {{{
-set diffexpr=MyDiff()
+"set diffexpr=MyDiff()
 function MyDiff()
     let opt = '-a --binary '
     if &diffopt =~ 'icase' | let opt = opt . '-i ' | endif
@@ -674,6 +682,7 @@ endfunction
 autocmd BufRead,BufNewFile *.md nmap <F5> :w<CR>:set syntax=markdown<CR>
 let g:vimwiki_valid_html_tags='b,i,s,u,sub,sup,kbd,br,hr,div,del,code'
 let g:Modeliner_format = 'sts= sw= ts= et'
+let g:syntastic_rust_checkers = ['rustc']
 "let g:polyglot_disabled = ['css']
 " test setting for web development {{{
 "let g:syntastic_javascript_eslint_exe = '$(npm bin)/eslint'
