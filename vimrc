@@ -107,6 +107,7 @@ endif
 " web development
 Plug 'sheerun/vim-polyglot'
 Plug 'hail2u/vim-css3-syntax'
+Plug 'lilydjwg/colorizer', { 'on': 'ColorHighlight' }
 "Plug 'maksimr/vim-jsbeautify'
 Plug 'Chiel92/vim-autoformat', {'on': 'Autoformat'}
 "Plug 'pangloss/vim-javascript'
@@ -377,7 +378,7 @@ else
     "let g:solarized_termcolors=256
 
     "let terminal support 256 color
-    "set t_Co=256
+    set t_Co=256
     colorscheme solarized8_dark "solarized8_dark desert evening solarized molokai hybrid
     "for sakura terminal
     "if $COLORTERM == "truecolor"
