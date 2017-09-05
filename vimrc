@@ -68,8 +68,8 @@ Plug 'tpope/vim-fugitive'
 Plug 'majutsushi/tagbar'
 Plug 'Valloric/ListToggle'
 Plug 'vim-scripts/Modeliner', { 'on': 'Modeliner' }
-"Plug 'w0rp/ale'
-Plug 'vim-syntastic/syntastic'
+Plug 'w0rp/ale'
+"Plug 'vim-syntastic/syntastic'
 Plug 'Shougo/unite.vim', { 'on': 'Unite' }
 Plug 'roxma/vim-paste-easy'
 "Plug 'rking/ag.vim'
@@ -483,6 +483,7 @@ nnoremap <Leader>ft :YcmCompleter GetType <CR>
 au FileType javascript,python,typescript nnoremap <LocalLeader>fr :YcmCompleter GoToReferences<CR>
 "autocmd BufRead,BufNewFile *.cpp,*.c,*.cc nnoremap <F5> :YcmForceCompileAndDiagnostics<CR>
 
+nnoremap <Leader>es :ALEFix<CR>
 au FileType javascript nnoremap <LocalLeader>es mF:%!~/.nvm/versions/node/v6.11.0/bin/eslint_d -c ~/.eslintrc-fix.json --stdin --fix-to-stdout<CR>`F
 au FileType javascript vnoremap <LocalLeader>es :!~/.nvm/versions/node/v6.11.0/bin/eslint_d -c ~/.eslintrc-fix.json --stdin --fix-to-stdout<CR>gv
 " format
@@ -556,7 +557,13 @@ let g:ycm_complete_in_strings = 1 " Completion in string
 let g:syntastic_javascript_checkers = ['eslint']
 let g:syntastic_javascript_eslint_exec = 'eslint_d'
 let g:syntastic_rust_checkers = ['rustc', 'cargo']
+let g:ale_javascript_eslint_executable = 'eslint_d'
 let g:polyglot_disabled = ['rust']
+let g:ale_fixers = {
+\   'javascript': ['eslint'],
+\   'rust': ['rustc'],
+\   'python': ['autopep8'],
+\}
 " add an autocmd after vim started to execute checktime for *.js files on write
 "au VimEnter *.js au BufWritePost *.js checktime
 "let g:EasyMotion_leader_key = '<space>'
