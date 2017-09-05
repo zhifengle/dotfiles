@@ -71,7 +71,7 @@ Plug 'vim-scripts/Modeliner', { 'on': 'Modeliner' }
 "Plug 'w0rp/ale'
 Plug 'vim-syntastic/syntastic'
 Plug 'Shougo/unite.vim', { 'on': 'Unite' }
-"Plug 'roxma/vim-paste-easy'
+Plug 'roxma/vim-paste-easy'
 "Plug 'rking/ag.vim'
 "Plug 'gregsexton/gitv'
 "Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
@@ -107,6 +107,8 @@ endif
 " web development
 Plug 'sheerun/vim-polyglot'
 Plug 'hail2u/vim-css3-syntax'
+Plug '22earth/vim-node', { 'branch': 'patch-2' }
+Plug 'othree/yajs.vim'
 Plug 'lilydjwg/colorizer', { 'on': 'ColorHighlight' }
 "Plug 'maksimr/vim-jsbeautify'
 Plug 'Chiel92/vim-autoformat', {'on': 'Autoformat'}
@@ -118,11 +120,16 @@ Plug 'Chiel92/vim-autoformat', {'on': 'Autoformat'}
 "Plug 'neovimhaskell/haskell-vim'
 " typescript
 Plug 'Shougo/vimproc.vim', {'do': 'make'}
-Plug 'Quramy/tsuquyomi'
+Plug 'Quramy/tsuquyomi', { 'for': 'typescript' }
 " need UltiSnips
 "Plug 'justinj/vim-react-snippets'
 " Rust
 Plug 'rust-lang/rust.vim'
+"Plug 'kana/vim-textobj-user'
+"Plug 'raghur/vim-textobj-function'
+"Plug 'haya14busa/vim-textobj-function-syntax'
+Plug 'tweekmonster/startuptime.vim', { 'on': 'StartupTime' }
+Plug 'nathanaelkane/vim-indent-guides', { 'on': 'IndentGuidesToggle' }
 "}}}
 call plug#end()
 
@@ -479,13 +486,17 @@ au FileType javascript,python,typescript nnoremap <LocalLeader>fr :YcmCompleter 
 au FileType javascript nnoremap <LocalLeader>es mF:%!~/.nvm/versions/node/v6.11.0/bin/eslint_d -c ~/.eslintrc-fix.json --stdin --fix-to-stdout<CR>`F
 au FileType javascript vnoremap <LocalLeader>es :!~/.nvm/versions/node/v6.11.0/bin/eslint_d -c ~/.eslintrc-fix.json --stdin --fix-to-stdout<CR>gv
 " format
-noremap <Leader>ef :Autoformat<CR>
-noremap <Leader>ec :call plug#load('editorconfig-vim')<CR>:EditorConfigReload<CR>
+nnoremap <Leader>ef :Autoformat<CR>
+nnoremap <Leader>ec :call plug#load('editorconfig-vim')<CR>:EditorConfigReload<CR>
+" 快捷键 i 开/关缩进可视化
+nnoremap <silent> <Leader>ei :IndentGuidesToggle<CR>
 
 vmap <silent> <Leader>c<Space> <Plug>NERDCommenterToggle
 nmap <silent> <Leader>c<Space> <Plug>NERDCommenterToggle
 nnoremap <Leader>b :Unite buffer<CR>
-
+" git
+nnoremap <Leader>gs :Gstatus<CR>
+nnoremap <Leader>gl :Glog<CR>
 "}}}
 
 " python setting{{{
@@ -544,6 +555,8 @@ let g:ycm_complete_in_strings = 1 " Completion in string
 "" syntastic
 let g:syntastic_javascript_checkers = ['eslint']
 let g:syntastic_javascript_eslint_exec = 'eslint_d'
+let g:syntastic_rust_checkers = ['rustc', 'cargo']
+let g:polyglot_disabled = ['rust']
 " add an autocmd after vim started to execute checktime for *.js files on write
 "au VimEnter *.js au BufWritePost *.js checktime
 "let g:EasyMotion_leader_key = '<space>'
@@ -566,8 +579,6 @@ let g:indent_guides_enable_on_vim_startup=0
 let g:indent_guides_start_level=2
 " 色块宽度
 let g:indent_guides_guide_size=1
-" 快捷键 i 开/关缩进可视化
-":nmap <silent> <Leader>i <Plug>IndentGuidesToggle
 
 "html.vim
 :let g:html_indent_inctags = "html,body,head,tbody"
@@ -685,7 +696,6 @@ endfunction
 autocmd BufRead,BufNewFile *.md nmap <F5> :w<CR>:set syntax=markdown<CR>
 let g:vimwiki_valid_html_tags='b,i,s,u,sub,sup,kbd,br,hr,div,del,code'
 let g:Modeliner_format = 'sts= sw= ts= et'
-let g:syntastic_rust_checkers = ['rustc']
 let g:EditorConfig_exclude_patterns = ['fugitive://.*']
 "let g:polyglot_disabled = ['css']
 " test setting for web development {{{
