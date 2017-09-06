@@ -72,37 +72,35 @@ Plug 'w0rp/ale'
 "Plug 'vim-syntastic/syntastic'
 Plug 'Shougo/unite.vim', { 'on': 'Unite' }
 Plug 'roxma/vim-paste-easy'
-"Plug 'rking/ag.vim'
-"Plug 'gregsexton/gitv'
-"Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-"Plug 'Shougo/denite.nvim'
-" Colorscheme
-"Plug 'altercation/vim-colors-solarized'
-"Plug 'ericbn/vim-solarized'
-Plug 'lifepillar/vim-solarized8'
-"Plug 'w0ng/vim-hybrid'
-
-" lazy load {{{
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 Plug 'editorconfig/editorconfig-vim', { 'on': [] }
-" }}}
+" Colorscheme
+Plug 'lifepillar/vim-solarized8'
 
 if has("win32")
     if executable('cl')
         Plug 'Valloric/YouCompleteMe', { 'on': [] }
     else
-        Plug 'Shougo/neocomplete.vim'
+        "Plug 'Shougo/neocomplete.vim'
+        Plug 'ervandew/supertab'
         Plug 'davidhalter/jedi-vim'
         Plug 'ternjs/tern_for_vim'
     endif
 elseif has("unix")
-    Plug 'Valloric/YouCompleteMe', { 'on': [] }
-    "Plug 'godlygeek/csapprox'
+    if has('nvim')
+        Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+        Plug 'carlitux/deoplete-ternjs', { 'do': 'npm install -g tern' }
+    else
+        "Plug 'ervandew/supertab'
+        "Plug 'ternjs/tern_for_vim', { 'do': 'npm install' }
+        "Plug 'davidhalter/jedi-vim'
+        Plug 'Valloric/YouCompleteMe', { 'on': [] }
+    endif
     Plug 'lilydjwg/fcitx.vim'
     "Plug 'tweekmonster/django-plus.vim'
-    "Plug 'eagletmt/ghcmod-vim'
-    "Plug 'eagletmt/neco-ghc'
+    Plug 'eagletmt/ghcmod-vim'
+    Plug 'eagletmt/neco-ghc'
 endif
 " web development
 Plug 'sheerun/vim-polyglot'
@@ -112,12 +110,6 @@ Plug 'othree/yajs.vim'
 Plug 'lilydjwg/colorizer', { 'on': 'ColorHighlight' }
 "Plug 'maksimr/vim-jsbeautify'
 Plug 'Chiel92/vim-autoformat', {'on': 'Autoformat'}
-"Plug 'pangloss/vim-javascript'
-"Plug 'cakebaker/scss-syntax.vim'
-"Plug 'leafgarland/typescript-vim'
-"Plug 'mxw/vim-jsx'
-"Plug 'posva/vim-vue'
-"Plug 'neovimhaskell/haskell-vim'
 " typescript
 Plug 'Shougo/vimproc.vim', {'do': 'make'}
 Plug 'Quramy/tsuquyomi', { 'for': 'typescript' }
@@ -125,9 +117,6 @@ Plug 'Quramy/tsuquyomi', { 'for': 'typescript' }
 "Plug 'justinj/vim-react-snippets'
 " Rust
 Plug 'rust-lang/rust.vim'
-"Plug 'kana/vim-textobj-user'
-"Plug 'raghur/vim-textobj-function'
-"Plug 'haya14busa/vim-textobj-function-syntax'
 Plug 'tweekmonster/startuptime.vim', { 'on': 'StartupTime' }
 Plug 'nathanaelkane/vim-indent-guides', { 'on': 'IndentGuidesToggle' }
 "}}}
@@ -186,11 +175,6 @@ if has("unix")
     "autocmd FileType html set dictionary=~/.vim/dict/bootstrap.dict
     "au FileType c set dictionary=~/.vim/dict/c.dict
     " test pluins' setting for linux
-    augroup load_us_ycm
-        autocmd!
-        autocmd InsertEnter * call plug#load('YouCompleteMe')
-                    \| autocmd! load_us_ycm
-    augroup END
 endif
 "'python' : 1
 "end of setting for linux}}}
@@ -263,7 +247,8 @@ if has("gui_running")
                             \| autocmd! load_us_ycm
             augroup END
         endif
-        if !empty(glob("~/vimfiles/bundle/neocomplete.vim/autoload/neocomplete.vim"))
+        if exists('g:plugs["neocomplete.vim"]')
+        "if !empty(glob("~/vimfiles/bundle/neocomplete.vim/autoload/neocomplete.vim"))
             " echo "File exists."
             "neocomplete setting {{{
             " Disable AutoComplPop.
@@ -365,15 +350,6 @@ if has("gui_running")
             "let g:jedi#force_py_version = 3
 
             "end of neocomplete setting }}}
-            "jedi 设置
-            let g:jedi#auto_initialization = 0
-            let g:jedi#goto_assignments_command = "<Leader>g"
-            let g:jedi#goto_definitions_command = "<Leader>d"
-            let g:jedi#documentation_command = "K"
-            let g:jedi#usages_command = "<Leader>n"
-            let g:jedi#completions_command = "<A-1>"
-            let g:jedi#rename_command = "<Leader>r"
-            let g:jedi#show_call_signatures = "1"
         endif
 
     endif
@@ -474,14 +450,8 @@ vmap <Leader>p "+p
 vmap <Leader>P "+P
 
 "nnoremap <Leader>te :tabe<space>
-nnoremap <Leader>d :YcmCompleter GoToDefinition <CR>
 " grep word under cursor
 nnoremap <Leader>fg :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
-nnoremap <Leader>fd :YcmCompleter GoToDefinitionElseDeclaration<CR>
-nnoremap K :YcmCompleter GetDoc<CR>
-nnoremap <Leader>ft :YcmCompleter GetType <CR>
-au FileType javascript,python,typescript nnoremap <LocalLeader>fr :YcmCompleter GoToReferences<CR>
-"autocmd BufRead,BufNewFile *.cpp,*.c,*.cc nnoremap <F5> :YcmForceCompileAndDiagnostics<CR>
 
 nnoremap <Leader>es :ALEFix<CR>
 au FileType javascript nnoremap <LocalLeader>es mF:%!~/.nvm/versions/node/v6.11.0/bin/eslint_d -c ~/.eslintrc-fix.json --stdin --fix-to-stdout<CR>`F
@@ -512,51 +482,67 @@ let g:haskellmode_completion_ghc = 0
 autocmd FileType haskell setlocal omnifunc=necoghc#omnifunc
             \ ts=8 et sw=4 softtabstop=4 shiftround
 let g:haskell_indent_disable=1
-let g:ycm_semantic_triggers = {'haskell' : ['.']}
 au FileType haskell map <silent> tw :update<CR>:GhcModTypeInsert<CR>
 au FileType haskell map <silent> ts :update<CR>:GhcModSplitFunCase<CR>
 au FileType haskell map <silent> tq :update<CR>:GhcModType<CR>
 au FileType haskell map <silent> te :update<CR>:GhcModTypeClear<CR>
+au FileType haskell vnoremap <LocalLeader>a= :Tabularize /=<CR>
+au FileType haskell vnoremap <LocalLeader>a; :Tabularize /::<CR>
+au FileType haskell vnoremap <LocalLeader>a- :Tabularize /-><CR>
 "au BufRead *.py map <buffer> <F5> :w<CR>:!/usr/bin/env python % <CR>
 " }}}
 
 
 "plugin setting{{{
 " YouCompleteMe {{{
-"nnoremap <Leader>f :YcmCompleter FixIt <CR>
-if has("unix")
-    "let g:ycm_path_to_python_interpreter = '$HOME/.pyenv/versions/env3/bin/python3'
-    let g:ycm_python_binary_path = '/home/alan/.pyenv/versions/env3/bin/python3'
-    let g:ycm_global_ycm_extra_conf = '~/.vim/.ycm_extra_conf.py'
+if exists('g:plugs["YouCompleteMe"]')
+    nnoremap <Leader>d :YcmCompleter GoToDefinition <CR>
+    nnoremap <Leader>fd :YcmCompleter GoToDefinitionElseDeclaration<CR>
+    nnoremap K :YcmCompleter GetDoc<CR>
+    nnoremap <Leader>ft :YcmCompleter GetType <CR>
+    au FileType javascript,python,typescript nnoremap <LocalLeader>fr :YcmCompleter GoToReferences<CR>
+    "autocmd BufRead,BufNewFile *.cpp,*.c,*.cc nnoremap <F5> :YcmForceCompileAndDiagnostics<CR>
+    augroup load_us_ycm
+        autocmd!
+        autocmd InsertEnter * call plug#load('YouCompleteMe')
+                    \| autocmd! load_us_ycm
+    augroup END
+    "nnoremap <Leader>f :YcmCompleter FixIt <CR>
+    if has("unix")
+        "let g:ycm_path_to_python_interpreter = '$HOME/.pyenv/versions/env3/bin/python3'
+        let g:ycm_python_binary_path = '/home/alan/.pyenv/versions/env3/bin/python3'
+        let g:ycm_global_ycm_extra_conf = '~/.vim/.ycm_extra_conf.py'
+    endif
+    "Do not ask when starting vim
+    let g:ycm_confirm_extra_conf = 0
+    let g:ycm_filetype_blacklist = {
+                \ 'tagbar' : 1,
+                \ 'qf' : 1,
+                \ 'notes' : 1,
+                \ 'markdown' : 1,
+                \ 'unite' : 1,
+                \ 'text' : 1,
+                \ 'vimwiki' : 1,
+                \ 'pandoc' : 1,
+                \ 'infolog' : 1,
+                \ 'mail' : 1,
+                \}
+    let g:ycm_use_ultisnips_completer = 1 " Default 1, just ensure
+    "let g:ycm_seed_identifiers_with_syntax = 1 " Completion for programming language's keyword
+    let g:ycm_complete_in_comments = 1 " Completion in comments
+    let g:ycm_complete_in_strings = 1 " Completion in string
+    if !exists("g:ycm_semantic_triggers")
+        let g:ycm_semantic_triggers = {}
+    endif
+    let g:ycm_semantic_triggers['typescript'] = ['.']
+    let g:ycm_semantic_triggers['haskell'] = ['.']
 endif
-"Do not ask when starting vim
-let g:ycm_confirm_extra_conf = 0
-let g:ycm_filetype_blacklist = {
-            \ 'tagbar' : 1,
-            \ 'qf' : 1,
-            \ 'notes' : 1,
-            \ 'markdown' : 1,
-            \ 'unite' : 1,
-            \ 'text' : 1,
-            \ 'vimwiki' : 1,
-            \ 'pandoc' : 1,
-            \ 'infolog' : 1,
-            \ 'mail' : 1,
-            \}
-let g:ycm_use_ultisnips_completer = 1 " Default 1, just ensure
-"let g:ycm_seed_identifiers_with_syntax = 1 " Completion for programming language's keyword
-let g:ycm_complete_in_comments = 1 " Completion in comments
-let g:ycm_complete_in_strings = 1 " Completion in string
 "}}}
 "" ale
 "let g:ale_javascript_eslint_executable = 'eslint_d'
 "let g:ale_javascript_eslint_options = '--fix'
 "let g:ale_lint_on_text_changed = 'never'
 "let g:ale_lint_on_enter = 0
-"" syntastic
-let g:syntastic_javascript_checkers = ['eslint']
-let g:syntastic_javascript_eslint_exec = 'eslint_d'
-let g:syntastic_rust_checkers = ['rustc', 'cargo']
 let g:ale_javascript_eslint_executable = 'eslint_d'
 let g:polyglot_disabled = ['rust']
 let g:ale_fixers = {
@@ -564,10 +550,12 @@ let g:ale_fixers = {
 \   'rust': ['rustc'],
 \   'python': ['autopep8'],
 \}
+"" syntastic
+"let g:syntastic_javascript_checkers = ['eslint']
+"let g:syntastic_javascript_eslint_exec = 'eslint_d'
+"let g:syntastic_rust_checkers = ['rustc', 'cargo']
 " add an autocmd after vim started to execute checktime for *.js files on write
 "au VimEnter *.js au BufWritePost *.js checktime
-"let g:EasyMotion_leader_key = '<space>'
-"map <Leader> <Plug>(easymotion-prefix)
 "UltiSnips
 let g:UltiSnipsExpandTrigger="<c-j>"
 let g:UltiSnipsJumpForwardTrigger="<c-j>"
@@ -592,10 +580,8 @@ let g:indent_guides_guide_size=1
 let g:html_indent_script1 = "inc"
 let g:html_indent_style1 = "inc"
 "NERDTree,提供查看文件折叠/展开列表功能
-nmap <Leader>2 :NERDTreeToggle<CR>
-"imap <F2> <ESC> :NERDTreeToggle<CR>
-
-nmap <Leader>3 :TagbarToggle<CR>
+nnoremap <Leader>2 :NERDTreeToggle<CR>
+nnoremap <Leader>3 :TagbarToggle<CR>
 let tagbar_left=1
 let g:tagbar_autofocus=1
 let g:ctrlp_custom_ignore = {
@@ -605,6 +591,29 @@ let g:ctrlp_custom_ignore = {
             \ }
 "au BufRead,BufNewFile *.scm,*rkt let g:AutoPairsLoaded = 0
 let g:AutoPairsFlyMode = 1
+" supertab
+if exists('g:plugs["supertab"]')
+    autocmd FileType python setlocal omnifunc=jedi#completions
+    let g:tern_map_keys = 1
+    au FileType javascript nnoremap <Leader>d :TernDef<CR>
+    autocmd FileType * 
+                \if &omnifunc != '' |
+                \call SuperTabChain(&omnifunc, "<c-p>") |
+                \call SuperTabSetDefaultCompletionType("<c-x><c-u>") |
+                \endif
+    "jedi 设置
+    if has('python3')
+        let g:jedi#force_py_version = 3
+    endif
+    "let g:jedi#auto_initialization = 0
+    "let g:jedi#goto_assignments_command = "<Leader>g"
+    "let g:jedi#goto_definitions_command = "<Leader>d"
+    "let g:jedi#documentation_command = "K"
+    "let g:jedi#usages_command = "<Leader>n"
+    "let g:jedi#completions_command = "<A-1>"
+    "let g:jedi#rename_command = "<Leader>r"
+    "let g:jedi#show_call_signatures = "1"
+endif
 if executable('ag')
     " Use ag over grep
     set grepprg=ag\ --nogroup\ --nocolor
@@ -618,7 +627,7 @@ if executable('ag')
     let g:unite_source_grep_command = 'ag'
     let g:unite_source_grep_default_opts =
                 \ '-i --vimgrep --hidden --ignore ' .
-              \ '''.hg'' --ignore ''.svn'' --ignore ''.git'' --ignore ''.bzr'''
+                \ '''.hg'' --ignore ''.svn'' --ignore ''.git'' --ignore ''.bzr'''
     let g:unite_source_grep_recursive_opt = ''
 elseif executable('ack-grep')
     let g:unite_source_grep_command = 'ack-grep'
@@ -668,32 +677,6 @@ func SetTitle()
 endfunc
 autocmd BufNewFile * normal G
 " }}}
-"setting for Windows {{{
-"set diffexpr=MyDiff()
-function MyDiff()
-    let opt = '-a --binary '
-    if &diffopt =~ 'icase' | let opt = opt . '-i ' | endif
-    if &diffopt =~ 'iwhite' | let opt = opt . '-b ' | endif
-    let arg1 = v:fname_in
-    if arg1 =~ ' ' | let arg1 = '"' . arg1 . '"' | endif
-    let arg2 = v:fname_new
-    if arg2 =~ ' ' | let arg2 = '"' . arg2 . '"' | endif
-    let arg3 = v:fname_out
-    if arg3 =~ ' ' | let arg3 = '"' . arg3 . '"' | endif
-    let eq = ''
-    if $VIMRUNTIME =~ ' '
-        if &sh =~ '\<cmd'
-            let cmd = '""' . $VIMRUNTIME . '\diff"'
-            let eq = '"'
-        else
-            let cmd = substitute($VIMRUNTIME, ' ', '" ', '') . '\diff"'
-        endif
-    else
-        let cmd = $VIMRUNTIME . '\diff'
-    endif
-    silent execute '!' . cmd . ' ' . opt . arg1 . ' ' . arg2 . ' > ' . arg3 . eq
-endfunction
-"}}}
 """""""""""""""""
 "  try to use   "
 """""""""""""""""
@@ -704,6 +687,9 @@ autocmd BufRead,BufNewFile *.md nmap <F5> :w<CR>:set syntax=markdown<CR>
 let g:vimwiki_valid_html_tags='b,i,s,u,sub,sup,kbd,br,hr,div,del,code'
 let g:Modeliner_format = 'sts= sw= ts= et'
 let g:EditorConfig_exclude_patterns = ['fugitive://.*']
+if has('nvim')
+    let g:deoplete#enable_at_startup = 1
+endif
 "let g:polyglot_disabled = ['css']
 " test setting for web development {{{
 "let g:syntastic_javascript_eslint_exe = '$(npm bin)/eslint'
@@ -715,12 +701,8 @@ func ToggleJsFiletype()
     endif
 endfunc
 let g:jsx_ext_required = 0
-autocmd BufRead,BufNewFile *.js nmap <F6> :%s/class=/className=/g<CR>
+autocmd BufRead,BufNewFile *.js nnoremap <F6> :%s/class=/className=/g<CR>
 "autocmd BufRead,BufNewFile *.js nmap <F7> :call ToggleJsFiletype()<CR>
-if !exists("g:ycm_semantic_triggers")
-    let g:ycm_semantic_triggers = {}
-endif
-let g:ycm_semantic_triggers['typescript'] = ['.']
 au BufRead,BufNewFile *.scss set filetype=scss.css
 "autocmd BufRead,BufNewFile *.vue setlocal filetype=vue.html.javascript.css
 " }}}
