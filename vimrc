@@ -23,6 +23,8 @@
 " .tern-config  // not support multiple tern servers
 " .ycm_extra_conf.py for cpp
 " add a plugin to support django, but have the influence on speed
+" fzf need install ag the_silver_searcher
+    " config: export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git --ignore node_modules -g ""'
 " }}}
 " window {{{
 " font: yahei_mono and DejaVu
@@ -51,7 +53,6 @@ else
 endif
 " }}}
 " packages {{{
-Plug 'kien/ctrlp.vim'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 Plug 'Lokaltog/vim-easymotion'
@@ -68,9 +69,8 @@ Plug 'tpope/vim-fugitive'
 Plug 'majutsushi/tagbar'
 Plug 'Valloric/ListToggle'
 Plug 'vim-scripts/Modeliner', { 'on': 'Modeliner' }
-Plug 'w0rp/ale'
-"Plug 'vim-syntastic/syntastic'
-Plug 'Shougo/unite.vim', { 'on': 'Unite' }
+"Plug 'w0rp/ale'
+Plug 'vim-syntastic/syntastic'
 Plug 'roxma/vim-paste-easy'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
@@ -101,12 +101,19 @@ elseif has("unix")
     "Plug 'tweekmonster/django-plus.vim'
     Plug 'eagletmt/ghcmod-vim'
     Plug 'eagletmt/neco-ghc'
+    Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+    Plug 'junegunn/fzf.vim'
+endif
+if !executable('fzf')
+    Plug 'kien/ctrlp.vim'
+    Plug 'Shougo/unite.vim', { 'on': 'Unite' }
 endif
 " web development
 Plug 'sheerun/vim-polyglot'
 Plug 'hail2u/vim-css3-syntax'
 Plug '22earth/vim-node', { 'branch': 'patch-2' }
 Plug 'othree/yajs.vim'
+Plug 'othree/csscomplete.vim'
 Plug 'lilydjwg/colorizer', { 'on': 'ColorHighlight' }
 "Plug 'maksimr/vim-jsbeautify'
 Plug 'Chiel92/vim-autoformat', {'on': 'Autoformat'}
@@ -464,7 +471,12 @@ nnoremap <silent> <Leader>ei :IndentGuidesToggle<CR>
 
 vmap <silent> <Leader>c<Space> <Plug>NERDCommenterToggle
 nmap <silent> <Leader>c<Space> <Plug>NERDCommenterToggle
-nnoremap <Leader>b :Unite buffer<CR>
+if executable('fzf') && exists('g:plugs["fzf.vim"]')
+    nnoremap <C-p> :FZF<CR>
+    nnoremap <Leader>b :Buffers<CR>
+else
+    nnoremap <Leader>b :Unite buffer<CR>
+endif
 " git
 nnoremap <Leader>gs :Gstatus<CR>
 nnoremap <Leader>gl :Glog<CR>
@@ -539,21 +551,20 @@ if exists('g:plugs["YouCompleteMe"]')
 endif
 "}}}
 "" ale
-"let g:ale_javascript_eslint_executable = 'eslint_d'
-"let g:ale_javascript_eslint_options = '--fix'
-"let g:ale_lint_on_text_changed = 'never'
-"let g:ale_lint_on_enter = 0
 let g:ale_javascript_eslint_executable = 'eslint_d'
+"let g:ale_javascript_eslint_options = '--fix'
 let g:polyglot_disabled = ['rust']
 let g:ale_fixers = {
 \   'javascript': ['eslint'],
 \   'rust': ['rustc'],
 \   'python': ['autopep8'],
 \}
+"let g:ale_lint_on_text_changed = 'never'
+"let g:ale_lint_on_enter = 0
 "" syntastic
-"let g:syntastic_javascript_checkers = ['eslint']
-"let g:syntastic_javascript_eslint_exec = 'eslint_d'
-"let g:syntastic_rust_checkers = ['rustc', 'cargo']
+let g:syntastic_javascript_checkers = ['eslint']
+let g:syntastic_javascript_eslint_exec = 'eslint_d'
+let g:syntastic_rust_checkers = ['rustc', 'cargo']
 " add an autocmd after vim started to execute checktime for *.js files on write
 "au VimEnter *.js au BufWritePost *.js checktime
 "UltiSnips
@@ -593,6 +604,10 @@ let g:ctrlp_custom_ignore = {
 let g:AutoPairsFlyMode = 1
 " supertab
 if exists('g:plugs["supertab"]')
+    "let g:SuperTabDefaultCompletionType = "context"
+    "let g:SuperTabContextDefaultCompletionType = "<c-p>"
+    "let g:SuperTabCompletionContexts = ['s:ContextText', 's:ContextDiscover']
+    "let g:SuperTabContextDiscoverDiscovery = ["&omnifunc:<c-x><c-o>"]
     autocmd FileType python setlocal omnifunc=jedi#completions
     let g:tern_map_keys = 1
     au FileType javascript nnoremap <Leader>d :TernDef<CR>
@@ -687,6 +702,8 @@ autocmd BufRead,BufNewFile *.md nmap <F5> :w<CR>:set syntax=markdown<CR>
 let g:vimwiki_valid_html_tags='b,i,s,u,sub,sup,kbd,br,hr,div,del,code'
 let g:Modeliner_format = 'sts= sw= ts= et'
 let g:EditorConfig_exclude_patterns = ['fugitive://.*']
+autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS noci
+
 if has('nvim')
     let g:deoplete#enable_at_startup = 1
 endif
