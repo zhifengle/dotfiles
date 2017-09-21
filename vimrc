@@ -55,6 +55,8 @@ endif
 " packages {{{
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-fugitive'
+" Plug 'tpope/vim-obsession'
 Plug 'Lokaltog/vim-easymotion'
 Plug 'vim-scripts/matchit.zip'
 Plug 'mattn/emmet-vim'
@@ -65,12 +67,11 @@ Plug 'mattn/calendar-vim', {'for': 'vimwiki'}
 Plug 'jiangmiao/auto-pairs'
 Plug 'godlygeek/tabular', { 'on': 'Tabularize' }
 Plug 'bling/vim-airline'
-Plug 'tpope/vim-fugitive'
 Plug 'majutsushi/tagbar'
 Plug 'Valloric/ListToggle'
 Plug 'vim-scripts/Modeliner', { 'on': 'Modeliner' }
-"Plug 'w0rp/ale'
-Plug 'vim-syntastic/syntastic'
+Plug 'w0rp/ale'
+"Plug 'vim-syntastic/syntastic'
 Plug 'roxma/vim-paste-easy'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
@@ -460,7 +461,9 @@ vmap <Leader>P "+P
 " grep word under cursor
 nnoremap <Leader>fg :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
 
-nnoremap <Leader>es :ALEFix<CR>
+if exists('g:plugs["ale"]')
+    nnoremap <Leader>es :ALEFix<CR>
+endif
 au FileType javascript nnoremap <LocalLeader>es mF:%!~/.nvm/versions/node/v6.11.0/bin/eslint_d -c ~/.eslintrc-fix.json --stdin --fix-to-stdout<CR>`F
 au FileType javascript vnoremap <LocalLeader>es :!~/.nvm/versions/node/v6.11.0/bin/eslint_d -c ~/.eslintrc-fix.json --stdin --fix-to-stdout<CR>gv
 " format
@@ -471,6 +474,9 @@ nnoremap <silent> <Leader>ei :IndentGuidesToggle<CR>
 
 vmap <silent> <Leader>c<Space> <Plug>NERDCommenterToggle
 nmap <silent> <Leader>c<Space> <Plug>NERDCommenterToggle
+if !has("gui_running")
+    nmap <silent> <C-_> <Plug>NERDCommenterToggle
+endif
 if executable('fzf') && exists('g:plugs["fzf.vim"]')
     nnoremap <C-p> :FZF<CR>
     nnoremap <Leader>b :Buffers<CR>
@@ -629,6 +635,13 @@ if exists('g:plugs["supertab"]')
     "let g:jedi#rename_command = "<Leader>r"
     "let g:jedi#show_call_signatures = "1"
 endif
+let g:NERDSpaceDelims = 1
+let g:NERDDefaultAlign = 'left'
+" Allow commenting and inverting empty lines (useful when commenting a region)
+let g:NERDCommentEmptyLines = 1
+" Enable trimming of trailing whitespace when uncommenting
+let g:NERDTrimTrailingWhitespace = 1
+
 if executable('ag')
     " Use ag over grep
     set grepprg=ag\ --nogroup\ --nocolor
@@ -703,6 +716,8 @@ let g:vimwiki_valid_html_tags='b,i,s,u,sub,sup,kbd,br,hr,div,del,code'
 let g:Modeliner_format = 'sts= sw= ts= et'
 let g:EditorConfig_exclude_patterns = ['fugitive://.*']
 autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS noci
+let g:delimitMate_expand_cr = 1
+let g:delimitMate_expand_space = 1
 
 if has('nvim')
     let g:deoplete#enable_at_startup = 1
