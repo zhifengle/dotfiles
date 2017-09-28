@@ -56,7 +56,6 @@ endif
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-fugitive'
-" Plug 'tpope/vim-obsession'
 Plug 'Lokaltog/vim-easymotion'
 Plug 'vim-scripts/matchit.zip'
 Plug 'mattn/emmet-vim'
@@ -98,7 +97,7 @@ elseif has("unix")
         "Plug 'davidhalter/jedi-vim'
         Plug 'Valloric/YouCompleteMe', { 'on': [] }
     endif
-    Plug 'lilydjwg/fcitx.vim'
+    Plug 'lilydjwg/fcitx.vim', { 'on': [] }
     "Plug 'tweekmonster/django-plus.vim'
     Plug 'eagletmt/ghcmod-vim'
     Plug 'eagletmt/neco-ghc'
@@ -469,6 +468,8 @@ au FileType javascript vnoremap <LocalLeader>es :!~/.nvm/versions/node/v6.11.0/b
 " format
 nnoremap <Leader>ef :Autoformat<CR>
 nnoremap <Leader>ec :call plug#load('editorconfig-vim')<CR>:EditorConfigReload<CR>
+nnoremap <Leader>ed :cd %:p:h<CR>
+command FcitxVim execute "call plug#load('fcitx.vim') | set ttimeoutlen=100"
 " 快捷键 i 开/关缩进可视化
 nnoremap <silent> <Leader>ei :IndentGuidesToggle<CR>
 
@@ -635,13 +636,19 @@ if exists('g:plugs["supertab"]')
     "let g:jedi#rename_command = "<Leader>r"
     "let g:jedi#show_call_signatures = "1"
 endif
-let g:NERDSpaceDelims = 1
+au filetype javascript let g:NERDSpaceDelims = 1
 let g:NERDDefaultAlign = 'left'
 " Allow commenting and inverting empty lines (useful when commenting a region)
 let g:NERDCommentEmptyLines = 1
 " Enable trimming of trailing whitespace when uncommenting
 let g:NERDTrimTrailingWhitespace = 1
 
+let g:fzf_action = {
+            \ 'ctrl-t': 'tab split',
+            \ 'ctrl-i': 'split',
+            \ 'ctrl-x': 'split',
+            \ 'ctrl-s': 'vsplit',
+            \ 'ctrl-v': 'vsplit' }
 if executable('ag')
     " Use ag over grep
     set grepprg=ag\ --nogroup\ --nocolor
