@@ -33,7 +33,7 @@
 " }}}
 
 "}}}
-set nocompatible              " be iMproved, required
+
 " auto install plug-vim {{{
 if has("win32")
     if empty(glob('~/vimfiles/autoload/plug.vim')) &&  executable('curl')
@@ -52,6 +52,7 @@ else
     call plug#begin('~/.vim/bundle')
 endif
 " }}}
+
 " packages {{{
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
@@ -92,10 +93,11 @@ elseif has("unix")
         Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
         Plug 'carlitux/deoplete-ternjs', { 'do': 'npm install -g tern' }
     else
-        "Plug 'ervandew/supertab'
-        "Plug 'ternjs/tern_for_vim', { 'do': 'npm install' }
-        "Plug 'davidhalter/jedi-vim'
-        Plug 'Valloric/YouCompleteMe', { 'on': [] }
+        Plug 'ervandew/supertab'
+        Plug 'ternjs/tern_for_vim', { 'do': 'npm install' }
+        Plug 'davidhalter/jedi-vim'
+        Plug 'racer-rust/vim-racer'
+        "Plug 'Valloric/YouCompleteMe', { 'on': [] }
     endif
     Plug 'lilydjwg/fcitx.vim', { 'on': [] }
     "Plug 'tweekmonster/django-plus.vim'
@@ -126,17 +128,65 @@ Plug 'Quramy/tsuquyomi', { 'for': 'typescript' }
 Plug 'rust-lang/rust.vim'
 Plug 'tweekmonster/startuptime.vim', { 'on': 'StartupTime' }
 Plug 'nathanaelkane/vim-indent-guides', { 'on': 'IndentGuidesToggle' }
-"}}}
 call plug#end()
+"}}}
 
-
+" default setting for me {{{
+"set nocompatible
 let mapleader="\<Space>"
 let maplocalleader="\<Space>"
-"let g:mapleader=";"
+if has('autocmd')
+  filetype plugin indent on
+endif
+if has('syntax') && !exists('g:syntax_on')
+  syntax enable
+endif
 set bs=2 "set backspace=indent,eol,start
-"set mouse=a
-filetype plugin on
-"setting for linux {{{
+"解决中文乱码 ,gb2312,big5,gb18030,cp936
+set enc=utf-8
+"set fileencoding=utf-8 "保存文件时编码
+set fileencodings=utf-8,cs-bom,gbk,cp936
+set number
+"set cc=80
+syntax on "打开高亮
+set autoread
+set wildmenu
+"set cul "高亮光标所在行
+"set cuc
+set showcmd
+"set autochdir
+set fdm=marker "marker indent
+set complete-=i
+"set completeopt=longest,menu
+set nobackup "覆盖文件不备份
+set noswapfile "编辑时不产生交换文件
+set showmatch
+set vb t_vb= "关闭响铃和闪屏
+set ruler
+"set nohls "不高亮显示结果
+set hls
+set incsearch "在输入要搜索的文字时，vim会实时匹配
+set fileformats=unix,dos
+" colorscheme
+set background=dark
+colorscheme solarized8_dark "solarized8_dark desert evening solarized molokai hybrid
+"缩进设置
+filetype indent on
+set tabstop=4 "让一个tab等于4个空格
+set shiftwidth=4 "sw=4
+set expandtab "插入tab时以空格替换et
+"set softtabstop=4 "sts
+set smarttab "开启新行的sta
+set autoindent "自动缩进
+set smartindent "智能自动缩进
+
+autocmd FileType python setlocal ts=4 sw=4 et sta
+autocmd FileType make setlocal ts=8 sw=8 noexpandtab
+" indent for wed
+autocmd FileType vue,javascript,typescript,html,css,scss,less setlocal ts=2 sw=2  et
+"}}}
+
+" setting for linux {{{
 if has("unix")
     set guifont=DejaVu\ Sans\ Mono\ 13
     "set guifont=Fira\ Code\ Medium\ 13
@@ -185,11 +235,11 @@ if has("unix")
 endif
 "'python' : 1
 "end of setting for linux}}}
+
+" setting for gvim or terminal {{{
 if has("gui_running")
     " 只显示菜单
     set guioptions=
-    set background=dark "dark light
-    colorscheme solarized8_dark "desertEx solarized molokai desert hybrid
     set lines=44
     set columns=90
     " 高亮光标所在的行
@@ -207,7 +257,7 @@ if has("gui_running")
         "set fileformats=dos
         "解决consle输出乱码
         language messages zh_CN.utf-8
-        au BufRead,BufNewFile *.txt setlocal ft=txt "syntax highlight for txt.vim
+        "au BufRead,BufNewFile *.txt setlocal ft=txt "syntax highlight for txt.vim
         " compile and run {{{
         func! Interpreter()
             if &filetype=='scheme'
@@ -363,60 +413,14 @@ if has("gui_running")
     " end of setting for windows }}}
 else
     set termguicolors
-    "let g:solarized_termtrans = 1
-    set background=dark
-    "let g:solarized_termcolors=256
-
     "let terminal support 256 color
     set t_Co=256
-    colorscheme solarized8_dark "solarized8_dark desert evening solarized molokai hybrid
-    "for sakura terminal
-    "if $COLORTERM == "truecolor"
-    "set t_ut=
-    "endif
+    if !has('nvim') && &ttimeoutlen == -1
+        set ttimeout
+        set ttimeoutlen=100
+    endif
 endif
-
-" default setting for me {{{
-"解决中文乱码 ,gb2312,big5,gb18030,cp936
-set enc=utf-8
-"set fileencoding=utf-8 "保存文件时编码
-set fileencodings=utf-8,cs-bom,gbk,cp936
-set number
-"set cc=80
-syntax on "打开高亮
-set autoread
-set wildmenu
-"set cul "高亮光标所在行
-"set cuc
-set showcmd
-"set autochdir
-set fdm=marker "marker indent
-set completeopt=longest,menu
-set nobackup "覆盖文件不备份
-set noswapfile "编辑时不产生交换文件
-set showmatch
-set vb t_vb= "关闭响铃和闪屏
-set ruler
-"set nohls "不高亮显示结果
-set hls
-set incsearch "在输入要搜索的文字时，vim会实时匹配
-set fileformats=unix,dos
-
-"缩进设置
-filetype indent on
-set tabstop=4 "让一个tab等于4个空格
-set shiftwidth=4 "sw=4
-set expandtab "插入tab时以空格替换et
-"set softtabstop=4 "sts
-set smarttab "开启新行的sta
-set autoindent "自动缩进
-set smartindent "智能自动缩进
-
-autocmd FileType python setlocal ts=4 sw=4 et sta
-autocmd FileType make setlocal ts=8 sw=8 noexpandtab
-" indent for wed
-autocmd FileType vue,javascript,typescript,html,css,scss,less setlocal ts=2 sw=2  et
-"}}}
+" gvim }}}
 
 "map setting{{{
 " F2:NERDTreeToggle  F3:tagbar F4 F6 F7 F8 F9:c F10:c run
@@ -445,8 +449,9 @@ inoremap <C-a> <C-o>^
 inoremap <C-e> <End>
 inoremap <C-f> <Right>
 inoremap <C-b> <Left>
-"set modeline
-
+if maparg('<C-L>', 'n') ==# ''
+  nnoremap <silent> <C-L> :nohlsearch<C-R>=has('diff')?'<Bar>diffupdate':''<CR><CR><C-L>
+endif
 """"""""""""""""""""
 "  Leader key map  "
 """"""""""""""""""""
@@ -510,7 +515,6 @@ au FileType haskell vnoremap <LocalLeader>a; :Tabularize /::<CR>
 au FileType haskell vnoremap <LocalLeader>a- :Tabularize /-><CR>
 "au BufRead *.py map <buffer> <F5> :w<CR>:!/usr/bin/env python % <CR>
 " }}}
-
 
 "plugin setting{{{
 " YouCompleteMe {{{
@@ -616,7 +620,7 @@ if exists('g:plugs["supertab"]')
     "let g:SuperTabCompletionContexts = ['s:ContextText', 's:ContextDiscover']
     "let g:SuperTabContextDiscoverDiscovery = ["&omnifunc:<c-x><c-o>"]
     autocmd FileType python setlocal omnifunc=jedi#completions
-    let g:tern_map_keys = 1
+    "let g:tern_map_keys = 1
     au FileType javascript nnoremap <Leader>d :TernDef<CR>
     autocmd FileType * 
                 \if &omnifunc != '' |
@@ -651,7 +655,20 @@ let g:fzf_action = {
             \ 'ctrl-v': 'vsplit' }
 if executable('ag')
     " Use ag over grep
-    set grepprg=ag\ --nogroup\ --nocolor
+    " set grepprg=ag\ --nogroup\ --nocolor
+    function! s:find_js_module(file)
+        if empty(a:file)
+            let file = expand('%:t:r')
+        else
+            let file = a:file
+        endif
+        let l:args =  "ag --vimgrep " . file . " | ag 'import|require'"
+        cexpr! system(l:args)
+    endfunction
+    command! -bar -bang -complete=file -nargs=? JSModule
+                \ execute s:find_js_module(<q-args>)
+    set grepprg=ag\ --vimgrep\ $*
+    set grepformat=%f:%l:%c:%m
     "let g:ackprg = 'ag --nogroup --nocolor --column'
 
     " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
