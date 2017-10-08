@@ -157,7 +157,7 @@ set showcmd
 "set autochdir
 set fdm=marker "marker indent
 set complete-=i
-"set completeopt=longest,menu
+set completeopt=longest,menu
 set nobackup "覆盖文件不备份
 set noswapfile "编辑时不产生交换文件
 set showmatch
@@ -619,6 +619,7 @@ if exists('g:plugs["supertab"]')
     "let g:SuperTabContextDefaultCompletionType = "<c-p>"
     "let g:SuperTabCompletionContexts = ['s:ContextText', 's:ContextDiscover']
     "let g:SuperTabContextDiscoverDiscovery = ["&omnifunc:<c-x><c-o>"]
+    let g:SuperTabClosePreviewOnPopupClose = 1
     autocmd FileType python setlocal omnifunc=jedi#completions
     "let g:tern_map_keys = 1
     au FileType javascript nnoremap <Leader>d :TernDef<CR>
