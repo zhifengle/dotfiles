@@ -155,7 +155,10 @@ set wildmenu
 "set cuc
 set showcmd
 "set autochdir
-set fdm=marker "marker indent
+set fdm=syntax "marker indent
+au fileType vim setlocal fdm=marker
+set nofoldenable
+"set foldlevelstart=99
 set complete-=i
 set completeopt=longest,menu
 set nobackup "覆盖文件不备份
@@ -183,7 +186,7 @@ set smartindent "智能自动缩进
 autocmd FileType python setlocal ts=4 sw=4 et sta
 autocmd FileType make setlocal ts=8 sw=8 noexpandtab
 " indent for wed
-autocmd FileType vue,javascript,typescript,html,css,scss,less setlocal ts=2 sw=2  et
+autocmd FileType json,vue,javascript,typescript,html,css,scss,less setlocal ts=2 sw=2  et
 "}}}
 
 " setting for linux {{{
@@ -474,6 +477,8 @@ au FileType javascript vnoremap <LocalLeader>es :!~/.nvm/versions/node/v6.11.0/b
 nnoremap <Leader>ef :Autoformat<CR>
 nnoremap <Leader>ec :call plug#load('editorconfig-vim')<CR>:EditorConfigReload<CR>
 nnoremap <Leader>ed :cd %:p:h<CR>
+nnoremap <Leader>e2 :setlocal ts=2 sw=2 et<CR>
+nnoremap <Leader>e4 :setlocal ts=4 sw=4 et<CR>
 command FcitxVim execute "call plug#load('fcitx.vim') | set ttimeoutlen=100"
 " 快捷键 i 开/关缩进可视化
 nnoremap <silent> <Leader>ei :IndentGuidesToggle<CR>
@@ -615,7 +620,9 @@ let g:ctrlp_custom_ignore = {
 let g:AutoPairsFlyMode = 1
 " supertab
 if exists('g:plugs["supertab"]')
-    "let g:SuperTabDefaultCompletionType = "context"
+    ":autocmd InsertEnter * let save_cwd = getcwd() | set autochdir
+    ":autocmd InsertLeave * set noautochdir | execute 'cd' fnameescape(save_cwd)
+    let g:SuperTabDefaultCompletionType = "context"
     "let g:SuperTabContextDefaultCompletionType = "<c-p>"
     "let g:SuperTabCompletionContexts = ['s:ContextText', 's:ContextDiscover']
     "let g:SuperTabContextDiscoverDiscovery = ["&omnifunc:<c-x><c-o>"]
@@ -737,6 +744,8 @@ autocmd BufNewFile * normal G
 "let g:AutoPairsShortcutBackInsert = '<M-b>'
 "set complete+=k
 autocmd BufRead,BufNewFile *.md nmap <F5> :w<CR>:set syntax=markdown<CR>
+"autocmd BufRead,BufNewFile *.md setlocal filetype=vimwiki.markdown
+let g:python3_host_prog = '/home/alan/.pyenv/versions/env3/bin/python3'
 let g:vimwiki_valid_html_tags='b,i,s,u,sub,sup,kbd,br,hr,div,del,code'
 let g:Modeliner_format = 'sts= sw= ts= et'
 let g:EditorConfig_exclude_patterns = ['fugitive://.*']
