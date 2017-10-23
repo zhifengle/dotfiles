@@ -183,10 +183,12 @@ set smarttab "开启新行的sta
 set autoindent "自动缩进
 set smartindent "智能自动缩进
 
-autocmd FileType python setlocal ts=4 sw=4 et sta
-autocmd FileType make setlocal ts=8 sw=8 noexpandtab
-" indent for wed
-autocmd FileType json,vue,javascript,typescript,html,css,scss,less setlocal ts=2 sw=2  et
+augroup E_indent
+    autocmd FileType python setlocal ts=4 sw=4 et sta
+    autocmd FileType make setlocal ts=8 sw=8 noexpandtab
+    " indent for wed
+    autocmd FileType json,vue,javascript,typescript,html,css,scss,less setlocal ts=2 sw=2  et
+augroup END
 "}}}
 
 " setting for linux {{{
@@ -215,21 +217,24 @@ if has("unix")
     map <silent> <Leader>ee :e $HOME/.vim/vimrc<cr>
     " has gui  gvim
     "key binding for compile or run {{{
-    au BufRead,BufNewFile *.c nmap <Leader>5 :w<CR>:!gcc -Wall % -g -o %<<CR>
-    au FileType cpp nmap <Leader>5 :update<CR>:!g++ -Wall % -g -o %<<CR>
-    "au FileType cpp nmap <F9> :update<CR>:!g++ -Wall % -g -o demo<CR>
-    au FileType c,cpp nmap <Leader>6 :!./%<<CR>
-    au FileType c,cpp nmap <F5> :update<CR>:make<CR>
-    au FileType c,cpp nmap <F6> :!./demo<CR>
-    au FileType sh nmap <Leader>5 :update<CR>:!bash %<CR>
-    autocmd BufRead,BufNewFile *.py nmap <Leader>5 :update<CR>:!python %<CR>
-    autocmd BufRead,BufNewFile *.py nmap <Leader>6 :update<CR>:!$HOME/.pyenv/versions/env3/bin/python %<CR>
-    autocmd BufRead,BufNewFile *.hs nmap <F5> :update<CR>:!runghc %<CR>
-    autocmd BufRead,BufNewFile *.hs nmap <F6> :update<CR>:!ghci %<CR>
-    au BufNewFile,BufRead *.coffee nmap <F5> :update<CR>:!coffee -c %<CR>:!node %<.js <CR>
-    "au BufRead,BufNewFile *.scm nmap <F5> :w<CR>:!mit-scheme --load %<CR>
-    autocmd BufRead,BufNewFile *.rkt,*scm nmap <F5> :update<CR>:!racket %<CR>
-    autocmd BufRead,BufNewFile *.js nmap <Leader>5 :update<CR>:!node %<CR>
+    augroup E_run_file
+        autocmd!
+        autocmd BufRead,BufNewFile *.c nmap <Leader>5 :w<CR>:!gcc -Wall % -g -o %<<CR>
+        autocmd FileType cpp nmap <Leader>5 :update<CR>:!g++ -Wall % -g -o %<<CR>
+        "au FileType cpp nmap <F9> :update<CR>:!g++ -Wall % -g -o demo<CR>
+        autocmd FileType c,cpp nmap <Leader>6 :!./%<<CR>
+        autocmd FileType c,cpp nmap <F5> :update<CR>:make<CR>
+        autocmd FileType c,cpp nmap <F6> :!./demo<CR>
+        autocmd FileType sh nmap <Leader>5 :update<CR>:!bash %<CR>
+        autocmd BufRead,BufNewFile *.py nmap <Leader>5 :update<CR>:!python %<CR>
+        autocmd BufRead,BufNewFile *.py nmap <Leader>6 :update<CR>:!$HOME/.pyenv/versions/env3/bin/python %<CR>
+        autocmd BufRead,BufNewFile *.hs nmap <F5> :update<CR>:!runghc %<CR>
+        autocmd BufRead,BufNewFile *.hs nmap <F6> :update<CR>:!ghci %<CR>
+        autocmd BufNewFile,BufRead *.coffee nmap <F5> :update<CR>:!coffee -c %<CR>:!node %<.js <CR>
+        "au BufRead,BufNewFile *.scm nmap <F5> :w<CR>:!mit-scheme --load %<CR>
+        autocmd BufRead,BufNewFile *.rkt,*scm nmap <F5> :update<CR>:!racket %<CR>
+        autocmd BufRead,BufNewFile *.js nmap <Leader>5 :update<CR>:!node %<CR>
+    augroup END
     "}}}
     "autocmd FileType javascript set dictionary=~/.vim/dict/javascript.dict
     "autocmd FileType html set dictionary=~/.vim/dict/bootstrap.dict
@@ -269,17 +274,20 @@ if has("gui_running")
             endif
         endfunc
         map <silent> <Leader>ee :e ~/vimfiles/vimrc<cr>
-        au BufRead,BufNewFile *.py nmap <Leader>5 :update<CR>:!python %<CR>
-        au BufRead,BufNewFile *.py nmap <Leader>6 :w<CR>:!"c:\Python27\python.exe" %<CR>
-        autocmd BufRead,BufNewFile *.scm map <F5> :w<CR>:call Interpreter()<CR>
-        autocmd BufRead,BufNewFile *.rkt,*scm nmap <F6> :w<CR>:!racket %<CR>
-        "autocmd BufRead *.py nmap <C-F5> :w<CR>:!idle.py -r %<CR>
-        autocmd BufRead *.py nmap <C-F5> :w<CR>:!ipython -i %<CR>
-        "autocmd BufRead *.py nmap <S-F5> :w<CR>:!idle.py -e %<CR>
-        au BufRead,BufNewFile *.c nmap <F9> :w<CR>:!gcc -Wall % -g -o %<.exe<CR>
-        au FileType cpp nmap <F9> :w<CR>:!gcc++ -Wall % -g -o %<.exe<CR>
-        au FileType c,cpp nmap <C-F9> :!./%<.exe<CR>
-        autocmd BufRead,BufNewFile *.js nmap <Leader>5 :update<CR>:!node %<CR>
+        augroup E_run_file_win
+            autocmd!
+            autocmd BufRead,BufNewFile *.py nmap <Leader>5 :update<CR>:!python %<CR>
+            autocmd BufRead,BufNewFile *.py nmap <Leader>6 :w<CR>:!"c:\Python27\python.exe" %<CR>
+            autocmd BufRead,BufNewFile *.scm map <F5> :w<CR>:call Interpreter()<CR>
+            autocmd BufRead,BufNewFile *.rkt,*scm nmap <F6> :w<CR>:!racket %<CR>
+            "autocmd BufRead *.py nmap <C-F5> :w<CR>:!idle.py -r %<CR>
+            autocmd BufRead *.py nmap <C-F5> :w<CR>:!ipython -i %<CR>
+            "autocmd BufRead *.py nmap <S-F5> :w<CR>:!idle.py -e %<CR>
+            autocmd BufRead,BufNewFile *.c nmap <F9> :w<CR>:!gcc -Wall % -g -o %<.exe<CR>
+            autocmd FileType cpp nmap <F9> :w<CR>:!gcc++ -Wall % -g -o %<.exe<CR>
+            autocmd FileType c,cpp nmap <C-F9> :!./%<.exe<CR>
+            autocmd BufRead,BufNewFile *.js nmap <Leader>5 :update<CR>:!node %<CR>
+        augroup END
         " }}}
         "vimwiki
         let g:vimwiki_use_mouse = 1
@@ -430,14 +438,6 @@ endif
 " 普通模式下 Ctrl+c 复制文件路径
 "nnoremap <c-c> :let @* = expand('%:p')<cr>
 "inoremap jk <Esc>
-"au BufRead *.wiki map <S-F4> :VimwikiAll2HTML<cr>
-"au BufRead *.wiki map <F4> :Vimwiki2HTML<cr>
-" calendar
-au BufRead *.wiki map <F8> :Calendar<cr>
-au FileType qf nnoremap <buffer> o <CR><C-w>j
-"nnoremap <F6> :GundoToggle<CR>
-" 自动运用设置
-autocmd BufWritePost .vimrc,.gvimrc,_vimrc silent source %
 " Buffers/Tab操作快捷方式!
 "nnoremap <s-h> :bprevious<cr>
 "nnoremap <s-l> :bnext<cr>
@@ -471,12 +471,10 @@ nnoremap <Leader>fg :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
 if exists('g:plugs["ale"]')
     nnoremap <Leader>es :ALEFix<CR>
 endif
-au FileType javascript nnoremap <LocalLeader>es mF:%!~/.nvm/versions/node/v6.11.0/bin/eslint_d -c ~/.eslintrc-fix.json --stdin --fix-to-stdout<CR>`F
-au FileType javascript vnoremap <LocalLeader>es :!~/.nvm/versions/node/v6.11.0/bin/eslint_d -c ~/.eslintrc-fix.json --stdin --fix-to-stdout<CR>gv
 " format
 nnoremap <Leader>ef :Autoformat<CR>
 nnoremap <Leader>ec :call plug#load('editorconfig-vim')<CR>:EditorConfigReload<CR>
-nnoremap <Leader>ed :cd %:p:h<CR>
+nnoremap <Leader>ed :lcd %:p:h<CR>
 nnoremap <Leader>e2 :setlocal ts=2 sw=2 et<CR>
 nnoremap <Leader>e4 :setlocal ts=4 sw=4 et<CR>
 command! FcitxVim execute "call plug#load('fcitx.vim') | set ttimeoutlen=100"
@@ -497,6 +495,18 @@ endif
 " git
 nnoremap <Leader>gs :Gstatus<CR>
 nnoremap <Leader>gl :Glog<CR>
+
+augroup E_map_setting
+    autocmd!
+    " 自动运用设置
+    autocmd BufWritePost .vimrc,.gvimrc,_vimrc silent source %
+    autocmd FileType vimwiki map <F8> :Calendar<CR>
+    " no auto indent when pasting
+    autocmd FileType vimwiki nnoremap <Leader>p moo<Esc>"+p`o
+    autocmd FileType qf nnoremap <buffer> o <CR><C-w>j
+    autocmd FileType javascript nnoremap <LocalLeader>es mF:%!~/.nvm/versions/node/v6.11.0/bin/eslint_d -c ~/.eslintrc-fix.json --stdin --fix-to-stdout<CR>`F
+    autocmd FileType javascript vnoremap <LocalLeader>es :!~/.nvm/versions/node/v6.11.0/bin/eslint_d -c ~/.eslintrc-fix.json --stdin --fix-to-stdout<CR>gv
+augroup end
 "}}}
 
 " python setting{{{
@@ -511,13 +521,13 @@ let g:haskellmode_completion_ghc = 0
 autocmd FileType haskell setlocal omnifunc=necoghc#omnifunc
             \ ts=8 et sw=4 softtabstop=4 shiftround
 let g:haskell_indent_disable=1
-au FileType haskell map <silent> tw :update<CR>:GhcModTypeInsert<CR>
-au FileType haskell map <silent> ts :update<CR>:GhcModSplitFunCase<CR>
-au FileType haskell map <silent> tq :update<CR>:GhcModType<CR>
-au FileType haskell map <silent> te :update<CR>:GhcModTypeClear<CR>
-au FileType haskell vnoremap <LocalLeader>a= :Tabularize /=<CR>
-au FileType haskell vnoremap <LocalLeader>a; :Tabularize /::<CR>
-au FileType haskell vnoremap <LocalLeader>a- :Tabularize /-><CR>
+autocmd FileType haskell map <silent> tw :update<CR>:GhcModTypeInsert<CR>
+autocmd FileType haskell map <silent> ts :update<CR>:GhcModSplitFunCase<CR>
+autocmd FileType haskell map <silent> tq :update<CR>:GhcModType<CR>
+autocmd FileType haskell map <silent> te :update<CR>:GhcModTypeClear<CR>
+autocmd FileType haskell vnoremap <LocalLeader>a= :Tabularize /=<CR>
+autocmd FileType haskell vnoremap <LocalLeader>a; :Tabularize /::<CR>
+autocmd FileType haskell vnoremap <LocalLeader>a- :Tabularize /-><CR>
 "au BufRead *.py map <buffer> <F5> :w<CR>:!/usr/bin/env python % <CR>
 " }}}
 
@@ -528,7 +538,7 @@ if exists('g:plugs["YouCompleteMe"]')
     nnoremap <Leader>fd :YcmCompleter GoToDefinitionElseDeclaration<CR>
     nnoremap K :YcmCompleter GetDoc<CR>
     nnoremap <Leader>ft :YcmCompleter GetType <CR>
-    au FileType javascript,python,typescript nnoremap <LocalLeader>fr :YcmCompleter GoToReferences<CR>
+    autocmd FileType javascript,python,typescript nnoremap <LocalLeader>fr :YcmCompleter GoToReferences<CR>
     "autocmd BufRead,BufNewFile *.cpp,*.c,*.cc nnoremap <F5> :YcmForceCompileAndDiagnostics<CR>
     augroup load_us_ycm
         autocmd!
@@ -620,8 +630,28 @@ let g:ctrlp_custom_ignore = {
 let g:AutoPairsFlyMode = 1
 " supertab
 if exists('g:plugs["supertab"]')
-    ":autocmd InsertEnter * let save_cwd = getcwd() | set autochdir
-    ":autocmd InsertLeave * set noautochdir | execute 'cd' fnameescape(save_cwd)
+    function! E_change_dir_toggle()
+        if !exists('g:E_change_dir_toggle_flag')
+            let g:E_change_dir_toggle_flag = 1
+        endif
+        " Enable if the group was previously disabled
+        if (g:E_change_dir_toggle_flag == 1)
+            let g:E_change_dir_toggle_flag = 0
+            augroup E_group_change_dir
+                autocmd InsertEnter * let save_cwd = getcwd() | set autochdir
+                autocmd InsertLeave * set noautochdir | execute 'cd' fnameescape(save_cwd)
+            augroup END
+        else    " Clear the group if it was previously enabled
+            let g:E_change_dir_toggle_flag = 1
+
+            " resetting the augroup
+            augroup E_group_change_dir
+                autocmd!
+            augroup END
+        endif
+    endfunction
+    let g:E_change_dir_toggle_flag = 0
+    call E_change_dir_toggle()
     let g:SuperTabDefaultCompletionType = "context"
     "let g:SuperTabContextDefaultCompletionType = "<c-p>"
     "let g:SuperTabCompletionContexts = ['s:ContextText', 's:ContextDiscover']
@@ -629,11 +659,11 @@ if exists('g:plugs["supertab"]')
     let g:SuperTabClosePreviewOnPopupClose = 1
     autocmd FileType python setlocal omnifunc=jedi#completions
     "let g:tern_map_keys = 1
-    au FileType javascript nnoremap <Leader>d :TernDef<CR>
-    au FileType rust nmap <leader>k <Plug>(rust-doc)
-    au FileType rust nmap gd <Plug>(rust-def)
-    au FileType rust nmap <leader>d <Plug>(rust-def-split)
-    au FileType rust nmap gx <Plug>(rust-def-vertical)
+    autocmd FileType javascript nnoremap <Leader>d :TernDef<CR>
+    autocmd FileType rust nmap <leader>k <Plug>(rust-doc)
+    autocmd FileType rust nmap gd <Plug>(rust-def)
+    autocmd FileType rust nmap <leader>d <Plug>(rust-def-split)
+    autocmd FileType rust nmap gx <Plug>(rust-def-vertical)
     autocmd FileType * 
                 \if &omnifunc != '' |
                 \call SuperTabChain(&omnifunc, "<c-p>") |
@@ -652,7 +682,7 @@ if exists('g:plugs["supertab"]')
     "let g:jedi#rename_command = "<Leader>r"
     "let g:jedi#show_call_signatures = "1"
 endif
-au filetype javascript let g:NERDSpaceDelims = 1
+autocmd filetype javascript let g:NERDSpaceDelims = 1
 let g:NERDDefaultAlign = 'left'
 " Allow commenting and inverting empty lines (useful when commenting a region)
 let g:NERDCommentEmptyLines = 1
@@ -756,8 +786,6 @@ let g:vimwiki_valid_html_tags='b,i,s,u,sub,sup,kbd,br,hr,div,del,code'
 let g:Modeliner_format = 'sts= sw= ts= et'
 let g:EditorConfig_exclude_patterns = ['fugitive://.*']
 autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS noci
-let g:delimitMate_expand_cr = 1
-let g:delimitMate_expand_space = 1
 
 if has('nvim')
     let g:deoplete#enable_at_startup = 1
@@ -775,7 +803,7 @@ endfunc
 let g:jsx_ext_required = 0
 autocmd BufRead,BufNewFile *.js nnoremap <F6> :%s/class=/className=/g<CR>
 "autocmd BufRead,BufNewFile *.js nmap <F7> :call ToggleJsFiletype()<CR>
-au BufRead,BufNewFile *.scss set filetype=scss.css
+autocmd BufRead,BufNewFile *.scss set filetype=scss.css
 "autocmd BufRead,BufNewFile *.vue setlocal filetype=vue.html.javascript.css
 " }}}
 " vim: set et fenc=utf-8 ff=unix sts=4 sw=4 ts=4 :
