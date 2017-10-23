@@ -73,6 +73,7 @@ Plug 'vim-scripts/Modeliner', { 'on': 'Modeliner' }
 Plug 'w0rp/ale'
 "Plug 'vim-syntastic/syntastic'
 Plug 'roxma/vim-paste-easy'
+Plug 'sickill/vim-pasta'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 Plug 'editorconfig/editorconfig-vim', { 'on': [] }
@@ -155,9 +156,8 @@ set wildmenu
 "set cuc
 set showcmd
 "set autochdir
-set fdm=syntax "marker indent
-au fileType vim setlocal fdm=marker
-set nofoldenable
+set fdm=marker "marker indent
+"set nofoldenable
 "set foldlevelstart=99
 set complete-=i
 set completeopt=longest,menu
@@ -458,11 +458,11 @@ endif
 """"""""""""""""""""
 "  Leader key map  "
 """"""""""""""""""""
-vmap <Leader>y "+y
-nmap <Leader>p "+p
-nmap <Leader>P "+P
-vmap <Leader>p "+p
-vmap <Leader>P "+P
+nnoremap <Leader>y "+y
+nnoremap <Leader>p moo<Esc>"+p`[v`]=`o
+nnoremap <Leader>P moO<Esc>"+P`[v`]=`o
+vnoremap <Leader>p "+p`[v`]=
+vnoremap <Leader>P "+P`[v`]=
 
 "nnoremap <Leader>te :tabe<space>
 " grep word under cursor
@@ -479,7 +479,7 @@ nnoremap <Leader>ec :call plug#load('editorconfig-vim')<CR>:EditorConfigReload<C
 nnoremap <Leader>ed :cd %:p:h<CR>
 nnoremap <Leader>e2 :setlocal ts=2 sw=2 et<CR>
 nnoremap <Leader>e4 :setlocal ts=4 sw=4 et<CR>
-command FcitxVim execute "call plug#load('fcitx.vim') | set ttimeoutlen=100"
+command! FcitxVim execute "call plug#load('fcitx.vim') | set ttimeoutlen=100"
 " 快捷键 i 开/关缩进可视化
 nnoremap <silent> <Leader>ei :IndentGuidesToggle<CR>
 
@@ -630,6 +630,10 @@ if exists('g:plugs["supertab"]')
     autocmd FileType python setlocal omnifunc=jedi#completions
     "let g:tern_map_keys = 1
     au FileType javascript nnoremap <Leader>d :TernDef<CR>
+    au FileType rust nmap <leader>k <Plug>(rust-doc)
+    au FileType rust nmap gd <Plug>(rust-def)
+    au FileType rust nmap <leader>d <Plug>(rust-def-split)
+    au FileType rust nmap gx <Plug>(rust-def-vertical)
     autocmd FileType * 
                 \if &omnifunc != '' |
                 \call SuperTabChain(&omnifunc, "<c-p>") |
@@ -655,6 +659,8 @@ let g:NERDCommentEmptyLines = 1
 " Enable trimming of trailing whitespace when uncommenting
 let g:NERDTrimTrailingWhitespace = 1
 
+"let g:paste_easy_enable=0 "vim-paste-easy
+"let g:paste_easy_message=0
 let g:fzf_action = {
             \ 'ctrl-t': 'tab split',
             \ 'ctrl-i': 'split',
@@ -704,7 +710,7 @@ endif
 "新建.c,.h,.sh,.java文件，自动插入文件头
 autocmd BufNewFile *.cpp,*.[ch],*.sh,*.java exec ":call SetTitle()"
 ""定义函数SetTitle，自动插入文件头
-func SetTitle()
+func! SetTitle()
     "如果文件类型为.sh文件
     if &filetype == 'sh'
         call setline(1,"\#!/bin/bash")
@@ -759,7 +765,7 @@ endif
 "let g:polyglot_disabled = ['css']
 " test setting for web development {{{
 "let g:syntastic_javascript_eslint_exe = '$(npm bin)/eslint'
-func ToggleJsFiletype()
+func! ToggleJsFiletype()
     if &filetype == 'javascript'
         setlocal ft=javascript.jsx
     elseif &filetype == 'javascript.jsx'
