@@ -57,6 +57,7 @@ endif
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-rsi'
 Plug 'Lokaltog/vim-easymotion'
 Plug 'vim-scripts/matchit.zip'
 Plug 'mattn/emmet-vim'
@@ -126,7 +127,7 @@ Plug 'Quramy/tsuquyomi', { 'for': 'typescript' }
 " need UltiSnips
 "Plug 'justinj/vim-react-snippets'
 " Rust
-Plug 'rust-lang/rust.vim'
+"Plug 'rust-lang/rust.vim'
 Plug 'tweekmonster/startuptime.vim', { 'on': 'StartupTime' }
 Plug 'nathanaelkane/vim-indent-guides', { 'on': 'IndentGuidesToggle' }
 call plug#end()
@@ -447,11 +448,6 @@ endif
 map <C-S> :update<CR>
 vmap <C-S> <C-C>:update<CR>
 imap <C-S> <C-O>:update<CR>
-" Insert mode use Emacs key bind
-inoremap <C-a> <C-o>^
-inoremap <C-e> <End>
-inoremap <C-f> <Right>
-inoremap <C-b> <Left>
 if maparg('<C-L>', 'n') ==# ''
   nnoremap <silent> <C-L> :nohlsearch<C-R>=has('diff')?'<Bar>diffupdate':''<CR><CR><C-L>
 endif
@@ -463,6 +459,7 @@ nnoremap <Leader>p moo<Esc>"+p`[v`]=`o
 nnoremap <Leader>P moO<Esc>"+P`[v`]=`o
 vnoremap <Leader>p "+p`[v`]=
 vnoremap <Leader>P "+P`[v`]=
+vnoremap <Leader>y "+y
 
 "nnoremap <Leader>te :tabe<space>
 " grep word under cursor
@@ -576,10 +573,10 @@ if exists('g:plugs["YouCompleteMe"]')
     let g:ycm_semantic_triggers['haskell'] = ['.']
 endif
 "}}}
-"" ale
+"let g:polyglot_disabled = ['rust']
+" ale
 let g:ale_javascript_eslint_executable = 'eslint_d'
 "let g:ale_javascript_eslint_options = '--fix'
-let g:polyglot_disabled = ['rust']
 let g:ale_fixers = {
 \   'javascript': ['eslint'],
 \   'rust': ['rustc'],
@@ -618,6 +615,7 @@ let g:html_indent_script1 = "inc"
 let g:html_indent_style1 = "inc"
 "NERDTree,提供查看文件折叠/展开列表功能
 nnoremap <Leader>2 :NERDTreeToggle<CR>
+"nnoremap <Leader>3 :call plug#load('tagbar')<CR>:TagbarToggle<CR>
 nnoremap <Leader>3 :TagbarToggle<CR>
 let tagbar_left=1
 let g:tagbar_autofocus=1
@@ -630,7 +628,7 @@ let g:ctrlp_custom_ignore = {
 let g:AutoPairsFlyMode = 1
 " supertab
 if exists('g:plugs["supertab"]')
-    function! E_change_dir_toggle()
+    function! s:E_change_dir_toggle()
         if !exists('g:E_change_dir_toggle_flag')
             let g:E_change_dir_toggle_flag = 1
         endif
@@ -650,8 +648,7 @@ if exists('g:plugs["supertab"]')
             augroup END
         endif
     endfunction
-    let g:E_change_dir_toggle_flag = 0
-    call E_change_dir_toggle()
+    nnoremap <Leader>4 :call <SID>E_change_dir_toggle()<CR>
     let g:SuperTabDefaultCompletionType = "context"
     "let g:SuperTabContextDefaultCompletionType = "<c-p>"
     "let g:SuperTabCompletionContexts = ['s:ContextText', 's:ContextDiscover']
@@ -660,10 +657,12 @@ if exists('g:plugs["supertab"]')
     autocmd FileType python setlocal omnifunc=jedi#completions
     "let g:tern_map_keys = 1
     autocmd FileType javascript nnoremap <Leader>d :TernDef<CR>
-    autocmd FileType rust nmap <leader>k <Plug>(rust-doc)
+    autocmd FileType javascript nnoremap <Leader>k :TernDoc<CR>
+    autocmd FileType rust nmap <Leader>k <Plug>(rust-doc)
     autocmd FileType rust nmap gd <Plug>(rust-def)
-    autocmd FileType rust nmap <leader>d <Plug>(rust-def-split)
-    autocmd FileType rust nmap gx <Plug>(rust-def-vertical)
+    autocmd FileType rust nmap <Leader>d <Plug>(rust-def)
+    autocmd FileType rust nmap <Leader>gs <Plug>(rust-def-split)
+    autocmd FileType rust nmap <Leader>gx <Plug>(rust-def-vertical)
     autocmd FileType * 
                 \if &omnifunc != '' |
                 \call SuperTabChain(&omnifunc, "<c-p>") |
