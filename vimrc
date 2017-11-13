@@ -58,6 +58,7 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rsi'
+Plug 'tpope/vim-obsession'
 Plug 'Lokaltog/vim-easymotion'
 Plug 'vim-scripts/matchit.zip'
 Plug 'mattn/emmet-vim'
@@ -78,6 +79,7 @@ Plug 'sickill/vim-pasta'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 Plug 'editorconfig/editorconfig-vim', { 'on': [] }
+"Plug 'haya14busa/vim-asterisk'
 " Colorscheme
 Plug 'lifepillar/vim-solarized8'
 
@@ -110,7 +112,7 @@ elseif has("unix")
 endif
 if !executable('fzf')
     Plug 'kien/ctrlp.vim'
-    Plug 'Shougo/unite.vim', { 'on': 'Unite' }
+    "Plug 'Shougo/unite.vim', { 'on': 'Unite' }
 endif
 " web development
 Plug 'sheerun/vim-polyglot'
@@ -448,6 +450,7 @@ endif
 map <C-S> :update<CR>
 vmap <C-S> <C-C>:update<CR>
 imap <C-S> <C-O>:update<CR>
+nnoremap <Leader>ew :update<CR>
 if maparg('<C-L>', 'n') ==# ''
   nnoremap <silent> <C-L> :nohlsearch<C-R>=has('diff')?'<Bar>diffupdate':''<CR><CR><C-L>
 endif
@@ -486,8 +489,11 @@ endif
 if executable('fzf') && exists('g:plugs["fzf.vim"]')
     nnoremap <C-p> :FZF<CR>
     nnoremap <Leader>b :Buffers<CR>
+    nnoremap <Leader>fl :Lines<CR>
 else
-    nnoremap <Leader>b :Unite buffer<CR>
+    "nnoremap <Leader>b :Unite buffer<CR>
+    nnoremap <Leader>b :CtrlPBuffer<CR>
+    nnoremap <Leader>fl :CtrlPLine<CR>
 endif
 " git
 nnoremap <Leader>gs :Gstatus<CR>
