@@ -68,7 +68,7 @@ Plug 'vimwiki/vimwiki'
 Plug 'mattn/calendar-vim', {'for': 'vimwiki'}
 Plug 'jiangmiao/auto-pairs'
 Plug 'godlygeek/tabular', { 'on': 'Tabularize' }
-Plug 'bling/vim-airline'
+Plug 'vim-airline/vim-airline'
 Plug 'majutsushi/tagbar'
 Plug 'Valloric/ListToggle'
 Plug 'vim-scripts/Modeliner', { 'on': 'Modeliner' }
@@ -88,6 +88,7 @@ if has("win32")
         Plug 'Valloric/YouCompleteMe', { 'on': [] }
     else
         "Plug 'Shougo/neocomplete.vim'
+        "Plug 'Valloric/YouCompleteMe', { 'on': [] }
         Plug 'ervandew/supertab'
         Plug 'davidhalter/jedi-vim'
         Plug 'ternjs/tern_for_vim'
@@ -97,11 +98,11 @@ elseif has("unix")
         Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
         Plug 'carlitux/deoplete-ternjs', { 'do': 'npm install -g tern' }
     else
-        Plug 'ervandew/supertab'
-        Plug 'ternjs/tern_for_vim', { 'do': 'npm install' }
-        Plug 'davidhalter/jedi-vim'
-        Plug 'racer-rust/vim-racer'
-        "Plug 'Valloric/YouCompleteMe', { 'on': [] }
+        "Plug 'ervandew/supertab'
+        "Plug 'ternjs/tern_for_vim', { 'do': 'npm install' }
+        "Plug 'davidhalter/jedi-vim'
+        "Plug 'racer-rust/vim-racer'
+        Plug 'Valloric/YouCompleteMe', { 'on': [] }
     endif
     Plug 'lilydjwg/fcitx.vim', { 'on': [] }
     "Plug 'tweekmonster/django-plus.vim'
@@ -113,6 +114,9 @@ endif
 if !executable('fzf')
     Plug 'kien/ctrlp.vim'
     "Plug 'Shougo/unite.vim', { 'on': 'Unite' }
+" elseif has("win32") && executable('fzf')
+"     Plug 'junegunn/fzf'
+"     Plug 'junegunn/fzf.vim'
 endif
 " web development
 Plug 'sheerun/vim-polyglot'
@@ -248,7 +252,7 @@ endif
 "end of setting for linux}}}
 
 " setting for gvim or terminal {{{
-if has("gui_running")
+if has("gui_running") || (has("nvim") && has("win32"))
     " 只显示菜单
     set guioptions=
     set lines=44
@@ -454,6 +458,11 @@ nnoremap <Leader>ew :update<CR>
 if maparg('<C-L>', 'n') ==# ''
   nnoremap <silent> <C-L> :nohlsearch<C-R>=has('diff')?'<Bar>diffupdate':''<CR><CR><C-L>
 endif
+map <M-1> 1gt
+map <M-2> 2gt
+map <M-3> 3gt
+map <M-4> 4gt
+map <M-5> 5gt
 """"""""""""""""""""
 "  Leader key map  "
 """"""""""""""""""""
@@ -473,7 +482,7 @@ if exists('g:plugs["ale"]')
 endif
 " format
 nnoremap <Leader>ef :Autoformat<CR>
-nnoremap <Leader>ec :call plug#load('editorconfig-vim')<CR>:EditorConfigReload<CR>
+nnoremap <Leader>ec :call plug#load('editorconfig-vim')<CR>:EditorConfigReload<CR>:e! %<CR>
 nnoremap <Leader>ed :lcd %:p:h<CR>
 nnoremap <Leader>e2 :setlocal ts=2 sw=2 et<CR>
 nnoremap <Leader>e4 :setlocal ts=4 sw=4 et<CR>
@@ -509,6 +518,10 @@ augroup E_map_setting
     autocmd FileType qf nnoremap <buffer> o <CR><C-w>j
     autocmd FileType javascript nnoremap <LocalLeader>es mF:%!~/.nvm/versions/node/v6.11.0/bin/eslint_d -c ~/.eslintrc-fix.json --stdin --fix-to-stdout<CR>`F
     autocmd FileType javascript vnoremap <LocalLeader>es :!~/.nvm/versions/node/v6.11.0/bin/eslint_d -c ~/.eslintrc-fix.json --stdin --fix-to-stdout<CR>gv
+    if has("win32")
+        autocmd FileType javascript nnoremap <LocalLeader>es mF:%!"C:\Program Files\nodejs\eslint_d" -c "C:\Users\alan\.eslintrc-fix.json" --stdin --fix-to-stdout<CR>`F
+        autocmd FileType javascript vnoremap <LocalLeader>es :!"C:\Program Files\nodejs\eslint_d" -c "C:\Users\alan\.eslintrc-fix.json" --stdin --fix-to-stdout<CR>gv
+    endif
 augroup end
 "}}}
 
@@ -588,8 +601,8 @@ let g:ale_fixers = {
 \   'rust': ['rustc'],
 \   'python': ['autopep8'],
 \}
-"let g:ale_lint_on_text_changed = 'never'
-"let g:ale_lint_on_enter = 0
+let g:ale_lint_on_text_changed = 'never'
+let g:ale_lint_on_enter = 0
 "" syntastic
 let g:syntastic_javascript_checkers = ['eslint']
 let g:syntastic_javascript_eslint_exec = 'eslint_d'
@@ -603,6 +616,7 @@ let g:UltiSnipsJumpBackwardTrigger="<c-b>"
 let g:snips_email="zhifengle@gmail.com"
 let g:snips_author="22earth"
 let g:snips_github="22earth"
+let g:UltiSnipsSnippetDirectories=["UltiSnips", "mycoolsnippets"]
 "emmet
 "let g:user_emmet_leader_key='<C-Z>'
 "let g:user_emmet_expandabbr_key = '<Tab>'
@@ -702,7 +716,11 @@ let g:fzf_action = {
             \ 'ctrl-x': 'split',
             \ 'ctrl-s': 'vsplit',
             \ 'ctrl-v': 'vsplit' }
-if executable('ag')
+
+if executable('rg')
+    set grepprg=rg\ --vimgrep
+    set grepformat=%f:%l:%c:%m
+elseif executable('ag')
     " Use ag over grep
     " set grepprg=ag\ --nogroup\ --nocolor
     function! s:find_js_module(file)
@@ -790,6 +808,7 @@ let g:python3_host_prog = '/home/alan/.pyenv/versions/env3/bin/python3'
 let g:vimwiki_valid_html_tags='b,i,s,u,sub,sup,kbd,br,hr,div,del,code'
 let g:Modeliner_format = 'sts= sw= ts= et'
 let g:EditorConfig_exclude_patterns = ['fugitive://.*']
+"let g:airline#extensions#tabline#enabled = 1
 autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS noci
 
 if has('nvim')
@@ -810,6 +829,8 @@ autocmd BufRead,BufNewFile *.js nnoremap <F6> :%s/class=/className=/g<CR>
 "autocmd BufRead,BufNewFile *.js nmap <F7> :call ToggleJsFiletype()<CR>
 autocmd BufRead,BufNewFile *.scss set filetype=scss.css
 "autocmd BufRead,BufNewFile *.vue setlocal filetype=vue.html.javascript.css
+autocmd FileType vue setlocal suffixesadd=.vue,.js
+autocmd FileType vue syntax sync fromstart
 " }}}
 " vim: set et fenc=utf-8 ff=unix sts=4 sw=4 ts=4 :
 "}}}
