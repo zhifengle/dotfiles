@@ -57,6 +57,7 @@ endif
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-fugitive'
+Plug 'junegunn/gv.vim'
 Plug 'tpope/vim-rsi'
 Plug 'tpope/vim-obsession'
 Plug 'Lokaltog/vim-easymotion'
@@ -92,6 +93,7 @@ if has("win32")
         Plug 'ervandew/supertab'
         Plug 'davidhalter/jedi-vim'
         Plug 'ternjs/tern_for_vim'
+        Plug 'racer-rust/vim-racer'
     endif
 elseif has("unix")
     if has('nvim')
@@ -112,7 +114,7 @@ elseif has("unix")
     Plug 'junegunn/fzf.vim'
 endif
 if !executable('fzf')
-    Plug 'kien/ctrlp.vim'
+    Plug 'ctrlpvim/ctrlp.vim'
     "Plug 'Shougo/unite.vim', { 'on': 'Unite' }
 " elseif has("win32") && executable('fzf')
 "     Plug 'junegunn/fzf'
@@ -506,7 +508,7 @@ else
 endif
 " git
 nnoremap <Leader>gs :Gstatus<CR>
-nnoremap <Leader>gl :Glog<CR>
+nnoremap <Leader>gl :GV!<CR>
 
 augroup E_map_setting
     autocmd!
@@ -830,7 +832,7 @@ autocmd BufRead,BufNewFile *.js nnoremap <F6> :%s/class=/className=/g<CR>
 autocmd BufRead,BufNewFile *.scss set filetype=scss.css
 "autocmd BufRead,BufNewFile *.vue setlocal filetype=vue.html.javascript.css
 autocmd FileType vue setlocal suffixesadd=.vue,.js
-autocmd FileType vue syntax sync fromstart
+"autocmd FileType vue syntax sync fromstart
 " }}}
 " vim: set et fenc=utf-8 ff=unix sts=4 sw=4 ts=4 :
 "}}}
