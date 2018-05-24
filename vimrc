@@ -460,11 +460,13 @@ nnoremap <Leader>ew :update<CR>
 if maparg('<C-L>', 'n') ==# ''
   nnoremap <silent> <C-L> :nohlsearch<C-R>=has('diff')?'<Bar>diffupdate':''<CR><CR><C-L>
 endif
-map <M-1> 1gt
-map <M-2> 2gt
-map <M-3> 3gt
-map <M-4> 4gt
-map <M-5> 5gt
+if (has("gui_running")) || has("win32")
+    map <M-1> 1gt
+    map <M-2> 2gt
+    map <M-3> 3gt
+    map <M-4> 4gt
+    map <M-5> 5gt
+endif
 """"""""""""""""""""
 "  Leader key map  "
 """"""""""""""""""""
@@ -527,6 +529,25 @@ augroup E_map_setting
 augroup end
 "}}}
 
+" web development setting{{{
+"autocmd FileType javascript set formatprg=prettier-eslint\ --stdin
+"autocmd BufWritePre *.js :normal gggqG
+"let g:syntastic_javascript_eslint_exe = '$(npm bin)/eslint'
+func! ToggleJsFiletype()
+    if &filetype == 'javascript'
+        setlocal ft=javascript.jsx
+    elseif &filetype == 'javascript.jsx'
+        setlocal ft=javascript
+    endif
+endfunc
+let g:jsx_ext_required = 0
+autocmd BufRead,BufNewFile *.js nnoremap <F6> :%s/class=/className=/g<CR>
+"autocmd BufRead,BufNewFile *.js nmap <F7> :call ToggleJsFiletype()<CR>
+autocmd BufRead,BufNewFile *.scss set filetype=scss.css
+"autocmd BufRead,BufNewFile *.vue setlocal filetype=vue.html.javascript.css
+autocmd FileType vue setlocal suffixesadd=.vue,.js
+"autocmd FileType vue syntax sync fromstart
+" }}}
 " python setting{{{
 
 let tlist_txt_settings = 'txt;c:content;f:figures;t:tables' "language definition for plain text
@@ -817,22 +838,5 @@ if has('nvim')
     let g:deoplete#enable_at_startup = 1
 endif
 "let g:polyglot_disabled = ['css']
-" test setting for web development {{{
-"let g:syntastic_javascript_eslint_exe = '$(npm bin)/eslint'
-func! ToggleJsFiletype()
-    if &filetype == 'javascript'
-        setlocal ft=javascript.jsx
-    elseif &filetype == 'javascript.jsx'
-        setlocal ft=javascript
-    endif
-endfunc
-let g:jsx_ext_required = 0
-autocmd BufRead,BufNewFile *.js nnoremap <F6> :%s/class=/className=/g<CR>
-"autocmd BufRead,BufNewFile *.js nmap <F7> :call ToggleJsFiletype()<CR>
-autocmd BufRead,BufNewFile *.scss set filetype=scss.css
-"autocmd BufRead,BufNewFile *.vue setlocal filetype=vue.html.javascript.css
-autocmd FileType vue setlocal suffixesadd=.vue,.js
-"autocmd FileType vue syntax sync fromstart
-" }}}
 " vim: set et fenc=utf-8 ff=unix sts=4 sw=4 ts=4 :
 "}}}
