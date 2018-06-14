@@ -33,8 +33,8 @@
 " }}}
 
 "}}}
-
 " auto install plug-vim {{{
+set nocompatible
 if has("win32")
     if empty(glob('~/vimfiles/autoload/plug.vim')) &&  executable('curl')
         cd $HOME
@@ -142,7 +142,6 @@ call plug#end()
 "}}}
 
 " default setting for me {{{
-"set nocompatible
 let mapleader="\<Space>"
 let maplocalleader="\<Space>"
 if has('autocmd')
