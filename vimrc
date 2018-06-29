@@ -484,6 +484,7 @@ if exists('g:plugs["ale"]')
     nnoremap <Leader>es :ALEFix<CR>
 endif
 " format
+nnoremap <Leader>em :%s/\r//g<CR>
 nnoremap <Leader>ef :Autoformat<CR>
 nnoremap <Leader>ec :call plug#load('editorconfig-vim')<CR>:EditorConfigReload<CR>:e! %<CR>
 nnoremap <Leader>ed :lcd %:p:h<CR>
@@ -519,12 +520,6 @@ augroup E_map_setting
     " no auto indent when pasting
     autocmd FileType vimwiki nnoremap <Leader>p moo<Esc>"+p`o
     autocmd FileType qf nnoremap <buffer> o <CR><C-w>j
-    autocmd FileType javascript nnoremap <LocalLeader>es mF:%!~/.nvm/versions/node/v6.11.0/bin/eslint_d -c ~/.eslintrc-fix.json --stdin --fix-to-stdout<CR>`F
-    autocmd FileType javascript vnoremap <LocalLeader>es :!~/.nvm/versions/node/v6.11.0/bin/eslint_d -c ~/.eslintrc-fix.json --stdin --fix-to-stdout<CR>gv
-    if has("win32")
-        autocmd FileType javascript nnoremap <LocalLeader>es mF:%!"C:\Program Files\nodejs\eslint_d" -c "C:\Users\alan\.eslintrc-fix.json" --stdin --fix-to-stdout<CR>`F
-        autocmd FileType javascript vnoremap <LocalLeader>es :!"C:\Program Files\nodejs\eslint_d" -c "C:\Users\alan\.eslintrc-fix.json" --stdin --fix-to-stdout<CR>gv
-    endif
 augroup end
 "}}}
 
@@ -532,13 +527,19 @@ augroup end
 "autocmd FileType javascript set formatprg=prettier-eslint\ --stdin
 "autocmd BufWritePre *.js :normal gggqG
 "let g:syntastic_javascript_eslint_exe = '$(npm bin)/eslint'
-func! ToggleJsFiletype()
+func! ToggleJsFiletype() "{{{
     if &filetype == 'javascript'
         setlocal ft=javascript.jsx
     elseif &filetype == 'javascript.jsx'
         setlocal ft=javascript
     endif
 endfunc
+"}}}
+fun! EnableALEFix() "{{{
+    let g:ale_fix_on_save = 1
+endfunc
+command! -nargs=* EnableALEFix call EnableALEFix()
+"}}}
 let g:jsx_ext_required = 0
 autocmd BufRead,BufNewFile *.js nnoremap <F6> :%s/class=/className=/g<CR>
 "autocmd BufRead,BufNewFile *.js nmap <F7> :call ToggleJsFiletype()<CR>
@@ -616,7 +617,7 @@ endif
 "}}}
 "let g:polyglot_disabled = ['rust']
 " ale
-let g:ale_javascript_eslint_executable = 'eslint_d'
+"let g:ale_javascript_eslint_executable = 'eslint_d'
 "let g:ale_javascript_eslint_options = '--fix'
 let g:ale_fixers = {
 \   'javascript': ['eslint'],
@@ -627,7 +628,6 @@ let g:ale_lint_on_text_changed = 'never'
 let g:ale_lint_on_enter = 0
 "" syntastic
 let g:syntastic_javascript_checkers = ['eslint']
-let g:syntastic_javascript_eslint_exec = 'eslint_d'
 let g:syntastic_rust_checkers = ['rustc', 'cargo']
 " add an autocmd after vim started to execute checktime for *.js files on write
 "au VimEnter *.js au BufWritePost *.js checktime
