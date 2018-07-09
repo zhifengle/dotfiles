@@ -85,16 +85,12 @@ Plug 'editorconfig/editorconfig-vim', { 'on': [] }
 Plug 'lifepillar/vim-solarized8'
 
 if has("win32")
-    if executable('cl')
-        Plug 'Valloric/YouCompleteMe', { 'on': [] }
-    else
-        "Plug 'Shougo/neocomplete.vim'
-        "Plug 'Valloric/YouCompleteMe', { 'on': [] }
-        Plug 'ervandew/supertab'
-        Plug 'davidhalter/jedi-vim'
-        Plug 'ternjs/tern_for_vim'
-        Plug 'racer-rust/vim-racer'
-    endif
+    "Plug 'Shougo/neocomplete.vim'
+    " Plug 'Valloric/YouCompleteMe', { 'on': [] }
+    Plug 'ervandew/supertab'
+    Plug 'davidhalter/jedi-vim'
+    Plug 'ternjs/tern_for_vim'
+    Plug 'racer-rust/vim-racer'
 elseif has("unix")
     if has('nvim')
         Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
@@ -136,6 +132,7 @@ Plug 'Quramy/tsuquyomi', { 'for': 'typescript' }
 "Plug 'justinj/vim-react-snippets'
 " Rust
 "Plug 'rust-lang/rust.vim'
+Plug '22earth/vim-go', { 'do': ':GoUpdateBinaries' }
 Plug 'tweekmonster/startuptime.vim', { 'on': 'StartupTime' }
 Plug 'nathanaelkane/vim-indent-guides', { 'on': 'IndentGuidesToggle' }
 call plug#end()
@@ -303,13 +300,13 @@ if has("gui_running") || (has("nvim") && has("win32"))
         "    \ 'path_html': '~/vimwiki/html/',
         "    \ 'html_header': '~/vimwiki/template/header.tpl',}]
         let wiki_1 = {}
-        let wiki_1.path = 'F:/vimwiki/'
-        let wiki_1.html_template = "F:/vimwiki/template/header.tpl"
+        let wiki_1.path = 'E:/vimwiki/'
+        let wiki_1.html_template = "E:/vimwiki/template/header.tpl"
         let wiki_1.nested_syntaxes = {'python': 'python', 'c++': 'cpp'}
-        let wiki_1.path_html = 'F:/vimwiki/html/'
+        let wiki_1.path_html = 'E:/vimwiki/html/'
 
         let wiki_2 = {}
-        let wiki_2.path = 'F:/my_notes/'
+        let wiki_2.path = 'E:/my_notes/'
         let wiki_2.index = 'my_markdown_notes'
         let wiki_2.syntax = 'markdown'
         let wiki_2.ext = '.md'
