@@ -79,7 +79,7 @@ Plug 'roxma/vim-paste-easy'
 Plug 'sickill/vim-pasta'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
-Plug 'editorconfig/editorconfig-vim', { 'on': [] }
+Plug 'editorconfig/editorconfig-vim'
 "Plug 'haya14busa/vim-asterisk'
 " Colorscheme
 Plug 'lifepillar/vim-solarized8'
@@ -96,11 +96,11 @@ elseif has("unix")
         Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
         Plug 'carlitux/deoplete-ternjs', { 'do': 'npm install -g tern' }
     else
-        "Plug 'ervandew/supertab'
-        "Plug 'ternjs/tern_for_vim', { 'do': 'npm install' }
-        "Plug 'davidhalter/jedi-vim'
-        "Plug 'racer-rust/vim-racer'
-        Plug 'Valloric/YouCompleteMe', { 'on': [] }
+        Plug 'ervandew/supertab'
+        Plug 'ternjs/tern_for_vim', { 'do': 'npm install' }
+        Plug 'davidhalter/jedi-vim'
+        Plug 'racer-rust/vim-racer'
+        "Plug 'Valloric/YouCompleteMe'
     endif
     Plug 'lilydjwg/fcitx.vim', { 'on': [] }
     "Plug 'tweekmonster/django-plus.vim'
@@ -620,6 +620,7 @@ let g:ale_fixers = {
 \   'javascript': ['eslint'],
 \   'rust': ['rustc'],
 \   'python': ['autopep8'],
+\   'vue': ['eslint'],
 \}
 let g:ale_lint_on_text_changed = 'never'
 let g:ale_lint_on_enter = 0
