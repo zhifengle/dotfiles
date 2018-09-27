@@ -93,8 +93,12 @@ if has("win32")
     Plug 'racer-rust/vim-racer'
 elseif has("unix")
     if has('nvim')
+        Plug 'autozimu/LanguageClient-neovim', {
+                    \ 'branch': 'next',
+                    \ 'do': 'bash install.sh',
+                    \ }
         Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-        Plug 'carlitux/deoplete-ternjs', { 'do': 'npm install -g tern' }
+        "Plug 'carlitux/deoplete-ternjs', { 'do': 'npm install -g tern' }
     else
         Plug 'ervandew/supertab'
         Plug 'ternjs/tern_for_vim', { 'do': 'npm install' }
@@ -102,7 +106,7 @@ elseif has("unix")
         Plug 'racer-rust/vim-racer'
         "Plug 'Valloric/YouCompleteMe'
     endif
-    Plug 'lilydjwg/fcitx.vim', { 'on': [] }
+    Plug 'lilydjwg/fcitx.vim'
     "Plug 'tweekmonster/django-plus.vim'
     Plug 'eagletmt/ghcmod-vim'
     Plug 'eagletmt/neco-ghc'
@@ -132,7 +136,8 @@ Plug 'Quramy/tsuquyomi', { 'for': 'typescript' }
 "Plug 'justinj/vim-react-snippets'
 " Rust
 "Plug 'rust-lang/rust.vim'
-Plug '22earth/vim-go', { 'do': ':GoUpdateBinaries' }
+"Plug '22earth/vim-go', { 'do': ':GoUpdateBinaries' }
+Plug '22earth/vim-go'
 Plug 'tweekmonster/startuptime.vim', { 'on': 'StartupTime' }
 Plug 'nathanaelkane/vim-indent-guides', { 'on': 'IndentGuidesToggle' }
 call plug#end()
@@ -187,6 +192,7 @@ set expandtab "插入tab时以空格替换et
 set smarttab "开启新行的sta
 set autoindent "自动缩进
 set smartindent "智能自动缩进
+set diffopt+=iwhite
 
 augroup E_indent
     autocmd FileType python setlocal ts=4 sw=4 et sta
@@ -239,6 +245,7 @@ if has("unix")
         "au BufRead,BufNewFile *.scm nmap <F5> :w<CR>:!mit-scheme --load %<CR>
         autocmd BufRead,BufNewFile *.rkt,*scm nmap <F5> :update<CR>:!racket %<CR>
         autocmd BufRead,BufNewFile *.js nmap <Leader>5 :update<CR>:!node %<CR>
+        autocmd BufRead,BufNewFile *.go nmap <Leader>5 :update<CR>:GoRun<CR>
     augroup END
     "}}}
     "autocmd FileType javascript set dictionary=~/.vim/dict/javascript.dict
@@ -481,7 +488,7 @@ if exists('g:plugs["ale"]')
     nnoremap <Leader>es :ALEFix<CR>
 endif
 " format
-nnoremap <Leader>em :%s/\r//g<CR>
+nnoremap <Leader>em :%s/\r//g<CR>:w<CR>
 nnoremap <Leader>ef :Autoformat<CR>
 nnoremap <Leader>ec :call plug#load('editorconfig-vim')<CR>:EditorConfigReload<CR>:e! %<CR>
 nnoremap <Leader>ed :lcd %:p:h<CR>
@@ -833,6 +840,22 @@ autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS noci
 
 if has('nvim')
     let g:deoplete#enable_at_startup = 1
+    let g:deoplete#num_processes = 1
+    if exists('g:plugs["LanguageClient-neovim"]')
+        let g:LanguageClient_serverCommands = {
+                    \ 'rust': ['rustup', 'run', 'stable', 'rls'],
+                    \ 'javascript.jsx': ['javascript-typescript-stdio'],
+                    \ 'javascript': ['tcp://127.0.0.1:2089'],
+                    \ 'python': ['/usr/local/bin/pyls'],
+                    \ 'vue': ['vls'],
+                    \ }
+
+        nnoremap <F5> :call LanguageClient_contextMenu()<CR>
+        " Or map each action separately
+        nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
+        nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
+        nnoremap <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
+    endif
 endif
 "let g:polyglot_disabled = ['css']
 " vim: set et fenc=utf-8 ff=unix sts=4 sw=4 ts=4 :
