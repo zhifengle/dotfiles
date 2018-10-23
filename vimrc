@@ -7,6 +7,7 @@
 " python: F5 use python in environment, F6 use user defined python path
 " use config file in another machine need to do some modification
 " use eslint
+" need set .tern-config
 " JS optional dependency
 " js-beautify eslint_d jsctags
 " linux {{{
@@ -79,7 +80,7 @@ Plug 'roxma/vim-paste-easy'
 Plug 'sickill/vim-pasta'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
-Plug 'editorconfig/editorconfig-vim'
+Plug 'editorconfig/editorconfig-vim', { 'on': [] }
 "Plug 'haya14busa/vim-asterisk'
 " Colorscheme
 Plug 'lifepillar/vim-solarized8'
@@ -108,8 +109,8 @@ elseif has("unix")
     endif
     Plug 'lilydjwg/fcitx.vim'
     "Plug 'tweekmonster/django-plus.vim'
-    Plug 'eagletmt/ghcmod-vim'
-    Plug 'eagletmt/neco-ghc'
+    "Plug 'eagletmt/ghcmod-vim'
+    "Plug 'eagletmt/neco-ghc'
     Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
     Plug 'junegunn/fzf.vim'
 endif
@@ -182,7 +183,7 @@ set incsearch "在输入要搜索的文字时，vim会实时匹配
 set fileformats=unix,dos
 " colorscheme
 set background=dark
-colorscheme solarized8_dark "solarized8_dark desert evening solarized molokai hybrid
+colorscheme solarized8 "solarized8_dark desert evening solarized molokai hybrid
 "缩进设置
 filetype indent on
 set tabstop=4 "让一个tab等于4个空格
@@ -710,7 +711,7 @@ if exists('g:plugs["supertab"]')
     autocmd FileType rust nmap <Leader>d <Plug>(rust-def)
     autocmd FileType rust nmap <Leader>gs <Plug>(rust-def-split)
     autocmd FileType rust nmap <Leader>gx <Plug>(rust-def-vertical)
-    autocmd FileType * 
+    autocmd FileType *
                 \if &omnifunc != '' |
                 \call SuperTabChain(&omnifunc, "<c-p>") |
                 \call SuperTabSetDefaultCompletionType("<c-x><c-u>") |
