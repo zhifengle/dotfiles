@@ -70,7 +70,7 @@ Plug 'vimwiki/vimwiki'
 Plug 'mattn/calendar-vim', {'for': 'vimwiki'}
 Plug 'jiangmiao/auto-pairs'
 Plug 'godlygeek/tabular', { 'on': 'Tabularize' }
-Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline', { 'on': 'AirlineToggle' }
 Plug 'majutsushi/tagbar'
 Plug 'Valloric/ListToggle'
 Plug 'vim-scripts/Modeliner', { 'on': 'Modeliner' }
@@ -101,11 +101,11 @@ elseif has("unix")
         Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
         "Plug 'carlitux/deoplete-ternjs', { 'do': 'npm install -g tern' }
     else
-        Plug 'ervandew/supertab'
-        Plug 'ternjs/tern_for_vim', { 'do': 'npm install' }
-        Plug 'davidhalter/jedi-vim'
-        Plug 'racer-rust/vim-racer'
-        "Plug 'Valloric/YouCompleteMe'
+        "Plug 'ervandew/supertab'
+        "Plug 'ternjs/tern_for_vim', { 'do': 'npm install' }
+        "Plug 'davidhalter/jedi-vim'
+        "Plug 'racer-rust/vim-racer'
+        Plug 'Valloric/YouCompleteMe', { 'on': [] }
     endif
     Plug 'lilydjwg/fcitx.vim'
     "Plug 'tweekmonster/django-plus.vim'
@@ -591,8 +591,13 @@ if exists('g:plugs["YouCompleteMe"]')
     augroup END
     "nnoremap <Leader>f :YcmCompleter FixIt <CR>
     if has("unix")
-        "let g:ycm_path_to_python_interpreter = '$HOME/.pyenv/versions/env3/bin/python3'
-        let g:ycm_python_binary_path = '/home/alan/.pyenv/versions/env3/bin/python3'
+        command! -bar -bang -complete=file -nargs=? SetPythonPath
+                    \ let g:ycm_python_interpreter_path = substitute(system('pyenv which python'), '\_s*$', '', '')
+        "let g:ycm_python_interpreter_path = '/home/alan/.pyenv/versions/env3/bin/python3'
+        let g:ycm_python_interpreter_path = substitute(system('pyenv which python'), '\_s*$', '', '')
+        let g:ycm_extra_conf_vim_data = [
+                    \  'g:ycm_python_interpreter_path'
+                    \]
         let g:ycm_global_ycm_extra_conf = '~/.vim/.ycm_extra_conf.py'
     endif
     "Do not ask when starting vim
@@ -832,12 +837,23 @@ autocmd BufNewFile * normal G
 "set complete+=k
 autocmd BufRead,BufNewFile *.md nmap <F5> :w<CR>:set syntax=markdown<CR>
 "autocmd BufRead,BufNewFile *.md setlocal filetype=vimwiki.markdown
-let g:python3_host_prog = '/home/alan/.pyenv/versions/env3/bin/python3'
+"let g:python3_host_prog = '/home/alan/.pyenv/versions/env3/bin/python3'
 let g:vimwiki_valid_html_tags='b,i,s,u,sub,sup,kbd,br,hr,div,del,code'
 let g:Modeliner_format = 'sts= sw= ts= et'
 let g:EditorConfig_exclude_patterns = ['fugitive://.*']
 "let g:airline#extensions#tabline#enabled = 1
 autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS noci
+
+if has("unix") && executable("rg")
+    function! s:findFile(str)
+        "let l:args = "find ./ -mtime -7 -type f -exec rg --vimgrep '". a:str . "' {} \\\;"
+        let l:args = "find ./ -ctime -7 -type f -print0 | xargs -0 rg --vimgrep " . a:str . " | awk -F : '!a[$1]++'"
+
+        cexpr! system(l:args)
+    endfunction
+    command! -bar -bang -complete=file -nargs=? FindFile7
+                \ execute s:findFile(<q-args>)
+endif
 
 if has('nvim')
     let g:deoplete#enable_at_startup = 1
