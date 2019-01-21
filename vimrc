@@ -194,6 +194,7 @@ set smarttab "开启新行的sta
 set autoindent "自动缩进
 set smartindent "智能自动缩进
 set diffopt+=iwhite
+set wildignore+=*/.git/*,*/tmp/*,*.swp,*/node_modules/*
 
 augroup E_indent
     autocmd FileType python setlocal ts=4 sw=4 et sta
@@ -753,6 +754,8 @@ let g:fzf_action = {
 if executable('rg')
     set grepprg=rg\ --vimgrep
     set grepformat=%f:%l:%c:%m
+    let g:ctrlp_user_command = 'rg %s --files --color=never --glob ""'
+    "let g:ctrlp_use_caching = 0
 elseif executable('ag')
     " Use ag over grep
     " set grepprg=ag\ --nogroup\ --nocolor
