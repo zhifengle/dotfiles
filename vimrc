@@ -105,7 +105,7 @@ elseif has("unix")
         "Plug 'ternjs/tern_for_vim', { 'do': 'npm install' }
         "Plug 'davidhalter/jedi-vim'
         "Plug 'racer-rust/vim-racer'
-        Plug 'Valloric/YouCompleteMe', { 'on': [] }
+        Plug 'Valloric/YouCompleteMe'
     endif
     Plug 'lilydjwg/fcitx.vim'
     "Plug 'tweekmonster/django-plus.vim'
@@ -194,7 +194,6 @@ set smarttab "开启新行的sta
 set autoindent "自动缩进
 set smartindent "智能自动缩进
 set diffopt+=iwhite
-set wildignore+=*/.git/*,*/tmp/*,*.swp,*/node_modules/*
 
 augroup E_indent
     autocmd FileType python setlocal ts=4 sw=4 et sta
@@ -321,119 +320,6 @@ if has("gui_running") || (has("nvim") && has("win32"))
         let wiki_2.ext = '.md'
 
         let g:vimwiki_list = [wiki_2, wiki_1]
-
-        if executable('cl')
-            augroup load_us_ycm
-                autocmd!
-                autocmd InsertEnter * call plug#load('YouCompleteMe')
-                            \| autocmd! load_us_ycm
-            augroup END
-        endif
-        if exists('g:plugs["neocomplete.vim"]')
-        "if !empty(glob("~/vimfiles/bundle/neocomplete.vim/autoload/neocomplete.vim"))
-            " echo "File exists."
-            "neocomplete setting {{{
-            " Disable AutoComplPop.
-            let g:acp_enableAtStartup = 0
-            " Use neocomplete.
-            let g:neocomplete#enable_at_startup = 1
-            " Use smartcase.
-            let g:neocomplete#enable_smart_case = 1
-            " Set minimum syntax keyword length.
-            let g:neocomplete#sources#syntax#min_keyword_length = 3
-            let g:neocomplete#lock_buffer_name_pattern = '\*ku\*'
-
-            " Define dictionary.
-            let g:neocomplete#sources#dictionary#dictionaries = {
-                        \ 'default' : '',
-                        \ 'javascript' : '~/vimfiles/dict/javascript.dict',
-                        \ 'html' : '~/vimfiles/dict/javascript.dict',
-                        \ 'c' : '~/vimfiles/dict/c.dict'
-                        \ }
-
-            " Define keyword.
-            if !exists('g:neocomplete#keyword_patterns')
-                let g:neocomplete#keyword_patterns = {}
-            endif
-            let g:neocomplete#keyword_patterns['default'] = '\h\w*'
-
-            " Plugin key-mappings.
-            inoremap <expr><C-g>     neocomplete#undo_completion()
-            inoremap <expr><C-l>     neocomplete#complete_common_string()
-
-            " Recommended key-mappings.
-            " <CR>: close popup and save indent.
-            inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
-            function! s:my_cr_function()
-                return neocomplete#close_popup() . "\<CR>"
-                " For no inserting <CR> key.
-                "return pumvisible() ? neocomplete#close_popup() : "\<CR>"
-            endfunction
-            " <TAB>: completion.
-            inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
-            " <C-h>, <BS>: close popup and delete backword char.
-            inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
-            inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
-            inoremap <expr><C-y>  neocomplete#close_popup()
-            inoremap <expr><C-e>  neocomplete#cancel_popup()
-            " Close popup by <Space>.
-            "inoremap <expr><Space> pumvisible() ? neocomplete#close_popup() : "\<Space>"
-
-            " For cursor moving in insert mode(Not recommended)
-            "inoremap <expr><Left>  neocomplete#close_popup() . "\<Left>"
-            "inoremap <expr><Right> neocomplete#close_popup() . "\<Right>"
-            "inoremap <expr><Up>    neocomplete#close_popup() . "\<Up>"
-            "inoremap <expr><Down>  neocomplete#close_popup() . "\<Down>"
-            " Or set this.
-            "let g:neocomplete#enable_cursor_hold_i = 1
-            " Or set this.
-            "let g:neocomplete#enable_insert_char_pre = 1
-
-            " AutoComplPop like behavior.
-            "let g:neocomplete#enable_auto_select = 1
-
-            " Shell like behavior(not recommended).
-            "set completeopt+=longest
-            "let g:neocomplete#enable_auto_select = 1
-            "let g:neocomplete#disable_auto_complete = 1
-            "inoremap <expr><TAB>  pumvisible() ? "\<Down>" : "\<C-x>\<C-u>"
-
-            " Enable omni completion.
-            autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
-            autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
-            autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
-            autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
-            autocmd FileType python setlocal omnifunc=python3complete#Complete
-            "autocmd FileType javascript setlocal omnifunc=tern#Complete
-
-            " Enable heavy omni completion.
-            if !exists('g:neocomplete#sources#omni#input_patterns')
-                let g:neocomplete#sources#omni#input_patterns = {}
-            endif
-            "let g:neocomplete#force_omni_input_patterns.javascript = '[^. \t]\.\w*'
-            "let g:neocomplete#sources#omni#input_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
-            "let g:neocomplete#sources#omni#input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
-            "let g:neocomplete#sources#omni#input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
-            " support python3
-            autocmd FileType python setlocal omnifunc=jedi#completions
-            "let g:neocomplete#enable_auto_select = 0
-            "let g:jedi#popup_select_first=0
-            "let g:jedi#popup_on_dot = 0
-            let g:jedi#completions_enabled = 0
-            let g:jedi#auto_vim_configuration = 0
-            if !exists('g:neocomplete#force_omni_input_patterns')
-                let g:neocomplete#force_omni_input_patterns = {}
-            endif
-            let g:neocomplete#force_omni_input_patterns.python = '\%([^. \t]\.\|^\s*@\|^\s*from\s.\+import \|^\s*from \|^\s*import \)\w*'
-
-            "if has('python3')
-            "let g:jedi#force_py_version = 3
-            "endif
-            "let g:jedi#force_py_version = 3
-
-            "end of neocomplete setting }}}
-        endif
-
     endif
     " end of setting for windows }}}
 else
@@ -587,6 +473,7 @@ if exists('g:plugs["YouCompleteMe"]')
     "autocmd BufRead,BufNewFile *.cpp,*.c,*.cc nnoremap <F5> :YcmForceCompileAndDiagnostics<CR>
     augroup load_us_ycm
         autocmd!
+        "InsertEnter
         autocmd InsertEnter * call plug#load('YouCompleteMe')
                     \| autocmd! load_us_ycm
     augroup END
@@ -594,8 +481,8 @@ if exists('g:plugs["YouCompleteMe"]')
     if has("unix")
         command! -bar -bang -complete=file -nargs=? SetPythonPath
                     \ let g:ycm_python_interpreter_path = substitute(system('pyenv which python'), '\_s*$', '', '')
-        "let g:ycm_python_interpreter_path = '/home/alan/.pyenv/versions/env3/bin/python3'
-        let g:ycm_python_interpreter_path = substitute(system('pyenv which python'), '\_s*$', '', '')
+        let g:ycm_python_interpreter_path = '/home/alan/.pyenv/versions/env3/bin/python3'
+        "let g:ycm_python_interpreter_path = substitute(system('pyenv which python'), '\_s*$', '', '')
         let g:ycm_extra_conf_vim_data = [
                     \  'g:ycm_python_interpreter_path'
                     \]
@@ -754,8 +641,6 @@ let g:fzf_action = {
 if executable('rg')
     set grepprg=rg\ --vimgrep
     set grepformat=%f:%l:%c:%m
-    let g:ctrlp_user_command = 'rg %s --files --color=never --glob ""'
-    "let g:ctrlp_use_caching = 0
 elseif executable('ag')
     " Use ag over grep
     " set grepprg=ag\ --nogroup\ --nocolor
