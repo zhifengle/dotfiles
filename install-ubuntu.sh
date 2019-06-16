@@ -14,18 +14,20 @@ script_parameters="-b -v -y"
 
 function install_basic_tools() {
     # necessary 
-    TOOLS="vim git zsh curl autojump rofi fcitx"
-    install_list="shadowsocks-qt5"
+    SOFTWARES="chromium-browser"
+    TOOLS="vim git zsh curl autojump rofi fcitx $SOFTWARES"
+    #install_list="shadowsocks-qt5"
+    install_list=""
 
-    sudo add-apt-repository -y ppa:jonathonf/vim 
-    sudo add-apt-repository -y ppa:hzwhuang/ss-qt5 
+    #sudo add-apt-repository -y ppa:jonathonf/vim
+    #sudo add-apt-repository -y ppa:hzwhuang/ss-qt5
     sudo apt-get update 
     for tool in $TOOLS ; do
         if ! command -v $tool &>/dev/null; then
             if [[ $tool == "fcitx" ]]; then
                 install_list="$install_list fcitx fcitx-pinyin im-switch fcitx-module-cloudpinyin"
             elif [[ $tool == "vim" ]]; then
-                install_list="$install_list vim-gnome"
+                install_list="$install_list vim-gtk"
             else
                 install_list="$install_list $tool"
             fi
@@ -35,7 +37,8 @@ function install_basic_tools() {
     sudo apt-get install -y $install_list
     #
     #sudo apt-get install ttf-mscorefonts-installer
-    if [[ -n $BASH ]]; then
+    #if [[ -n $BASH ]]; then
+    if ! [[ $SHELL =~ zsh$ ]]; then
         chsh -s /bin/zsh 
     fi
     if command -v curl &>/dev/null; then
@@ -68,11 +71,11 @@ function install_basic_tools() {
     ## terminal theme
 
     # https://github.com/Anthony25/gnome-terminal-colors-solarized 
-    if [[ -d gnome-terminal-colors-solarized ]]; then
-        git clone https://github.com/Anthony26/gnome-terminal-colors-solarized.git 
-        cd gnome-terminal-colors-solarized
-        ./install.sh
-    fi
+    #if [[ -d gnome-terminal-colors-solarized ]]; then
+    #    git clone https://github.com/Anthony26/gnome-terminal-colors-solarized.git
+    #    cd gnome-terminal-colors-solarized
+    #    ./install.sh
+    #fi
 }
 
 function install_ycm() {
