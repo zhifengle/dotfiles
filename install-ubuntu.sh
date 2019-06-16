@@ -41,6 +41,11 @@ function install_basic_tools() {
     if ! [[ $SHELL =~ zsh$ ]]; then
         chsh -s /bin/zsh 
     fi
+    if command -v chromium-browser &>/dev/null; then
+        if command -v chromium &>/dev/null; then
+            sudo ln -s `which chromium-browser` /usr/bin/chromium
+        fi
+    fi
     if command -v curl &>/dev/null; then
         if [[ ! -d ~/.nvm ]]; then
             curl -o- https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash
