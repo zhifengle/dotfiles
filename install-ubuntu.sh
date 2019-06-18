@@ -14,8 +14,9 @@ script_parameters="-b -v -y"
 
 function install_basic_tools() {
     # necessary 
-    SOFTWARES="chromium-browser"
-    TOOLS="vim git zsh curl autojump rofi fcitx $SOFTWARES"
+    ### fcitx-mozc
+    SOFTWARES="fcitx i3 chromium-browser telegram-desktop"
+    TOOLS="vim git zsh curl autojump tmux xsel rofi jq $SOFTWARES"
     #install_list="shadowsocks-qt5"
     install_list=""
 
@@ -48,13 +49,18 @@ function install_basic_tools() {
     fi
     if command -v curl &>/dev/null; then
         if [[ ! -d ~/.nvm ]]; then
-            curl -o- https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash
+            curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash
         fi
         if [[ ! -d ~/.pyenv ]]; then
             curl -L https://raw.githubusercontent.com/pyenv/pyenv-installer/master/bin/pyenv-installer | bash 
         fi
         if [[ ! -d ~/.oh-my-zsh ]]; then
             sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+        fi
+        if [[ ! -d ~/.tmux ]]; then
+            git clone https://github.com/gpakosz/.tmux.git
+            ln -s -f .tmux/.tmux.conf
+            cp .tmux/.tmux.conf.local .
         fi
     fi
 
