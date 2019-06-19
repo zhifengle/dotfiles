@@ -76,7 +76,7 @@ Plug 'Valloric/ListToggle'
 Plug 'vim-scripts/Modeliner', { 'on': 'Modeliner' }
 Plug 'w0rp/ale'
 "Plug 'vim-syntastic/syntastic'
-Plug 'roxma/vim-paste-easy'
+"Plug 'roxma/vim-paste-easy'
 Plug 'sickill/vim-pasta'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
@@ -101,11 +101,13 @@ elseif has("unix")
         Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
         "Plug 'carlitux/deoplete-ternjs', { 'do': 'npm install -g tern' }
     else
-        "Plug 'ervandew/supertab'
-        "Plug 'ternjs/tern_for_vim', { 'do': 'npm install' }
-        "Plug 'davidhalter/jedi-vim'
+        Plug 'ervandew/supertab'
+        if executable('npm')
+            Plug 'ternjs/tern_for_vim', { 'do': 'npm install' }
+        endif
+        Plug 'davidhalter/jedi-vim'
         "Plug 'racer-rust/vim-racer'
-        Plug 'Valloric/YouCompleteMe'
+        "Plug 'Valloric/YouCompleteMe'
     endif
     Plug 'lilydjwg/fcitx.vim'
     "Plug 'tweekmonster/django-plus.vim'
