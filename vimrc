@@ -62,7 +62,6 @@ Plug 'junegunn/gv.vim'
 Plug 'tpope/vim-rsi'
 Plug 'tpope/vim-obsession'
 Plug 'Lokaltog/vim-easymotion'
-Plug 'vim-scripts/matchit.zip'
 Plug 'mattn/emmet-vim'
 Plug 'scrooloose/nerdcommenter'
 Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' } | Plug '22earth/nerdtree-execute', { 'on':  'NERDTreeToggle' }
@@ -132,15 +131,14 @@ Plug 'othree/csscomplete.vim'
 Plug 'lilydjwg/colorizer', { 'on': 'ColorHighlight' }
 "Plug 'maksimr/vim-jsbeautify'
 Plug 'Chiel92/vim-autoformat', {'on': 'Autoformat'}
-" typescript
-Plug 'Shougo/vimproc.vim', {'do': 'make'}
-Plug 'Quramy/tsuquyomi', { 'for': 'typescript' }
+" typescript 2019-06-20 comment
+"Plug 'Shougo/vimproc.vim', {'do': 'make'}
+"Plug 'Quramy/tsuquyomi', { 'for': 'typescript' }
 " need UltiSnips
 "Plug 'justinj/vim-react-snippets'
 " Rust
 "Plug 'rust-lang/rust.vim'
-"Plug '22earth/vim-go', { 'do': ':GoUpdateBinaries' }
-Plug '22earth/vim-go'
+"Plug '22earth/vim-go'
 Plug 'tweekmonster/startuptime.vim', { 'on': 'StartupTime' }
 Plug 'nathanaelkane/vim-indent-guides', { 'on': 'IndentGuidesToggle' }
 call plug#end()
@@ -196,11 +194,12 @@ set smarttab "开启新行的sta
 set autoindent "自动缩进
 set smartindent "智能自动缩进
 set diffopt+=iwhite
+packadd! matchit
 
 augroup E_indent
     autocmd FileType python setlocal ts=4 sw=4 et sta
     autocmd FileType make setlocal ts=8 sw=8 noexpandtab
-    " indent for wed
+    " indent for web
     autocmd FileType json,vue,javascript,typescript,html,css,scss,less setlocal ts=2 sw=2  et
 augroup END
 "}}}
