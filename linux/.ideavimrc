@@ -1,0 +1,57 @@
+let mapleader=" "
+set showmode
+set surround
+set number
+set hls
+set history=1000
+vmap <C-C> "+y<Esc>
+inoremap <C-a> <C-o>^
+inoremap <C-e> <End>
+inoremap <C-f> <Right>
+inoremap <C-b> <Left>
+" 复制粘贴
+vnoremap <Leader>y "+y
+vnoremap <Leader>d "+d
+nnoremap <Leader>p "+p
+nnoremap <Leader>P "+P
+vnoremap <Leader>p "+p
+vnoremap <Leader>P "+P
+
+"inoremap <C-A-c> {@code }<C-o>h
+"S-Esc
+"A-7 structure
+"nmap csw' :action Macro.surround_with_single_quote<CR>
+
+"nnoremap <c-y>, :action Emmet<CR>
+"c-a-t SurroundWith
+noremap <c-y>n :action EmmetNextEditPoint<CR>
+noremap <c-y>N :action EmmetPreviousEditPoint<CR>
+nnoremap K :action GotoDeclaration<CR>
+nnoremap <c-p> :action GotoFile<CR>
+nnoremap <leader>fu :action FindUsages<CR>
+nnoremap <Leader>ff :action FindInPath<CR>
+
+nnoremap <Leader>nj :action NewJavaScriptFile<CR>
+" comment
+nnoremap <Leader>ci :action CommentByLineComment<CR>
+nnoremap <Leader>cl :action CommentByLineComment<CR>
+nnoremap <Leader>cs :action CommentByBlockComment<CR>
+vnoremap <Leader>ci :action CommentByLineComment<CR>
+vnoremap <Leader>cl :action CommentByLineComment<CR>
+vnoremap <Leader>cs :action CommentByBlockComment<CR>
+
+"AceJump
+noremap <space><space>f :action AceAction<CR>
+noremap <space><space>F :action AceTargetAction<CR>
+noremap <space><space>j :action AceLineAction<CR>
+noremap <space><space>k :action AceLineAction<CR>
+"External Tool
+" vim eslint
+nnoremap <Space>ev :action Tool_External Tools_vim<CR>
+nnoremap <Space>es :action Tool_Web_eslint<CR>
+nnoremap <Space>ef :action ReformatCode<CR>
+" run
+nnoremap <Leader>5 :action Tool_Web_yarn_dev<CR>
+nnoremap <Leader>6 :action Tool_Web_yarn_run<CR>
+
+nnoremap <leader>vs :source ~/.ideavimrc<CR>

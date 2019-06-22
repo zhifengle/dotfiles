@@ -1,0 +1,144 @@
+"set fileencoding=gbk
+"set rtp+="E:\Firefox\Profiles\Pentadactyl\_pentadactylrc"
+"E:\Firefox\firefox.exe -profile "E:\Firefox\Profiles" -pentadactyl "++cmd 'js services.get(''environment'').set(''HOME'', services.get(''directory'').get(''ProfD'', Ci.nsIFile).path + ''\\Pentadactyl'')'"
+set loadplugins='\.(js|penta)$'
+js <<EOF
+const TC_PATH = "D:\\Program Files\\TotalCMD64\\Totalcmd64.exe";
+
+const ProfD = services.directory.get("ProfD", Ci.nsIFile);
+
+//  dactyl.execute("set runtimepath=" + ProfD.path);
+
+function openProfileDirectory() {
+	if(File(TC_PATH).exists()){
+		io.run(TC_PATH, [ProfD.path, "/T"]);
+	}else{
+		ProfD.reveal();
+	}
+}
+EOF
+"打开火狐配置文件
+com! openProfile -d "Open Profile directory" -js openProfileDirectory();
+set editor='"c:\\Windows\\notepad.exe" <file>'
+loadplugins '\.(js|penta)$'
+group user
+"rc相关命令{{{
+"定义查看rc命令
+com! erc -d "Edit the _pentadactylrc file" -js io.run("C:\\Program Files\\Vim\\vim74\\gvim.exe", [PATH])
+"定义重新载入rc命令
+:com! fresh -description "Reload _pentadactyl rc file" source $HOME/_pentadactylrc
+"}}}
+"使用Windows风格的undo，复制，粘贴，剪切操作 {{{
+map -count -modes=n,v <C-c> -builtin <C-v><C-c>
+map -count -modes=n,v <C-a> -builtin <C-v><C-a>
+
+map -count -modes=c <C-c> -builtin <C-v><C-c>
+map -count -modes=c <C-v> -builtin <C-v><C-v>
+map -count -modes=c <C-x> -builtin <C-v><C-x>
+
+map -count -modes=i <C-a> -builtin <C-v><C-a>
+map -count -modes=i <C-c> -builtin <C-v><C-c>
+map -count -modes=i <C-v> -builtin <C-v><C-v>
+map -count -modes=i <C-x> -builtin <C-v><C-x>
+map -count -modes=i <C-z> -builtin <C-v><C-z>
+"}}}
+"常用映射修改{{{
+map -modes=normal -silent j 11<scroll-down-line>
+map -modes=normal -silent k 11<scroll-up-line>
+map -count -modes=n,v d -builtin <count>D
+map -count -modes=n,v D -builtin <count>d
+map -count -modes=n,v J <count><C-d>
+map -count -modes=n,v K <count><C-u>
+map -m=n h -builtin gT
+map -m=n l -builtin gt
+:map ] ]]
+:map [ [[
+"按Ctrl+enter自动补全www和.com
+map -count -modes=c <C-Return> -builtin <End>.com<Home><C-Right>www.<CR>
+"}}}
+
+"常用网站设置{{{
+map -count -m=n,v <leader>bi -builtin :tabopen<space>http://www.bilibili.tv/video/bangumi-two-1.html<CR>
+" Feedly
+"set passkeys+='feedly.com':rxonpmNPJK<Space>,ga,gl
+set passkeys+='feedly.com':rjknpovmxsetNPJK,gm,ga,gg
+map -count -m=n,v <leader>bgm -builtin :tabopen<space>https://cse.google.com/cse/home?cx=008561732579436191137:pumvqkbpt6w<CR>
+map -count -m=n 1s -builtin :tabopen<space>
+"}}}
+"键盘映射{{{
+map -count -modes=n,v -silent <F2> <count>:<Space>set<Space>go!=BT<Space><Return>
+map -count -modes=n -silent <Leader>r :o about:epubreader?id=1<CR>
+"}}}
+"打开外部程序{{{
+map -count -modes=n,v <leader>ie <count>:js<Space>io.run("c:\\program<Space>files\\internet<Space>explorer\\iexplore.exe",<Space>[buffer.URL])<Return>
+map -count -modes=n,v zn <count>:js<Space>io.run("C:\\Windows\\system32\\notepad.exe")<Return>
+"}}}
+
+
+"  Custom commands {{{
+	command! rebuc -description userChromeJS打开新窗口并重置脚本 -js userChromejs && userChromejs.rebuild();
+    command! proxysetting -d "proxysetting" exe "t chrome://browser/content/preferences/connection.xul"
+
+com! ad -d "打开about:addons" exe "t about:addons"
+com! ac -d "打开about:config" exe "t about:config"
+com! redirector -d "open redirector" exe "t chrome://redirector/content/redirector.html"
+com! blockflash -d "never activate flash" exe "se! plugin.state.flash=0"
+com! activateflash -d "activate flash" exe "se! plugin.state.flash=2"
+"com! noscripttoggle -js (function() { var p = "noscript.global";prefs.set(p, !prefs.get(p)); dactyl.echo(p+" is now set to "+prefs.get(p)+"\n") })();
+
+    " 关闭右侧标签
+    " command! tabcloser -description "close all right tabs" -js
+    "用x\c来关闭左右标签
+    " map -modes=n,v c -js gBrowser.removeTab(gBrowser.mCurrentTab.boxObject.nextSibling)
+    " map -modes=n,v x -js gBrowser.removeTab(gBrowser.mCurrentTab.boxObject.previousSibling)
+    "另一种写法
+    "map x -j var tab = gBrowser.mCurrentTab.boxObject.previousSibling; if(tab) gBrowser.removeTab(tab);
+    "map c -j var tab = gBrowser.mCurrentTab.boxObject.nextSibling; if(tab)  gBrowser.removeTab(tab);
+
+"command! p5 -d "设置系统代理" -js (function() { var p = "quickproxy.type"; prefs.set(p, 5); dactyl.echo(p+" is now set to "+prefs.get(p)+"\n") })();
+"    command! p1 -d "切换代理" -js (function() { var p = "network.proxy.http"; var http_port = "network.proxy.http_port"; var pd = "111.117.111.247"; var pg = "127.0.0.1"; if(prefs.get(p)==pd) { prefs.set(p, pg);prefs.set(http_port, 8087); dactyl.echo(p+" is now set to "+prefs.get(p)+"\n"); } else { prefs.set(p, pd);prefs.set(http_port, 3128); dactyl.echo(p+" is now set to "+prefs.get(p)+"\n"); } })();
+    "com! p1 -d "设置代理为GAE" -js (function() { var p = "network.proxy.sockes"; var http_port = "network.proxy.socks_port"; prefs.set(p,"127.0.0.1"); prefs.set(http_port, 8087); prefs.set("network.proxy.type", 1); dactyl.echo(p+" is now set to "+prefs.get(p)+"\n") })();
+    "command! p2 -d "设置代理为2" -js (function() { var p = "network.proxy.type"; prefs.set(p, 2); dactyl.echo(p+" is now set to "+prefs.get(p)+"\n") })();
+    "command! pf0 -d "关闭代理" -js (function() { var p = "network.proxy.type"; prefs.set(p, 0); dactyl.echo(p+" is now set to "+prefs.get(p)+"\n") })();
+    com! proxyAuto -d "自动模式" exe "se! extensions.autoproxy.proxyMode=auto"
+    com! proxyGlobal -d "global" exe "se! extensions.autoproxy.proxyMode=global"
+    com! proxyDisable -d "disabled" exe "se! extensions.autoproxy.proxyMode=disabled"
+    com! jsrevokeTemp -d "Revoke temporary permissions" exe "js noscriptOverlay.revokeTemp()"
+    com! jsallTemp -d "Temporarily allow all this page" exe "js noscriptOverlay.allowPage()"
+	" 开启和关闭javascript或图片
+	"command! jstoggle -js (function() { var p = "javascript.enabled"; prefs.set(p, !prefs.get(p)); dactyl.echo(p+" is now set to "+prefs.get(p)+"\n") })()
+	"command! imgtoggle -js (function() { var p = "permissions.default.image"; prefs.set(p, prefs.get(p)==1 ? 2 : 1); dactyl.echo(p+" is now set to "+prefs.get(p)+"\n") })()
+
+" }}}
+" 按了S后就能自己输入搜索引擎关键字（当然也可以在自动补全菜单里选择），如果不选直接回车就是用默认引擎（对于选中的恰好是链接的情况则是直接打开链接）
+"搜索{{{
+command! -nargs=? -complete=search engineSelect exe 't <args> ' + content.getSelection()
+"map S :engineSelect<Space>
+        map ss -js content.getSelection().toString()!=""?dactyl.execute(":t google "+ content.getSelection()):""
+       map sg -js content.getSelection().toString()!=""?dactyl.execute(":t getchu "+ content.getSelection()):""
+    "bangumi
+       map sa -js content.getSelection().toString()!=""?dactyl.execute(":t http://www.google.com/search?as_qdr=y15&q=site:bangumi.tv "+ content.getSelection()):""
+        "map sb -js content.getSelection().toString()!=""?dactyl.execute(":t http://www.baidu.com/s?&ie=UTF-8&oe=UTF-8&cl=3&rn=100&wd=site:bangumi.tv "+ content.getSelection()):""
+        map sb -js content.getSelection().toString()!=""?dactyl.execute(":t http://www.baidu.com/s?&ie=UTF-8&oe=UTF-8&cl=3&rn=100&wd="+ content.getSelection()):""
+command! -nargs=* sitesearch -description 用google站内搜索API搜索当前站点 exe "t https://www.google.com.hk/search?q=" + encodeURIComponent("<args>") + "&sitesearch=" + window.content.location.hostname
+" 对应baidu的
+" com! -nargs=* sitesearch exe "t http://www.baidu.com/s?ie=utf-8&word=" + encodeURIComponent("<args> site:" + window.content.location.hostname);
+" 查单词, 结合dict插件翻译选中字符串
+" map -modes=n,v -silent W -js do_selection("dict")
+    "有道
+"        map sy -js content.getSelection().toString()!=""?dactyl.execute(":dict -e y "+ content.getSelection()):""
+"}}}
+"regular setting don't change{{{
+
+"高亮搜索
+set hlfind
+"set go=BTbCrs
+"map <Leader>e :extedit -types<Space>
+"map <Leader>r -js autoReader.launch();
+"命令行模式禁用输入法
+"style -name=commandline-ime chrome://* #dactyl-commandline-command input {ime-mode: inactive;}
+"style -name commandline-ime chrome://* #dactyl-commandline-command input , #dactyl-statusline-field-commandline-command input {ime-mode: inactive;}
+set nextpattern='s*下一页|下一章|下一张|下一篇|下页|后页s*',^bnextb,'\bnext\b',^>$,'^(>>|)$','^(>|)','(>|)$','\bmore\b'
+set previouspattern='s*上一页|上一章|上一张|上一篇|上页|前页s*','^bprev|previousb','\bprev|pr'
+"}}}
+" vim: set ft=pentadactyl:

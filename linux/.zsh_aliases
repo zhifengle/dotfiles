@@ -1,0 +1,70 @@
+alias shadowsocks="sslocal -c /etc/shadowsocks/config.json"
+alias gae="$HOME/goproxy/goproxy"
+alias gae-xx="$HOME/.pyenv/shims/python2.7 $HOME/tools/XX-Mini/proxy.py"
+alias vim="stty stop '' -ixoff ; vim"
+alias you-get="$HOME/.pyenv/versions/env3/bin/you-get"
+alias you-get-m="you-get -p mpv -c $HOME/.mozilla/firefox/gwl3ttki.default/cookies.sqlite" 
+alias aria2c-rpc="aria2c --conf-path=$HOME/.aria2/config"
+alias feh-bg="feh --bg-scale ~/Pictures/amagase_natsuki.png"
+alias vim-i3="vim ~/.config/i3/config"
+alias vim-zsh="vim ~/.zshrc"
+alias vim-alias="vim ~/.zsh_aliases"
+alias npm-react="npm install --save react react-dom"
+alias thunderbird="~/myapps/thunderbird/thunderbird"
+alias testproxy="curl -i http://ip.cn"
+alias tmux="env TERM=xterm-256color tmux"
+#alias sass-watch="sass --watch sass:css"
+
+function eslint-fix() {
+    $HOME/.npm-global/bin/eslint -c $HOME/.eslintrc-fix.json --fix $1
+}
+
+function npm_update_g() {
+    list="babel-eslint eslint-plugin-react"
+    #npm update -g `ls ~/.npm-global/bin`
+    for v in $list; do
+        npm update -g $v
+    done
+}
+
+function npm_babel_dev() {
+    #npm install --save-dev babel-core babel-preset-es2015
+    #npm install --save-dev babel-loader
+    yarn add --dev babel-core babel-loader babel-preset-env
+
+    echo '{ "presets": [ "env"  ]  }' > .babelrc
+    npm_webpack_dev
+}
+
+function npm_webpack_dev() {
+    #npm install --save-dev webpack 
+    yarn add --dev webpack
+    webpack="webpack.config.js"
+    if [[ -e "$HOME/$webpack"  && ! -e $webpack ]]; then
+        #echo "Hello"
+        cp $HOME/$webpack .
+    fi
+}
+
+function npm_react_dev() {
+    eslintrc="$HOME/backup/my_dotfiles/.eslintrc.json"
+    cp $eslintrc ./
+    #npm install --save-dev babel-cli babel-preset-env
+    # eslint babel-eslint eslint-plugin-react
+    npm_webpack_dev
+}
+
+function vim_ycm_update() {
+    vim +BundleUpdate +qall
+    python $HOME/.vim/bundle/YouCompleteMe/install.py --clang-completer --system-libclang --tern-completer
+}
+
+function setproxy() {
+    # export {HTTP,HTTPS,FTP}_PROXY="http://127.0.0.1:3128" 也可以设置http代理
+    export ALL_PROXY=socks5://127.0.0.1:1080
+}
+
+function unsetproxy() {
+    # unset {HTTP,HTTPS,FTP}_PROXY
+    unset ALL_PROXY
+}
