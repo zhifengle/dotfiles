@@ -1,4 +1,4 @@
-#pacman -S git vim
+pacman -S git vim
 ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 hwclock --systohc
 echo -e "en_US.UTF-8 UTF-8\nzh_CN.UTF-8 UTF-8\nzh_TW.UTF-8" >> /etc/locale.gen
