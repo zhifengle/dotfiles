@@ -1,0 +1,10 @@
+#export LANG="zh_CN.UTF-8"
+#export LC_CTYPE="zh_CN.UTF-8"
+export GTK_IM_MODULE=fcitx
+export QT_IM_MODULE=fcitx
+export XMODIFIERS="@im=fcitx"
+#sslocal -c /etc/shadowsocks/config.json &
+#feh --bg-scale ~/Pictures/amagase_natsuki.png
+#xcompmgr &
+#devilspie -a &
+# vim: set sw=4 ts=4 ft=config : 
