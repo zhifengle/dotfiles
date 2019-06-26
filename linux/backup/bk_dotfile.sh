@@ -45,3 +45,4 @@ for line in $dotfiles; do
         cp --parents -u $HOME/$line ~/Nutstore/
     fi
 done
+cp -ur ~/Nutstore$HOME/* ~/my-projects/dotfiles/linux/ 
