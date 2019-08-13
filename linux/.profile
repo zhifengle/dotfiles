@@ -34,3 +34,5 @@ export PATH="$HOME/myapps/bin:$PATH"
 #else
 #    export TERM='xterm-color'
 #fi
+# 2019-06-28 10:24 for vim color
+export TERM=xterm

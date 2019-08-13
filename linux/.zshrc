@@ -99,3 +99,4 @@ export FZF_DEFAULT_COMMAND='rg --files'
 #export FZF_DEFAULT_COMMAND='ag -g ""'
 # setting for fcitx vim
 ttimeoutlen=100
+export TERM=xterm
