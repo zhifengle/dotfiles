@@ -7,25 +7,14 @@
 " python: F5 use python in environment, F6 use user defined python path
 " use config file in another machine need to do some modification
 " use eslint
-" need set .tern-config
 " JS optional dependency
 " js-beautify eslint_d jsctags
 " linux {{{
 " font: DejaVu\ Sans\ Mono\
 " DejaVuSansMono
-" use fcitx.vim instead of vimim
 " install ctags
-" set syntastic
-" syntastic_python_python_exec="xxx", pyflakes
-" set python path which installed by pyenv
-" set youcompleteme
-" remove python for ycm's blacklist
-" let g:ycm_python_binary_path = 'python'  // have jedi
-" .tern-config  // not support multiple tern servers
-" .ycm_extra_conf.py for cpp
-" add a plugin to support django, but have the influence on speed
-" fzf need install ag the_silver_searcher
-    " config: export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git --ignore node_modules -g ""'
+" fzf need install ripgrep
+    " config: export FZF_DEFAULT_COMMAND='rg --files'
 " }}}
 " window {{{
 " font: yahei_mono and DejaVu
@@ -53,7 +42,9 @@ else
     call plug#begin('~/.vim/bundle')
 endif
 " }}}
-
+" before load plugins{{{
+set termguicolors
+" }}}
 " packages {{{
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
@@ -81,16 +72,15 @@ Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 Plug 'editorconfig/editorconfig-vim', { 'on': [] }
 "Plug 'haya14busa/vim-asterisk'
+Plug 'adelarsq/vim-matchit'
 " Colorscheme
 Plug 'lifepillar/vim-solarized8'
 
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 if has("win32")
-    "Plug 'Shougo/neocomplete.vim'
-    " Plug 'Valloric/YouCompleteMe', { 'on': [] }
-    Plug 'ervandew/supertab'
-    Plug 'davidhalter/jedi-vim'
-    Plug 'ternjs/tern_for_vim'
-    Plug 'racer-rust/vim-racer'
+    "Plug 'ervandew/supertab'
+    "Plug 'davidhalter/jedi-vim'
+    "Plug 'ternjs/tern_for_vim'
 elseif has("unix")
     "Plug 'ervandew/supertab'
     "if executable('npm')
@@ -99,7 +89,6 @@ elseif has("unix")
     "Plug 'davidhalter/jedi-vim'
     "Plug 'racer-rust/vim-racer'
     "Plug 'Valloric/YouCompleteMe'
-    Plug 'neoclide/coc.nvim', {'branch': 'release'}
     Plug 'lilydjwg/fcitx.vim'
     "Plug 'tweekmonster/django-plus.vim'
     "Plug 'eagletmt/ghcmod-vim'
@@ -195,7 +184,7 @@ set autoindent "自动缩进
 set smartindent "智能自动缩进
 set diffopt+=iwhite
 " vim8
-packadd! matchit
+"packadd! matchit
 
 augroup E_indent
     autocmd FileType python setlocal ts=4 sw=4 et sta
@@ -325,9 +314,11 @@ if has("gui_running") || (has("nvim") && has("win32"))
     endif
     " end of setting for windows }}}
 else
-    set termguicolors
-    "let terminal support 256 color
-    set t_Co=256
+    "xfce4-terminal
+    "set t_Co=256
+    " tmux colors
+    "let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+    "let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
     if !has('nvim') && &ttimeoutlen == -1
         set ttimeout
         set ttimeoutlen=100

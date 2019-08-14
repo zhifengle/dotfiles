@@ -3,7 +3,7 @@
 function backup_nuts() {
     for line in `cat ~/backup/dotfiles`; do
         if [[ $line ]]; then
-            cp --parents -u $HOME/$line ~/Nutstore/
+            cp --parents -u -r $HOME/$line ~/Nutstore/
         fi
     done
 }

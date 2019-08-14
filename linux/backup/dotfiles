@@ -18,6 +18,7 @@
 .yarnrc
 .eslintrc-fix.json
 
+.config/nvim/init.vim
 .config/i3/config
 .config/xfce4/terminal/terminalrc
 backup/dotfiles
