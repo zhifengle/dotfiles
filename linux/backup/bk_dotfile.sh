@@ -19,6 +19,7 @@ dotfiles="
 .gtkrc*
 
 .vim/vimrc
+.vim/mycoolsnippets
 .pentadactylrc
 .vimperatorrc
 .ideavimrc
@@ -30,6 +31,7 @@ dotfiles="
 .yarnrc
 .eslintrc-fix.json
 
+.config/nvim/init.vim
 .config/i3/config
 .config/xfce4/terminal/terminalrc
 backup/dotfiles
@@ -42,7 +44,7 @@ tools/*.py
 "
 for line in $dotfiles; do
     if [[ $line ]]; then
-        cp --parents -u $HOME/$line ~/Nutstore/
+        cp --parents -u -r $HOME/$line ~/Nutstore/
     fi
 done
 #cp -u -r ~/Nutstore$HOME/. ~/my-projects/dotfiles/linux/
