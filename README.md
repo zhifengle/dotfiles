@@ -1,3 +1,11 @@
-config file for vim , vimperator and pentadactl
------------------------------------------------
+## Config files and scripts
 
+## folders
+
+linux
+
+> dotfiles for i3, vim etc.
+
+archlinux-install
+
+> scripts for installing archlinux
