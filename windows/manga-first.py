@@ -10,8 +10,8 @@ from fnmatch import fnmatch
 # 这里设置漫画的路径
 workDir = r"e:\comic\test"
 
-# Set to full path of unrar.exe if it is not in PATH
-rarfile.UNRAR_TOOL = "D:\\Program Files\\WinRAR\\UnRAR.exe"
+# 设置 unrar.exe 路径
+rarfile.UNRAR_TOOL = r"D:\Program Files\WinRAR\UnRAR.exe"
 
 # Set to '\\' to be more compatible with old rarfile
 rarfile.PATH_SEP = '\\'
