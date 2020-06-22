@@ -29,7 +29,8 @@ noremap <c-y>N :action EmmetPreviousEditPoint<CR>
 nnoremap K :action GotoDeclaration<CR>
 nnoremap <c-p> :action GotoFile<CR>
 nnoremap <leader>fu :action FindUsages<CR>
-nnoremap <Leader>ff :action FindInPath<CR>
+nnoremap <Leader>fp :action FindInPath<CR>
+nnoremap <Leader>ff :action Find<CR>
 
 nnoremap <Leader>nj :action NewJavaScriptFile<CR>
 " comment
