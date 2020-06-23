@@ -64,7 +64,7 @@ Plug 'vim-airline/vim-airline', { 'on': 'AirlineToggle' }
 Plug 'majutsushi/tagbar'
 Plug 'Valloric/ListToggle'
 Plug 'vim-scripts/Modeliner', { 'on': 'Modeliner' }
-Plug 'w0rp/ale'
+"Plug 'w0rp/ale'
 "Plug 'vim-syntastic/syntastic'
 "Plug 'roxma/vim-paste-easy'
 Plug 'sickill/vim-pasta'
@@ -112,9 +112,6 @@ Plug 'othree/csscomplete.vim'
 Plug 'lilydjwg/colorizer', { 'on': 'ColorHighlight' }
 "Plug 'maksimr/vim-jsbeautify'
 Plug 'Chiel92/vim-autoformat', {'on': 'Autoformat'}
-" typescript 2019-06-20 comment
-"Plug 'Shougo/vimproc.vim', {'do': 'make'}
-"Plug 'Quramy/tsuquyomi', { 'for': 'typescript' }
 " need UltiSnips
 "Plug 'justinj/vim-react-snippets'
 " Rust
@@ -409,9 +406,6 @@ augroup end
 "}}}
 
 " web development setting{{{
-"autocmd FileType javascript set formatprg=prettier-eslint\ --stdin
-"autocmd BufWritePre *.js :normal gggqG
-"let g:syntastic_javascript_eslint_exe = '$(npm bin)/eslint'
 func! ToggleJsFiletype() "{{{
     if &filetype == 'javascript'
         setlocal ft=javascript.jsx
@@ -456,56 +450,6 @@ autocmd FileType haskell vnoremap <LocalLeader>a- :Tabularize /-><CR>
 " }}}
 
 "plugin setting{{{
-" YouCompleteMe {{{
-if exists('g:plugs["YouCompleteMe"]')
-    nnoremap <Leader>d :YcmCompleter GoToDefinition <CR>
-    nnoremap <Leader>fd :YcmCompleter GoToDefinitionElseDeclaration<CR>
-    nnoremap K :YcmCompleter GetDoc<CR>
-    nnoremap <Leader>ft :YcmCompleter GetType <CR>
-    autocmd FileType javascript,python,typescript nnoremap <LocalLeader>fr :YcmCompleter GoToReferences<CR>
-    "autocmd BufRead,BufNewFile *.cpp,*.c,*.cc nnoremap <F5> :YcmForceCompileAndDiagnostics<CR>
-    augroup load_us_ycm
-        autocmd!
-        "InsertEnter
-        autocmd InsertEnter * call plug#load('YouCompleteMe')
-                    \| autocmd! load_us_ycm
-    augroup END
-    "nnoremap <Leader>f :YcmCompleter FixIt <CR>
-    if has("unix")
-        command! -bar -bang -complete=file -nargs=? SetPythonPath
-                    \ let g:ycm_python_interpreter_path = substitute(system('pyenv which python'), '\_s*$', '', '')
-        let g:ycm_python_interpreter_path = '/home/alan/.pyenv/versions/env3/bin/python3'
-        "let g:ycm_python_interpreter_path = substitute(system('pyenv which python'), '\_s*$', '', '')
-        let g:ycm_extra_conf_vim_data = [
-                    \  'g:ycm_python_interpreter_path'
-                    \]
-        let g:ycm_global_ycm_extra_conf = '~/.vim/.ycm_extra_conf.py'
-    endif
-    "Do not ask when starting vim
-    let g:ycm_confirm_extra_conf = 0
-    let g:ycm_filetype_blacklist = {
-                \ 'tagbar' : 1,
-                \ 'qf' : 1,
-                \ 'notes' : 1,
-                \ 'markdown' : 1,
-                \ 'unite' : 1,
-                \ 'text' : 1,
-                \ 'vimwiki' : 1,
-                \ 'pandoc' : 1,
-                \ 'infolog' : 1,
-                \ 'mail' : 1,
-                \}
-    let g:ycm_use_ultisnips_completer = 1 " Default 1, just ensure
-    "let g:ycm_seed_identifiers_with_syntax = 1 " Completion for programming language's keyword
-    let g:ycm_complete_in_comments = 1 " Completion in comments
-    let g:ycm_complete_in_strings = 1 " Completion in string
-    if !exists("g:ycm_semantic_triggers")
-        let g:ycm_semantic_triggers = {}
-    endif
-    let g:ycm_semantic_triggers['typescript'] = ['.']
-    let g:ycm_semantic_triggers['haskell'] = ['.']
-endif
-"}}}
 " coc 2019-08-13 16:22 {{{
 if exists('g:plugs["coc.nvim"]')
     " if hidden is not set, TextEdit might fail.
@@ -605,6 +549,12 @@ if exists('g:plugs["coc.nvim"]')
 
     " Add status line support, for integration with other plugin, checkout `:h coc-status`
     set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
+    " my config
+    " CocInstall coc-json coc-css coc-tsserver coc-eslint coc-prettier 
+    command! -nargs=0 Prettier :CocCommand prettier.formatFile
+    autocmd FileType vimwiki,markdown let b:coc_suggest_disable = 1
+    " overwrite Autoformat;
+    autocmd FileType javascript,typescript,typescriptreact,json,javascriptreact,typescript.tsx nnoremap <Leader>ef :Prettier<CR>
 endif
 " end coc config}}}
 "let g:polyglot_disabled = ['rust']
