@@ -1,0 +1,310 @@
+" readme {{{
+" put plug.vim in autoload dir
+" https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+" key bind
+" leader 2 nerdtree, leader 3 tagbar
+" cpp: leader 5 make, leader 6 run demo
+" python: F5 use python in environment, F6 use user defined python path
+" use config file in another machine need to do some modification
+" use eslint
+" JS optional dependency
+" js-beautify eslint_d jsctags
+" linux {{{
+" font: DejaVu\ Sans\ Mono\
+" DejaVuSansMono
+" install ctags
+" fzf need install ripgrep
+    " config: export FZF_DEFAULT_COMMAND='rg --files'
+" }}}
+" window {{{
+" font: yahei_mono and DejaVu
+" need config eslint_d path, vimwiki path
+" check executable('cl') use ycm or not
+" }}}
+
+"}}}
+" auto install plug-vim {{{
+set nocompatible
+if has("win32")
+    if empty(glob('~/vimfiles/autoload/plug.vim')) &&  executable('curl')
+        cd $HOME
+        silent !curl -fLo vimfiles/autoload/plug.vim --create-dirs
+                    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+        autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+    endif
+    call plug#begin('~/vimfiles/bundle')
+else
+    if empty(glob('~/.vim/autoload/plug.vim')) &&  executable('curl')
+        silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+                    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+        autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+    endif
+    call plug#begin('~/.vim/bundle')
+endif
+" }}}
+" before load plugins{{{
+set termguicolors
+" }}}
+" packages {{{
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-repeat'
+"Plug 'tpope/vim-fugitive'
+"Plug 'junegunn/gv.vim'
+Plug 'tpope/vim-rsi'
+Plug 'tpope/vim-obsession'
+Plug 'Lokaltog/vim-easymotion'
+Plug 'scrooloose/nerdcommenter'
+Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' } | Plug '22earth/nerdtree-execute', { 'on':  'NERDTreeToggle' }
+Plug 'vimwiki/vimwiki'
+Plug 'jiangmiao/auto-pairs'
+Plug 'Valloric/ListToggle'
+Plug 'vim-scripts/Modeliner', { 'on': 'Modeliner' }
+Plug 'sickill/vim-pasta'
+"Plug 'SirVer/ultisnips'
+"Plug 'honza/vim-snippets'
+Plug 'adelarsq/vim-matchit'
+" Colorscheme
+Plug 'lifepillar/vim-solarized8'
+Plug 'ctrlpvim/ctrlp.vim'
+call plug#end()
+"}}}
+
+" default setting for me {{{
+let mapleader="\<Space>"
+let maplocalleader="\<Space>"
+if has('autocmd')
+  filetype plugin indent on
+endif
+if has('syntax') && !exists('g:syntax_on')
+  syntax enable
+endif
+set bs=2 "set backspace=indent,eol,start
+"解决中文乱码 ,gb2312,big5,gb18030,cp936
+set enc=utf-8
+"set fileencoding=utf-8 "保存文件时编码
+set fileencodings=utf-8,cs-bom,gbk,cp936
+set number
+"set cc=80
+syntax on "打开高亮
+set autoread
+set wildmenu
+"set cul "高亮光标所在行
+"set cuc
+set showcmd
+"set autochdir
+set fdm=marker "marker indent
+"set nofoldenable
+"set foldlevelstart=99
+set complete-=i
+set completeopt=longest,menu
+set nobackup "覆盖文件不备份
+set noswapfile "编辑时不产生交换文件
+set showmatch
+set vb t_vb= "关闭响铃和闪屏
+set ruler
+"set nohls "不高亮显示结果
+set hls
+set incsearch "在输入要搜索的文字时，vim会实时匹配
+set fileformats=unix,dos
+" colorscheme
+set background=dark
+colorscheme solarized8_flat "solarized8 desert molokai
+"缩进设置
+filetype indent on
+set tabstop=4 "让一个tab等于4个空格
+set shiftwidth=4 "sw=4
+set expandtab "插入tab时以空格替换et
+"set softtabstop=4 "sts
+set smarttab "开启新行的sta
+set autoindent "自动缩进
+set smartindent "智能自动缩进
+set diffopt+=iwhite
+" vim8
+"packadd! matchit
+
+augroup E_indent
+    autocmd FileType python setlocal ts=4 sw=4 et sta
+    autocmd FileType make setlocal ts=8 sw=8 noexpandtab
+    " indent for web
+    autocmd FileType json,vue,javascript,typescript,html,css,scss,less setlocal ts=2 sw=2  et
+augroup END
+"}}}
+
+" setting for linux {{{
+if has("unix")
+    "set guifont=DejaVu\ Sans\ Mono\ 13
+    "set guifont=Yahei\ Mono\ 13
+    let g:vimwiki_use_mouse = 1
+    let wiki_1 = {}
+    let wiki_1.path = '~/vimwiki/'
+    let wiki_1.html_template = "~/vimwiki/template/header.tpl"
+    let wiki_1.nested_syntaxes = {'python': 'python', 'c++': 'cpp'}
+    let wiki_1.path_html = '~/vimwiki/html/'
+
+    let wiki_2 = {}
+    let wiki_2.path = '~/my_notes/'
+    let wiki_2.index = 'my_markdown_notes'
+    let wiki_2.syntax = 'markdown'
+    let wiki_2.ext = '.md'
+
+    let g:vimwiki_list = [wiki_2, wiki_1]
+    map <silent> <Leader>ee :e $HOME/.vim/vimrc<cr>
+    " has gui  gvim
+    "key binding for compile or run {{{
+    augroup E_run_file
+        autocmd!
+        autocmd BufRead,BufNewFile *.c nmap <Leader>5 :w<CR>:!gcc -Wall % -g -o %<<CR>
+        autocmd FileType sh nmap <Leader>5 :update<CR>:!bash %<CR>
+        autocmd BufRead,BufNewFile *.py nmap <Leader>5 :update<CR>:!python %<CR>
+        autocmd BufRead,BufNewFile *.js nmap <Leader>5 :update<CR>:!node %<CR>
+    augroup END
+    "}}}
+endif
+"'python' : 1
+"end of setting for linux}}}
+
+" setting for gvim or terminal {{{
+if has("gui_running") || (has("nvim") && has("win32"))
+    " 只显示菜单
+    set guioptions=
+    set lines=44
+    set columns=90
+    " 高亮光标所在的行
+    "set cursorline
+    "setting for windows {{{
+    if has("win32")
+        " Windows 兼容配置
+        set guifont=DejaVu_Sans_Mono:h13:cANSI
+        set guifontwide=Yahei_Mono:b:h13:cGB2312
+        "autocmd GUIEnter * simalt ~x "最大化gvim
+        "source $VIMRUNTIME/mswin.vim
+        source $VIMRUNTIME/menu.vim
+        source $ViMRUnTIME/delmenu.vim
+        "source $VIMRUNTIME/vimrc_example.vim
+        "set fileformats=dos
+        "解决consle输出乱码
+        language messages zh_CN.utf-8
+        map <silent> <Leader>ee :e ~/vimfiles/vimrc<cr>
+        augroup E_run_file_win
+            autocmd!
+            autocmd BufRead,BufNewFile *.py nmap <Leader>5 :update<CR>:!python %<CR>
+            autocmd BufRead *.py nmap <C-F5> :w<CR>:!ipython -i %<CR>
+        augroup END
+        " }}}
+        "vimwiki
+        let g:vimwiki_use_mouse = 1
+        "    let g:vimwiki_list = [{'path': '~/vimwiki/',
+        "    \ 'path_html': '~/vimwiki/html/',
+        "    \ 'html_header': '~/vimwiki/template/header.tpl',}]
+        let wiki_1 = {}
+        let wiki_1.path = 'E:/vimwiki/'
+        let wiki_1.html_template = "E:/vimwiki/template/header.tpl"
+        let wiki_1.nested_syntaxes = {'python': 'python', 'c++': 'cpp'}
+        let wiki_1.path_html = 'E:/vimwiki/html/'
+
+        let wiki_2 = {}
+        let wiki_2.path = 'E:/my_notes/'
+        let wiki_2.index = 'my_markdown_notes'
+        let wiki_2.syntax = 'markdown'
+        let wiki_2.ext = '.md'
+
+        let g:vimwiki_list = [wiki_2, wiki_1]
+    endif
+    " end of setting for windows }}}
+else
+    "xfce4-terminal
+    "set t_Co=256
+    " tmux colors
+    "let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+    "let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+    if !has('nvim') && &ttimeoutlen == -1
+        set ttimeout
+        set ttimeoutlen=100
+    endif
+endif
+" gvim }}}
+
+"map setting{{{
+" F2:NERDTreeToggle  F3:tagbar F4 F6 F7 F8 F9:c F10:c run
+" 普通模式下 Ctrl+c 复制文件路径
+"nnoremap <c-c> :let @* = expand('%:p')<cr>
+"inoremap jk <Esc>
+" Buffers/Tab操作快捷方式!
+"nnoremap <s-h> :bprevious<cr>
+"nnoremap <s-l> :bnext<cr>
+"nnoremap F :tabe %
+"vmap <C-C> "+y
+" ctrl+s, need set alias vim="stty stop '' -ixoff ; vim"
+map <C-S> :update<CR>
+vmap <C-S> <C-C>:update<CR>
+imap <C-S> <C-O>:update<CR>
+nnoremap <Leader>ew :update<CR>
+if maparg('<C-L>', 'n') ==# ''
+  nnoremap <silent> <C-L> :nohlsearch<C-R>=has('diff')?'<Bar>diffupdate':''<CR><CR><C-L>
+endif
+if (has("gui_running")) || has("win32")
+    map <M-1> 1gt
+    map <M-2> 2gt
+    map <M-3> 3gt
+    map <M-4> 4gt
+    map <M-5> 5gt
+endif
+""""""""""""""""""""
+"  Leader key map  "
+""""""""""""""""""""
+nnoremap <Leader>y "+y
+nnoremap <Leader>p moo<Esc>"+p`[v`]=`o
+nnoremap <Leader>P moO<Esc>"+P`[v`]=`o
+vnoremap <Leader>p "+p`[v`]=
+vnoremap <Leader>P "+P`[v`]=
+vnoremap <Leader>y "+y
+
+"nnoremap <Leader>te :tabe<space>
+" grep word under cursor
+nnoremap <Leader>fg :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
+" format
+nnoremap <Leader>em :%s/\r//g<CR>:w<CR>
+nnoremap <Leader>ef :Autoformat<CR>
+nnoremap <Leader>ec :call plug#load('editorconfig-vim')<CR>:EditorConfigReload<CR>:e! %<CR>
+nnoremap <Leader>ed :lcd %:p:h<CR>
+nnoremap <Leader>e2 :setlocal ts=2 sw=2 et<CR>
+nnoremap <Leader>e4 :setlocal ts=4 sw=4 et<CR>
+command! FcitxVim execute "call plug#load('fcitx.vim') | set ttimeoutlen=100"
+" 快捷键 i 开/关缩进可视化
+nnoremap <silent> <Leader>ei :IndentGuidesToggle<CR>
+
+vmap <silent> <Leader>c<Space> <Plug>NERDCommenterToggle
+nmap <silent> <Leader>c<Space> <Plug>NERDCommenterToggle
+if !has("gui_running")
+    nmap <silent> <C-_> <Plug>NERDCommenterToggle
+endif
+if executable('fzf') && exists('g:plugs["fzf.vim"]')
+    nnoremap <C-p> :FZF<CR>
+    nnoremap <Leader>b :Buffers<CR>
+    nnoremap <Leader>fl :Lines<CR>
+else
+    "nnoremap <Leader>b :Unite buffer<CR>
+    nnoremap <Leader>b :CtrlPBuffer<CR>
+    nnoremap <Leader>fl :CtrlPLine<CR>
+endif
+" git
+nnoremap <Leader>gs :Gstatus<CR>
+nnoremap <Leader>gl :GV!<CR>
+
+augroup E_map_setting
+    autocmd!
+    " 自动运用设置
+    autocmd BufWritePost .vimrc,.gvimrc,_vimrc silent source %
+    autocmd FileType vimwiki map <F8> :Calendar<CR>
+    " no auto indent when pasting
+    autocmd FileType vimwiki nnoremap <Leader>p moo<Esc>"+p`o
+    autocmd FileType qf nnoremap <buffer> o <CR><C-w>j
+augroup end
+"}}}
+
+"plugin setting{{{
+if executable('rg')
+    set grepprg=rg\ --vimgrep
+    set grepformat=%f:%l:%c:%m
+endif
+" plugin setting end}}}
