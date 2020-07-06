@@ -2,7 +2,7 @@
 " put plug.vim in autoload dir
 " https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 " key bind
-" leader 2 nerdtree, leader 3 tagbar
+" leader 2 nerdtree
 " cpp: leader 5 make, leader 6 run demo
 " python: F5 use python in environment, F6 use user defined python path
 " use config file in another machine need to do some modification
@@ -18,8 +18,6 @@
 " }}}
 " window {{{
 " font: yahei_mono and DejaVu
-" need config eslint_d path, vimwiki path
-" check executable('cl') use ycm or not
 " }}}
 
 "}}}
@@ -52,9 +50,9 @@ Plug 'tpope/vim-repeat'
 "Plug 'junegunn/gv.vim'
 Plug 'tpope/vim-rsi'
 Plug 'tpope/vim-obsession'
-Plug 'Lokaltog/vim-easymotion'
-Plug 'scrooloose/nerdcommenter'
-Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' } | Plug '22earth/nerdtree-execute', { 'on':  'NERDTreeToggle' }
+Plug 'easymotion/vim-easymotion'
+Plug 'preservim/nerdcommenter'
+Plug 'preservim/nerdtree', { 'on':  'NERDTreeToggle' } | Plug '22earth/nerdtree-execute', { 'on':  'NERDTreeToggle' }
 Plug 'vimwiki/vimwiki'
 Plug 'jiangmiao/auto-pairs'
 Plug 'Valloric/ListToggle'
@@ -62,7 +60,8 @@ Plug 'vim-scripts/Modeliner', { 'on': 'Modeliner' }
 Plug 'sickill/vim-pasta'
 "Plug 'SirVer/ultisnips'
 "Plug 'honza/vim-snippets'
-Plug 'adelarsq/vim-matchit'
+" replacement adelarsq/vim-matchit
+Plug 'andymass/vim-matchup'
 " Colorscheme
 Plug 'lifepillar/vim-solarized8'
 Plug 'ctrlpvim/ctrlp.vim'
@@ -174,8 +173,8 @@ if has("gui_running") || (has("nvim") && has("win32"))
     "setting for windows {{{
     if has("win32")
         " Windows 兼容配置
-        set guifont=DejaVu_Sans_Mono:h13:cANSI
-        set guifontwide=Yahei_Mono:b:h13:cGB2312
+        "set guifont=DejaVu_Sans_Mono:h13:cANSI
+        "set guifontwide=Yahei_Mono:b:h13:cGB2312
         "autocmd GUIEnter * simalt ~x "最大化gvim
         "source $VIMRUNTIME/mswin.vim
         source $VIMRUNTIME/menu.vim
@@ -190,7 +189,6 @@ if has("gui_running") || (has("nvim") && has("win32"))
             autocmd BufRead,BufNewFile *.py nmap <Leader>5 :update<CR>:!python %<CR>
             autocmd BufRead *.py nmap <C-F5> :w<CR>:!ipython -i %<CR>
         augroup END
-        " }}}
         "vimwiki
         let g:vimwiki_use_mouse = 1
         "    let g:vimwiki_list = [{'path': '~/vimwiki/',
@@ -283,7 +281,6 @@ if executable('fzf') && exists('g:plugs["fzf.vim"]')
     nnoremap <Leader>b :Buffers<CR>
     nnoremap <Leader>fl :Lines<CR>
 else
-    "nnoremap <Leader>b :Unite buffer<CR>
     nnoremap <Leader>b :CtrlPBuffer<CR>
     nnoremap <Leader>fl :CtrlPLine<CR>
 endif

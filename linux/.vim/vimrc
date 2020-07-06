@@ -52,10 +52,10 @@ Plug 'tpope/vim-fugitive'
 Plug 'junegunn/gv.vim'
 Plug 'tpope/vim-rsi'
 Plug 'tpope/vim-obsession'
-Plug 'Lokaltog/vim-easymotion'
+Plug 'easymotion/vim-easymotion'
 Plug 'mattn/emmet-vim'
-Plug 'scrooloose/nerdcommenter'
-Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' } | Plug '22earth/nerdtree-execute', { 'on':  'NERDTreeToggle' }
+Plug 'preservim/nerdcommenter'
+Plug 'preservim/nerdtree', { 'on':  'NERDTreeToggle' } | Plug '22earth/nerdtree-execute', { 'on':  'NERDTreeToggle' }
 Plug 'vimwiki/vimwiki'
 Plug 'mattn/calendar-vim', {'for': 'vimwiki'}
 Plug 'jiangmiao/auto-pairs'
@@ -72,7 +72,7 @@ Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 Plug 'editorconfig/editorconfig-vim', { 'on': [] }
 "Plug 'haya14busa/vim-asterisk'
-Plug 'adelarsq/vim-matchit'
+Plug 'andymass/vim-matchup'
 " Colorscheme
 Plug 'lifepillar/vim-solarized8'
 
@@ -88,9 +88,8 @@ elseif has("unix")
     "endif
     "Plug 'davidhalter/jedi-vim'
     "Plug 'racer-rust/vim-racer'
-    "Plug 'Valloric/YouCompleteMe'
+    "Plug 'ycm-core/YouCompleteMe'
     Plug 'lilydjwg/fcitx.vim'
-    "Plug 'tweekmonster/django-plus.vim'
     "Plug 'eagletmt/ghcmod-vim'
     "Plug 'eagletmt/neco-ghc'
     Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
@@ -98,25 +97,15 @@ elseif has("unix")
 endif
 if !executable('fzf')
     Plug 'ctrlpvim/ctrlp.vim'
-    "Plug 'Shougo/unite.vim', { 'on': 'Unite' }
-" elseif has("win32") && executable('fzf')
-"     Plug 'junegunn/fzf'
-"     Plug 'junegunn/fzf.vim'
 endif
 " web development
 Plug 'sheerun/vim-polyglot'
 Plug 'hail2u/vim-css3-syntax'
-Plug '22earth/vim-node', { 'branch': 'patch-2' }
-Plug 'othree/yajs.vim'
-Plug 'othree/csscomplete.vim'
+"Plug '22earth/vim-node', { 'branch': 'patch-2' }
 Plug 'lilydjwg/colorizer', { 'on': 'ColorHighlight' }
-"Plug 'maksimr/vim-jsbeautify'
 Plug 'Chiel92/vim-autoformat', {'on': 'Autoformat'}
-" need UltiSnips
-"Plug 'justinj/vim-react-snippets'
 " Rust
 "Plug 'rust-lang/rust.vim'
-"Plug '22earth/vim-go'
 Plug 'tweekmonster/startuptime.vim', { 'on': 'StartupTime' }
 Plug 'nathanaelkane/vim-indent-guides', { 'on': 'IndentGuidesToggle' }
 " 2019-06-26 11:29
@@ -266,7 +255,6 @@ if has("gui_running") || (has("nvim") && has("win32"))
         "set fileformats=dos
         "解决consle输出乱码
         language messages zh_CN.utf-8
-        "au BufRead,BufNewFile *.txt setlocal ft=txt "syntax highlight for txt.vim
         " compile and run {{{
         func! Interpreter()
             if &filetype=='scheme'
