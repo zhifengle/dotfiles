@@ -215,14 +215,12 @@ if has("unix")
         autocmd FileType c,cpp nmap <F5> :update<CR>:make<CR>
         autocmd FileType c,cpp nmap <F6> :!./demo<CR>
         autocmd FileType sh nmap <Leader>5 :update<CR>:!bash %<CR>
-        autocmd BufRead,BufNewFile *.py nmap <Leader>5 :update<CR>:!python %<CR>
         autocmd BufRead,BufNewFile *.py nmap <Leader>6 :update<CR>:!$HOME/.pyenv/versions/env3/bin/python %<CR>
         autocmd BufRead,BufNewFile *.hs nmap <F5> :update<CR>:!runghc %<CR>
         autocmd BufRead,BufNewFile *.hs nmap <F6> :update<CR>:!ghci %<CR>
         autocmd BufNewFile,BufRead *.coffee nmap <F5> :update<CR>:!coffee -c %<CR>:!node %<.js <CR>
         "au BufRead,BufNewFile *.scm nmap <F5> :w<CR>:!mit-scheme --load %<CR>
         autocmd BufRead,BufNewFile *.rkt,*scm nmap <F5> :update<CR>:!racket %<CR>
-        autocmd BufRead,BufNewFile *.js nmap <Leader>5 :update<CR>:!node %<CR>
         autocmd BufRead,BufNewFile *.go nmap <Leader>5 :update<CR>:GoRun<CR>
     augroup END
     "}}}
@@ -265,8 +263,6 @@ if has("gui_running") || (has("nvim") && has("win32"))
         map <silent> <Leader>ee :e ~/vimfiles/vimrc<cr>
         augroup E_run_file_win
             autocmd!
-            autocmd BufRead,BufNewFile *.py nmap <Leader>5 :update<CR>:!python %<CR>
-            autocmd BufRead,BufNewFile *.py nmap <Leader>6 :w<CR>:!"c:\Python27\python.exe" %<CR>
             autocmd BufRead,BufNewFile *.scm map <F5> :w<CR>:call Interpreter()<CR>
             autocmd BufRead,BufNewFile *.rkt,*scm nmap <F6> :w<CR>:!racket %<CR>
             "autocmd BufRead *.py nmap <C-F5> :w<CR>:!idle.py -r %<CR>
@@ -275,7 +271,6 @@ if has("gui_running") || (has("nvim") && has("win32"))
             autocmd BufRead,BufNewFile *.c nmap <F9> :w<CR>:!gcc -Wall % -g -o %<.exe<CR>
             autocmd FileType cpp nmap <F9> :w<CR>:!gcc++ -Wall % -g -o %<.exe<CR>
             autocmd FileType c,cpp nmap <C-F9> :!./%<.exe<CR>
-            autocmd BufRead,BufNewFile *.js nmap <Leader>5 :update<CR>:!node %<CR>
         augroup END
         " }}}
         "vimwiki
@@ -390,6 +385,12 @@ augroup E_map_setting
     " no auto indent when pasting
     autocmd FileType vimwiki nnoremap <Leader>p moo<Esc>"+p`o
     autocmd FileType qf nnoremap <buffer> o <CR><C-w>j
+augroup end
+augroup E_run_map_setting
+    autocmd!
+    autocmd BufRead,BufNewFile *.py nmap <Leader>5 :update<CR>:!python %<CR>
+    autocmd BufRead,BufNewFile *.js nmap <Leader>5 :update<CR>:!node %<CR>
+    autocmd BufRead,BufNewFile *.ts nmap <Leader>5 :update<CR>:!ts-node %<CR>
 augroup end
 "}}}
 
@@ -519,7 +520,7 @@ if exists('g:plugs["coc.nvim"]')
     " Remap for do codeAction of current line
     nmap <leader>ac  <Plug>(coc-codeaction)
     " Fix autofix problem of current line
-    nmap <leader>qf  <Plug>(coc-fix-current)
+    nmap <leader>es  <Plug>(coc-fix-current)
 
     " Use <tab> for select selections ranges, needs server support, like: coc-tsserver, coc-python
     nmap <silent> <TAB> <Plug>(coc-range-select)

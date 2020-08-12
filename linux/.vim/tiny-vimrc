@@ -154,8 +154,6 @@ if has("unix")
         autocmd!
         autocmd BufRead,BufNewFile *.c nmap <Leader>5 :w<CR>:!gcc -Wall % -g -o %<<CR>
         autocmd FileType sh nmap <Leader>5 :update<CR>:!bash %<CR>
-        autocmd BufRead,BufNewFile *.py nmap <Leader>5 :update<CR>:!python %<CR>
-        autocmd BufRead,BufNewFile *.js nmap <Leader>5 :update<CR>:!node %<CR>
     augroup END
     "}}}
 endif
@@ -184,11 +182,9 @@ if has("gui_running") || (has("nvim") && has("win32"))
         "解决consle输出乱码
         language messages zh_CN.utf-8
         map <silent> <Leader>ee :e ~/vimfiles/vimrc<cr>
-        augroup E_run_file_win
-            autocmd!
-            autocmd BufRead,BufNewFile *.py nmap <Leader>5 :update<CR>:!python %<CR>
-            autocmd BufRead *.py nmap <C-F5> :w<CR>:!ipython -i %<CR>
-        augroup END
+        "augroup E_run_file_win
+        "    autocmd!
+        "augroup END
         "vimwiki
         let g:vimwiki_use_mouse = 1
         "    let g:vimwiki_list = [{'path': '~/vimwiki/',
@@ -296,6 +292,12 @@ augroup E_map_setting
     " no auto indent when pasting
     autocmd FileType vimwiki nnoremap <Leader>p moo<Esc>"+p`o
     autocmd FileType qf nnoremap <buffer> o <CR><C-w>j
+augroup end
+augroup E_run_map_setting
+    autocmd!
+    autocmd BufRead,BufNewFile *.py nmap <Leader>5 :update<CR>:!python %<CR>
+    autocmd BufRead,BufNewFile *.js nmap <Leader>5 :update<CR>:!node %<CR>
+    autocmd BufRead,BufNewFile *.ts nmap <Leader>5 :update<CR>:!ts-node %<CR>
 augroup end
 "}}}
 
