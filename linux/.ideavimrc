@@ -29,7 +29,7 @@ noremap <c-y>N :action EmmetPreviousEditPoint<CR>
 nnoremap K :action GotoDeclaration<CR>
 nnoremap <c-p> :action GotoFile<CR>
 nnoremap <leader>fu :action FindUsages<CR>
-nnoremap <Leader>fp :action FindInPath<CR>
+nnoremap <Leader>fg :action FindInPath<CR>
 nnoremap <Leader>ff :action Find<CR>
 
 nnoremap <Leader>nj :action NewJavaScriptFile<CR>
@@ -41,18 +41,7 @@ vnoremap <Leader>ci :action CommentByLineComment<CR>
 vnoremap <Leader>cl :action CommentByLineComment<CR>
 vnoremap <Leader>cs :action CommentByBlockComment<CR>
 
-"AceJump
-noremap <space><space>f :action AceAction<CR>
-noremap <space><space>F :action AceTargetAction<CR>
-noremap <space><space>j :action AceLineAction<CR>
-noremap <space><space>k :action AceLineAction<CR>
 "External Tool
-" vim eslint
-nnoremap <Space>ev :action Tool_External Tools_vim<CR>
-nnoremap <Space>es :action Tool_Web_eslint<CR>
 nnoremap <Space>ef :action ReformatCode<CR>
-" run
-nnoremap <Leader>5 :action Tool_Web_yarn_dev<CR>
-nnoremap <Leader>6 :action Tool_Web_yarn_run<CR>
 
 nnoremap <leader>vs :source ~/.ideavimrc<CR>
