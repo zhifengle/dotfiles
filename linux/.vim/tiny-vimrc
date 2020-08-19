@@ -219,7 +219,6 @@ endif
 " gvim }}}
 
 "map setting{{{
-" F2:NERDTreeToggle  F3:tagbar F4 F6 F7 F8 F9:c F10:c run
 " 普通模式下 Ctrl+c 复制文件路径
 "nnoremap <c-c> :let @* = expand('%:p')<cr>
 "inoremap jk <Esc>
@@ -264,8 +263,8 @@ nnoremap <Leader>ed :lcd %:p:h<CR>
 nnoremap <Leader>e2 :setlocal ts=2 sw=2 et<CR>
 nnoremap <Leader>e4 :setlocal ts=4 sw=4 et<CR>
 command! FcitxVim execute "call plug#load('fcitx.vim') | set ttimeoutlen=100"
-" 快捷键 i 开/关缩进可视化
-nnoremap <silent> <Leader>ei :IndentGuidesToggle<CR>
+"nnoremap <silent> <Leader>ei :IndentGuidesToggle<CR>
+nnoremap <Leader>2 :NERDTreeToggle<CR>
 
 vmap <silent> <Leader>c<Space> <Plug>NERDCommenterToggle
 nmap <silent> <Leader>c<Space> <Plug>NERDCommenterToggle

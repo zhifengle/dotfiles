@@ -44,4 +44,5 @@ vnoremap <Leader>cs :action CommentByBlockComment<CR>
 "External Tool
 nnoremap <Space>ef :action ReformatCode<CR>
 
+set easymotion
 nnoremap <leader>vs :source ~/.ideavimrc<CR>
