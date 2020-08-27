@@ -81,7 +81,7 @@ set bs=2 "set backspace=indent,eol,start
 "解决中文乱码 ,gb2312,big5,gb18030,cp936
 set enc=utf-8
 "set fileencoding=utf-8 "保存文件时编码
-set fileencodings=utf-8,cs-bom,gbk,cp936
+set fileencodings=ucs-bom,utf-8,cp936,gb18030,big5,euc-jp,euc-kr,latin1
 set number
 "set cc=80
 syntax on "打开高亮
@@ -154,8 +154,6 @@ if has("unix")
         autocmd!
         autocmd BufRead,BufNewFile *.c nmap <Leader>5 :w<CR>:!gcc -Wall % -g -o %<<CR>
         autocmd FileType sh nmap <Leader>5 :update<CR>:!bash %<CR>
-        autocmd BufRead,BufNewFile *.py nmap <Leader>5 :update<CR>:!python %<CR>
-        autocmd BufRead,BufNewFile *.js nmap <Leader>5 :update<CR>:!node %<CR>
     augroup END
     "}}}
 endif
@@ -184,11 +182,9 @@ if has("gui_running") || (has("nvim") && has("win32"))
         "解决consle输出乱码
         language messages zh_CN.utf-8
         map <silent> <Leader>ee :e ~/vimfiles/vimrc<cr>
-        augroup E_run_file_win
-            autocmd!
-            autocmd BufRead,BufNewFile *.py nmap <Leader>5 :update<CR>:!python %<CR>
-            autocmd BufRead *.py nmap <C-F5> :w<CR>:!ipython -i %<CR>
-        augroup END
+        "augroup E_run_file_win
+        "    autocmd!
+        "augroup END
         "vimwiki
         let g:vimwiki_use_mouse = 1
         "    let g:vimwiki_list = [{'path': '~/vimwiki/',
@@ -223,7 +219,6 @@ endif
 " gvim }}}
 
 "map setting{{{
-" F2:NERDTreeToggle  F3:tagbar F4 F6 F7 F8 F9:c F10:c run
 " 普通模式下 Ctrl+c 复制文件路径
 "nnoremap <c-c> :let @* = expand('%:p')<cr>
 "inoremap jk <Esc>
@@ -268,8 +263,8 @@ nnoremap <Leader>ed :lcd %:p:h<CR>
 nnoremap <Leader>e2 :setlocal ts=2 sw=2 et<CR>
 nnoremap <Leader>e4 :setlocal ts=4 sw=4 et<CR>
 command! FcitxVim execute "call plug#load('fcitx.vim') | set ttimeoutlen=100"
-" 快捷键 i 开/关缩进可视化
-nnoremap <silent> <Leader>ei :IndentGuidesToggle<CR>
+"nnoremap <silent> <Leader>ei :IndentGuidesToggle<CR>
+nnoremap <Leader>2 :NERDTreeToggle<CR>
 
 vmap <silent> <Leader>c<Space> <Plug>NERDCommenterToggle
 nmap <silent> <Leader>c<Space> <Plug>NERDCommenterToggle
@@ -296,6 +291,12 @@ augroup E_map_setting
     " no auto indent when pasting
     autocmd FileType vimwiki nnoremap <Leader>p moo<Esc>"+p`o
     autocmd FileType qf nnoremap <buffer> o <CR><C-w>j
+augroup end
+augroup E_run_map_setting
+    autocmd!
+    autocmd BufRead,BufNewFile *.py nmap <Leader>5 :update<CR>:!python %<CR>
+    autocmd BufRead,BufNewFile *.js nmap <Leader>5 :update<CR>:!node %<CR>
+    autocmd BufRead,BufNewFile *.ts nmap <Leader>5 :update<CR>:!ts-node %<CR>
 augroup end
 "}}}
 

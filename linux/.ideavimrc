@@ -29,7 +29,7 @@ noremap <c-y>N :action EmmetPreviousEditPoint<CR>
 nnoremap K :action GotoDeclaration<CR>
 nnoremap <c-p> :action GotoFile<CR>
 nnoremap <leader>fu :action FindUsages<CR>
-nnoremap <Leader>fp :action FindInPath<CR>
+nnoremap <Leader>fg :action FindInPath<CR>
 nnoremap <Leader>ff :action Find<CR>
 
 nnoremap <Leader>nj :action NewJavaScriptFile<CR>
@@ -44,6 +44,7 @@ vnoremap <Leader>cs :action CommentByBlockComment<CR>
 "External Tool
 nnoremap <Space>ef :action ReformatCode<CR>
 
+set easymotion
 nnoremap <leader>vs :source ~/.ideavimrc<CR>
 " easymotion
 set easymotion
