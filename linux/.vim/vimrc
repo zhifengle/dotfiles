@@ -132,7 +132,7 @@ set bs=2 "set backspace=indent,eol,start
 "解决中文乱码 ,gb2312,big5,gb18030,cp936
 set enc=utf-8
 "set fileencoding=utf-8 "保存文件时编码
-set fileencodings=utf-8,cs-bom,gbk,cp936
+set fileencodings=ucs-bom,utf-8,cp936,gb18030,big5,euc-jp,euc-kr,latin1
 set number
 "set cc=80
 syntax on "打开高亮
