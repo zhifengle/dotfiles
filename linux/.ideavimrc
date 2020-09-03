@@ -26,13 +26,13 @@ vnoremap <Leader>P "+P
 "c-a-t SurroundWith
 noremap <c-y>n :action EmmetNextEditPoint<CR>
 noremap <c-y>N :action EmmetPreviousEditPoint<CR>
-nnoremap K :action GotoDeclaration<CR>
 nnoremap <c-p> :action GotoFile<CR>
 nnoremap <leader>fu :action FindUsages<CR>
 nnoremap <Leader>fg :action FindInPath<CR>
 nnoremap <Leader>ff :action Find<CR>
 
 nnoremap <Leader>nj :action NewJavaScriptFile<CR>
+nnoremap <Leader>K :action QuickJavaDoc<CR>
 " comment
 nnoremap <Leader>ci :action CommentByLineComment<CR>
 nnoremap <Leader>cl :action CommentByLineComment<CR>
@@ -45,4 +45,4 @@ vnoremap <Leader>cs :action CommentByBlockComment<CR>
 nnoremap <Space>ef :action ReformatCode<CR>
 
 set easymotion
-nnoremap <leader>vs :source ~/.ideavimrc<CR>
+nnoremap <Leader>vs :source ~/.ideavimrc<CR>
