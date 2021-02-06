@@ -63,7 +63,8 @@ Plug 'sickill/vim-pasta'
 " replacement adelarsq/vim-matchit
 Plug 'andymass/vim-matchup'
 " Colorscheme
-Plug 'lifepillar/vim-solarized8'
+"Plug 'lifepillar/vim-solarized8'
+Plug 'rakr/vim-one'
 Plug 'ctrlpvim/ctrlp.vim'
 call plug#end()
 "}}}
@@ -106,8 +107,8 @@ set hls
 set incsearch "在输入要搜索的文字时，vim会实时匹配
 set fileformats=unix,dos
 " colorscheme
-set background=dark
-colorscheme solarized8_flat "solarized8 desert molokai
+set background=light
+colorscheme one "solarized8 desert molokai
 "缩进设置
 filetype indent on
 set tabstop=4 "让一个tab等于4个空格
@@ -173,6 +174,7 @@ if has("gui_running") || (has("nvim") && has("win32"))
         " Windows 兼容配置
         "set guifont=DejaVu_Sans_Mono:h13:cANSI
         "set guifontwide=Yahei_Mono:b:h13:cGB2312
+        set guifont=DejaVuSansMono_YaHei_NF:h13
         "autocmd GUIEnter * simalt ~x "最大化gvim
         "source $VIMRUNTIME/mswin.vim
         source $VIMRUNTIME/menu.vim
@@ -219,6 +221,7 @@ endif
 " gvim }}}
 
 "map setting{{{
+" F2:NERDTreeToggle  F3:tagbar F4 F6 F7 F8 F9:c F10:c run
 " 普通模式下 Ctrl+c 复制文件路径
 "nnoremap <c-c> :let @* = expand('%:p')<cr>
 "inoremap jk <Esc>
@@ -263,7 +266,7 @@ nnoremap <Leader>ed :lcd %:p:h<CR>
 nnoremap <Leader>e2 :setlocal ts=2 sw=2 et<CR>
 nnoremap <Leader>e4 :setlocal ts=4 sw=4 et<CR>
 command! FcitxVim execute "call plug#load('fcitx.vim') | set ttimeoutlen=100"
-"nnoremap <silent> <Leader>ei :IndentGuidesToggle<CR>
+" 快捷键 i 开/关缩进可视化
 nnoremap <Leader>2 :NERDTreeToggle<CR>
 
 vmap <silent> <Leader>c<Space> <Plug>NERDCommenterToggle

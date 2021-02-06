@@ -74,7 +74,8 @@ Plug 'editorconfig/editorconfig-vim', { 'on': [] }
 "Plug 'haya14busa/vim-asterisk'
 Plug 'andymass/vim-matchup'
 " Colorscheme
-Plug 'lifepillar/vim-solarized8'
+"Plug 'lifepillar/vim-solarized8'
+Plug 'rakr/vim-one'
 
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 if has("win32")
@@ -158,7 +159,8 @@ set incsearch "在输入要搜索的文字时，vim会实时匹配
 set fileformats=unix,dos
 " colorscheme
 set background=dark
-colorscheme solarized8_flat "solarized8 desert molokai
+set background=light
+colorscheme one "solarized8_flat desert molokai
 "缩进设置
 filetype indent on
 set tabstop=4 "让一个tab等于4个空格
