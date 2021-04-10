@@ -2,5 +2,6 @@
   "javascript.validate.enable": false,
   "prettier.singleQuote": true,
   "coc.preferences.formatOnSaveFiletypes": ["javascript", "typescript", "typescriptreact", "json", "javascriptreact", "typescript.tsx"],
-  "eslint.filetypes": ["javascript", "typescript", "typescriptreact", "javascriptreact", "typescript.tsx"]
+  "eslint.filetypes": ["javascript", "typescript", "typescriptreact", "javascriptreact", "typescript.tsx"],
+  "rust-analyzer.server.path":"D:\\Devel\\local\\bin\\rust-analyzer-windows.exe"
 }

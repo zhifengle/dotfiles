@@ -158,7 +158,6 @@ set hls
 set incsearch "在输入要搜索的文字时，vim会实时匹配
 set fileformats=unix,dos
 " colorscheme
-set background=dark
 set background=light
 colorscheme one "solarized8_flat desert molokai
 "缩进设置
@@ -245,8 +244,8 @@ if has("gui_running") || (has("nvim") && has("win32"))
     "setting for windows {{{
     if has("win32")
         " Windows 兼容配置
-        set guifont=DejaVu_Sans_Mono:h13:cANSI
-        set guifontwide=Yahei_Mono:b:h13:cGB2312
+        set guifont=DejaVu_Sans_Mono:h14:cANSI
+        "set guifontwide=Yahei_Mono:b:h13:cGB2312
         "autocmd GUIEnter * simalt ~x "最大化gvim
         "source $VIMRUNTIME/mswin.vim
         source $VIMRUNTIME/menu.vim
@@ -393,6 +392,7 @@ augroup E_run_map_setting
     autocmd BufRead,BufNewFile *.py nmap <Leader>5 :update<CR>:!python %<CR>
     autocmd BufRead,BufNewFile *.js nmap <Leader>5 :update<CR>:!node %<CR>
     autocmd BufRead,BufNewFile *.ts nmap <Leader>5 :update<CR>:!ts-node %<CR>
+    autocmd BufRead,BufNewFile *.rs nmap <Leader>5 :update<CR>:!cargo run<CR>
 augroup end
 "}}}
 
