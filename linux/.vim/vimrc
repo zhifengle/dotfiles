@@ -269,8 +269,8 @@ if has("gui_running") || (has("nvim") && has("win32"))
             autocmd BufRead *.py nmap <C-F5> :w<CR>:!ipython -i %<CR>
             "autocmd BufRead *.py nmap <S-F5> :w<CR>:!idle.py -e %<CR>
             autocmd BufRead,BufNewFile *.c nmap <Leader>5 :w<CR>:!gcc -Wall % -g -o %<.exe<CR>
-            autocmd FileType cpp nmap <Leader>5 :w<CR>:!gcc++ -Wall % -g -o %<.exe<CR>
-            autocmd FileType c,cpp nmap <Leader>6 :!./%<.exe<CR>
+            autocmd FileType cpp nmap <Leader>5 :w<CR>:!g++ -Wall % -g -o %<.exe<CR>
+            autocmd FileType c,cpp nmap <Leader>6 :!%<.exe<CR>
         augroup END
         " }}}
         "vimwiki
