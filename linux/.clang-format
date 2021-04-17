@@ -1,0 +1,18 @@
+#https://clang.llvm.org/docs/ClangFormatStyleOptions.html
+---
+ColumnLimit: 100
+IndentWidth: 2
+AlignTrailingComments: true
+UseTab: Never
+---
+Language: Cpp
+BasedOnStyle: Chromium
+IndentWidth: 4
+# Force pointers to the type for C++.
+DerivePointerAlignment: false
+PointerAlignment: Left
+BreakBeforeBraces: Mozilla
+#BinPackParameters: false
+#BinPackArguments: false
+#BreakConstructorInitializersBeforeComma: true
+---
