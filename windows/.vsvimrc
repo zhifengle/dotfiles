@@ -1,0 +1,22 @@
+let mapleader=" "
+set number
+set hls
+set history=1000
+vmap <C-C> "+y<Esc>
+inoremap <C-a> <C-o>^
+inoremap <C-e> <End>
+inoremap <C-f> <Right>
+inoremap <C-b> <Left>
+" 复制粘贴
+vnoremap <Leader>y "+y
+vnoremap <Leader>d "+d
+nnoremap <Leader>p "+p
+nnoremap <Leader>P "+P
+vnoremap <Leader>p "+p
+vnoremap <Leader>P "+P
+
+nnoremap <Leader>ef :vsc Edit.FormatDocument<CR>
+nnoremap <Leader>ff :vsc Edit.Find<CR>
+nnoremap <Space><Space> :vsc Tools.InvokeAceJumpCommand<CR>
+
+nnoremap <Leader>vs :source ~/.vsvimrc<CR>
