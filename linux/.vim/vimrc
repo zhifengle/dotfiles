@@ -188,14 +188,6 @@ if has("unix")
     "set guifont=Yahei\ Mono\ 13
     "set guifont=Source\ Code\ Pro\ 13
     let g:vimwiki_use_mouse = 1
-    "    let g:vimwiki_list = [{'path': '~/vimwiki/',
-    "    \ 'path_html': '~/vimwiki/html/',
-    "    \ 'html_header': '~/vimwiki/template/header.tpl',}]
-    let wiki_1 = {}
-    let wiki_1.path = '~/vimwiki/'
-    let wiki_1.html_template = "~/vimwiki/template/header.tpl"
-    let wiki_1.nested_syntaxes = {'python': 'python', 'c++': 'cpp'}
-    let wiki_1.path_html = '~/vimwiki/html/'
 
     let wiki_2 = {}
     let wiki_2.path = '~/my_notes/'
@@ -203,7 +195,7 @@ if has("unix")
     let wiki_2.syntax = 'markdown'
     let wiki_2.ext = '.md'
 
-    let g:vimwiki_list = [wiki_2, wiki_1]
+    let g:vimwiki_list = [wiki_2]
     map <silent> <Leader>ee :e $HOME/.vim/vimrc<cr>
     " has gui  gvim
     "key binding for compile or run {{{
@@ -275,14 +267,6 @@ if has("gui_running") || (has("nvim") && has("win32"))
         " }}}
         "vimwiki
         let g:vimwiki_use_mouse = 1
-        "    let g:vimwiki_list = [{'path': '~/vimwiki/',
-        "    \ 'path_html': '~/vimwiki/html/',
-        "    \ 'html_header': '~/vimwiki/template/header.tpl',}]
-        let wiki_1 = {}
-        let wiki_1.path = 'E:/vimwiki/'
-        let wiki_1.html_template = "E:/vimwiki/template/header.tpl"
-        let wiki_1.nested_syntaxes = {'python': 'python', 'c++': 'cpp'}
-        let wiki_1.path_html = 'E:/vimwiki/html/'
 
         let wiki_2 = {}
         let wiki_2.path = 'E:/my_notes/'
@@ -290,7 +274,7 @@ if has("gui_running") || (has("nvim") && has("win32"))
         let wiki_2.syntax = 'markdown'
         let wiki_2.ext = '.md'
 
-        let g:vimwiki_list = [wiki_2, wiki_1]
+        let g:vimwiki_list = [wiki_2]
     endif
     " end of setting for windows }}}
 else
@@ -392,6 +376,7 @@ augroup E_run_map_setting
     autocmd BufRead,BufNewFile *.js nmap <Leader>5 :update<CR>:!node %<CR>
     autocmd BufRead,BufNewFile *.ts nmap <Leader>5 :update<CR>:!ts-node %<CR>
     autocmd BufRead,BufNewFile *.rs nmap <Leader>5 :update<CR>:!cargo run<CR>
+    autocmd BufRead,BufNewFile *.rs nmap <Leader>6 :update<CR>:!cargo test<CR>
 augroup end
 "}}}
 
@@ -576,6 +561,7 @@ if exists('g:plugs["coc.nvim"]')
     command! -nargs=0 Prettier :CocCommand prettier.formatFile
     autocmd FileType vimwiki,markdown let b:coc_suggest_disable = 1
     nnoremap <silent> <Leader>k :call <SID>show_documentation()<CR>
+    command! -nargs=0 ReloadRustAnalyzerServer :CocCommand rust-analyzer.reload
     " overwrite Autoformat;
     autocmd FileType javascript,typescript,typescriptreact,json,javascriptreact,typescript.tsx nnoremap <Leader>ef :Prettier<CR>
 endif
