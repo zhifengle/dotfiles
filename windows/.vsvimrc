@@ -20,3 +20,4 @@ nnoremap <Leader>ff :vsc Edit.Find<CR>
 nnoremap <Space><Space> :vsc Tools.InvokeAceJumpCommand<CR>
 
 nnoremap <Leader>vs :source ~/.vsvimrc<CR>
+nnoremap <Leader>q :vsc VAssistX.RefactorContextMenu<CR>
