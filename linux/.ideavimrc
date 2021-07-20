@@ -33,6 +33,7 @@ nnoremap <Leader>ff :action Find<CR>
 
 nnoremap <Leader>nj :action NewJavaScriptFile<CR>
 nnoremap <Leader>K :action QuickJavaDoc<CR>
+" ShowIntentionActions   默认 <A-CR>
 " comment
 nnoremap <Leader>ci :action CommentByLineComment<CR>
 nnoremap <Leader>cl :action CommentByLineComment<CR>
