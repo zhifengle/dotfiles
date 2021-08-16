@@ -2,6 +2,23 @@
 ; #Warn  ; Enable warnings to assist with detecting common errors.
 SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
 SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
+SetTitleMatchMode 2
+
+GroupAdd, dict, ahk_exe DeepL.exe
+GroupAdd, dict, ahk_exe EBWin4.exe
+GroupAdd, dict, ahk_exe EBWin.exe
+GroupAdd, dict, ahk_exe chrome.exe
+GroupAdd, dict, ahk_exe gvim.exe
+
+global googleTranslateSearchX := 910
+global googleTranslateSearchY := 490
+global googleTranslateCopyX := 1632
+global googleTranslateCopyY := 709
+
+global deepLSearchX := 751
+global deepLSearchY := 205
+global deepLCopyX := 1435
+global deepLCopyY := 883
 
 clickBtn(x, y) {
     MouseGetPos, xpos, ypos
@@ -13,6 +30,18 @@ clickBtn(x, y) {
 inputSearchBtn(x, y) {
     MouseClick, left, x, y
     Sleep, 50
+    Send, ^a{BS}^v
+    Sleep, 100
+    Send, {Enter}
+}
+
+
+; 输入框搜索 vim，支持 Enter 搜索
+inputSearchBtnVim() {
+    Send, {Esc}
+    Sleep, 100
+    Send, gi
+    Sleep, 200
     Send, ^a{BS}^v
     Sleep, 100
     Send, {Enter}
@@ -32,7 +61,7 @@ queryDeepL() {
     {
         return
     }
-    clearAndPaste(429, 138)
+    clearAndPaste(deepLSearchX, deepLSearchY)
 }
 
 ; 第一个标签
@@ -48,7 +77,7 @@ queryGoogle() {
     IfWinActive, %title%
     {
         ; 我的电脑里面的坐标
-        clearAndPaste(925,327)
+        clearAndPaste(googleTranslateSearchX,googleTranslateSearchY)
         return
     }
     ; chrome 第一个 tab
@@ -58,7 +87,7 @@ queryGoogle() {
     {
         return
     }
-    clearAndPaste(925,327)
+    clearAndPaste(googleTranslateSearchX,googleTranslateSearchY)
     ;MsgBox, Google 翻译 Ok!
 }
 queryEBwin() {
@@ -73,6 +102,16 @@ queryEBwin() {
     Send, {BS}
     Send, ^v{Enter}
 }
+queryEBwin4() {
+    WinActivate, ahk_exe EBWin4.exe
+    WinWaitActive, ahk_exe EBWin4.exe, , 2
+    if ErrorLevel
+    {
+        return
+    }
+    ControlSetText, Edit1, %clipboard%, ahk_exe EBWin4.exe
+    ControlSend, Edit1, {Enter}, ahk_exe EBWin4.exe
+}
 ;chrome 第二个标签，打开沪江小D
 queryHj() {
     SetTitleMatchMode 2
@@ -85,9 +124,7 @@ queryHj() {
     }
     IfWinActive, %title%
     {
-        Send,{PgUp}
-        Sleep, 100
-        inputSearchBtn(782, 322)
+        inputSearchBtnVim()
         return
     }
     ; chrome 第一个 tab
@@ -97,25 +134,34 @@ queryHj() {
     {
         return
     }
-    Send,{PgUp}
-    Sleep, 100
-    inputSearchBtn(782, 322)
+    inputSearchBtnVim()
+}
+writeWordsText() {
+    title = words.txt ahk_exe notepad++.exe
+    IfWinExist, %title%
+    {
+        ControlSend, Scintilla1, ^v{Enter}, %title%
+        return
+    }
+    ControlSend, Scintilla1, ^{Numpad1}, ahk_exe notepad++.exe
+    Sleep, 400
+    ControlSend, Scintilla1, ^v{Enter}, %title%
 }
 
 #IfWinActive ahk_exe DeepL.exe
 1::
-    clearAndPaste(429, 138)
+    clearAndPaste(deepLSearchX, deepLSearchY)
 return
 
 ;复制
 2::
-    clickBtn(403, 566)
+    clickBtn(deepLCopyX, deepLCopyY)
     Sleep, 200
     clipboard := Trim(clipboard, "`n`r`t ")
 return
 
 3::
-    clickBtn(429, 138)
+    clickBtn(deepLSearchX, deepLSearchY)
 return
 
 #IfWinActive ahk_exe EBWin.exe
@@ -125,35 +171,46 @@ return
     Send, {BS}
     Send, ^v{Enter}
 return
+#IfWinActive ahk_exe EBWin4.exe
+1::
+    ControlSetText, Edit1, %clipboard%, ahk_exe EBWin4.exe
+    ControlSend, Edit1, {Enter}, ahk_exe EBWin4.exe
+return
 
 #IfWinActive Google 翻译 - Google Chrome
 1::
-    clearAndPaste(925,327)
+    clearAndPaste(googleTranslateSearchX,googleTranslateSearchY)
 return
 
 2::
-    clickBtn(1470,489)
+    clickBtn(googleTranslateCopyX,googleTranslateCopyY)
     Sleep, 100
     clipboard := Trim(clipboard, "`n`r`t ")
 return
 
 3::
-    clickBtn(925,327)
+    clearAndPaste(googleTranslateSearchX,googleTranslateSearchY)
 return
 
-#IfWinActive ahk_exe gvim.exe
+#IfWinActive 沪江小D ahk_exe chrome.exe
+1::
+    inputSearchBtnVim()
+return
+
+#IfWinActive ahk_group dict
 F1::
     queryDeepL()
 return
 F2::
     queryGoogle()
 return
+F3::
+    queryEBwin4()
+return
 F4::
     queryHj()
 return
-
-
-#IfWinActive
-F3::
-    queryEBwin()
+; 写入一些记录
+F5::
+    writeWordsText()
 return
