@@ -358,7 +358,7 @@ else
     nnoremap <Leader>fl :CtrlPLine<CR>
 endif
 " git
-nnoremap <Leader>gs :Gstatus<CR>
+nnoremap <Leader>gs :Git<CR>
 nnoremap <Leader>gl :GV!<CR>
 
 augroup E_map_setting
