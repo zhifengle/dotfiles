@@ -33,7 +33,8 @@ nnoremap <Leader>ff :action Find<CR>
 
 nnoremap <Leader>nj :action NewJavaScriptFile<CR>
 nnoremap <Leader>K :action QuickJavaDoc<CR>
-" ShowIntentionActions   默认 <A-CR>
+"使用默认的 alt + enter
+"nnoremap <Leader>q :action QuickActions<CR>
 " comment
 nnoremap <Leader>ci :action CommentByLineComment<CR>
 nnoremap <Leader>cl :action CommentByLineComment<CR>
@@ -48,3 +49,4 @@ nnoremap <Space>ef :action ReformatCode<CR>
 " easymotion
 set easymotion
 nnoremap <Leader>vs :source ~/.ideavimrc<CR>
+nnoremap <c-l> :nohls<CR>
