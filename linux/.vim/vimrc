@@ -109,14 +109,7 @@ Plug 'Chiel92/vim-autoformat', {'on': 'Autoformat'}
 "Plug 'rust-lang/rust.vim'
 Plug 'tweekmonster/startuptime.vim', { 'on': 'StartupTime' }
 Plug 'nathanaelkane/vim-indent-guides', { 'on': 'IndentGuidesToggle' }
-" 2019-06-26 11:29
-Plug 'kana/vim-textobj-user'
-Plug 'kana/vim-textobj-indent'
-Plug 'kana/vim-textobj-syntax'
-Plug 'kana/vim-textobj-function', { 'for':['c', 'cpp', 'vim', 'java', 'javascript'] }
-Plug 'thinca/vim-textobj-function-javascript'
-Plug 'sgur/vim-textobj-parameter'
-Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & npm install'  }
+"Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & npm install'  }
 call plug#end()
 "}}}
 
@@ -159,7 +152,7 @@ set incsearch "在输入要搜索的文字时，vim会实时匹配
 set fileformats=unix,dos
 " colorscheme
 set background=light
-colorscheme one "solarized8_flat desert molokai
+colorscheme one "solarized8_flat desert molokai one
 "缩进设置
 filetype indent on
 set tabstop=4 "让一个tab等于4个空格
@@ -235,7 +228,8 @@ if has("gui_running") || (has("nvim") && has("win32"))
     "setting for windows {{{
     if has("win32")
         " Windows 兼容配置
-        set guifont=DejaVu_Sans_Mono:h14:cANSI
+        "set guifont=DejaVu_Sans_Mono:h14:cANSI
+        let &guifont='DejaVuSansMono NF:h14:cANSI'
         "set guifontwide=Yahei_Mono:b:h13:cGB2312
         "autocmd GUIEnter * simalt ~x "最大化gvim
         "source $VIMRUNTIME/mswin.vim
@@ -376,7 +370,6 @@ augroup E_run_map_setting
     autocmd BufRead,BufNewFile *.js nmap <Leader>5 :update<CR>:!node %<CR>
     autocmd BufRead,BufNewFile *.ts nmap <Leader>5 :update<CR>:!ts-node %<CR>
     autocmd BufRead,BufNewFile *.rs nmap <Leader>5 :update<CR>:!cargo run<CR>
-    autocmd BufRead,BufNewFile *.rs nmap <Leader>6 :update<CR>:!cargo test<CR>
 augroup end
 "}}}
 
@@ -561,7 +554,6 @@ if exists('g:plugs["coc.nvim"]')
     command! -nargs=0 Prettier :CocCommand prettier.formatFile
     autocmd FileType vimwiki,markdown let b:coc_suggest_disable = 1
     nnoremap <silent> <Leader>k :call <SID>show_documentation()<CR>
-    command! -nargs=0 ReloadRustAnalyzerServer :CocCommand rust-analyzer.reload
     " overwrite Autoformat;
     autocmd FileType javascript,typescript,typescriptreact,json,javascriptreact,typescript.tsx nnoremap <Leader>ef :Prettier<CR>
 endif
@@ -760,6 +752,18 @@ if has("unix") && executable("rg")
     command! -bar -bang -complete=file -nargs=? FindFile7
                 \ execute s:findFile(<q-args>)
 endif
+augroup wiki_syn
+    " 自定义 hi; syn keyword
+    highlight MyEmoji guifg=#FFF80A
+    "autocmd Syntax vimwiki syn keyword pEmoji 💡 📌
+    "autocmd Syntax vimwiki hi def link pEmoji Label
+    autocmd Syntax vimwiki syn keyword rEmoji 💊 💣 ❌ 👍 👎 👉
+    autocmd Syntax vimwiki syn keyword gEmoji 😂
+    " Label
+    autocmd Syntax vimwiki hi def link rEmoji WarningMsg
+    autocmd Syntax vimwiki hi def link gEmoji Constant
+    autocmd Syntax vimwiki match Label /💡\|📌/
+augroup END
 
 " textobj 2019-06-26
 " function: f  param: ,  syntax: y indent: i
