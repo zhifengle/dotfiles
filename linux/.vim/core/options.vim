@@ -1,4 +1,6 @@
-set termguicolors
+set background=light
+colorscheme solarized8_flat "solarized8_flat desert molokai one
+"set termguicolors  "已在 vimrc 设置
 let mapleader="\<Space>"
 let maplocalleader="\<Space>"
 if has('autocmd')
@@ -55,3 +57,13 @@ augroup E_indent
     " indent for web
     autocmd FileType json,vue,javascript,typescript,html,css,scss,less,lua setlocal ts=2 sw=2  et
 augroup END
+
+" setting for gvim or terminal {{{
+if has("gui_running")
+    set guioptions=
+    set lines=36
+    set columns=90
+    let &guifont='DejaVuSansMono NF:h14:cANSI'
+    "language messages zh_CN.utf-8
+endif
+" gvim }}}

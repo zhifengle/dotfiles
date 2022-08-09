@@ -34,7 +34,6 @@ nnoremap <Leader>ed :lcd %:p:h<CR>
 nnoremap <Leader>e2 :setlocal ts=2 sw=2 et<CR>
 nnoremap <Leader>e4 :setlocal ts=4 sw=4 et<CR>
 
-"map <silent> <Leader>ee :exec printf('e %s/%s', stdpath('config'), 'init.vim')<CR>:lcd %:p:h<CR>
 map <silent> <Leader>ee :e $MYVIMRC<CR>:lcd %:p:h<CR>
 
 augroup E_map_setting

@@ -1,11 +1,9 @@
-lua require('plugins')
-
 "vimwiki
 let g:vimwiki_use_mouse = 1
 
 let wiki_2 = {}
 let wiki_2.path = '~/Documents/my_notes/'
-if !isdirectory("E:/my_notes")
+if isdirectory("E:/my_notes")
     let wiki_2.path = 'E:/my_notes'
 endif
 let wiki_2.index = 'my_markdown_notes'
@@ -49,13 +47,10 @@ let g:UltiSnipsJumpBackwardTrigger="<c-b>"
 let g:snips_email="zhifengle@gmail.com"
 let g:snips_author="22earth"
 let g:snips_github="22earth"
-"let g:UltiSnipsSnippetDirectories=["UltiSnips", "mycoolsnippets"]
+let g:UltiSnipsSnippetDirectories=["UltiSnips", "mycoolsnippets"]
 
 
 nnoremap <Leader>2 :NERDTreeToggle<CR>
-"nnoremap <Leader>3 :call plug#load('tagbar')<CR>:TagbarToggle<CR>
-"nnoremap <Leader>3 :TagbarToggle<CR>
-
 
 let g:ctrlp_custom_ignore = {
             \ 'dir':  '\v[\/](\.(git|hg|svn))|(node_modules|dist)|(debug)',

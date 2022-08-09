@@ -2,7 +2,7 @@ local utils = require("utils")
 local fn = vim.fn
 
 vim.g.package_home = fn.stdpath("data") .. "/site/pack/packer/"
-local packer_install_dir = vim.g.package_home .. "/start/packer.nvim"
+local packer_install_dir = vim.g.package_home .. "/opt/packer.nvim"
 
 -- Load packer.nvim
 vim.cmd("packadd packer.nvim")
@@ -28,8 +28,8 @@ packer.startup({
     use { 'vim-airline/vim-airline', cmd = { 'AirlineToggle' } }
     use 'jiangmiao/auto-pairs'
     use 'sickill/vim-pasta'
-    use 'SirVer/ultisnips'
-    use 'honza/vim-snippets'
+    --use 'SirVer/ultisnips'
+    --use 'honza/vim-snippets'
     use 'andymass/vim-matchup'
     use 'lifepillar/vim-solarized8'
     use 'vimwiki/vimwiki'
