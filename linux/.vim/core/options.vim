@@ -17,7 +17,8 @@ set fileencodings=ucs-bom,utf-8,cp936,gb18030,big5,euc-jp,euc-kr,latin1
 set number
 "set cc=80
 syntax on "打开高亮
-set autoread
+set autoread                                                                                                                                                                                    
+au CursorHold * checktime  
 set wildmenu
 "set cul "高亮光标所在行
 "set cuc

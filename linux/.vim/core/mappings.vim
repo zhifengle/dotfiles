@@ -39,7 +39,7 @@ map <silent> <Leader>ee :e $MYVIMRC<CR>:lcd %:p:h<CR>
 augroup E_map_setting
     autocmd!
     " 自动运用设置
-    autocmd BufWritePost init.vim,.vimrc,.gvimrc,_vimrc silent source %
+    "autocmd BufWritePost init.vim,.vimrc,.gvimrc,_vimrc silent source %
     autocmd FileType qf nnoremap <buffer> o <CR><C-w>j
     autocmd BufRead,BufNewFile *.py nmap <Leader>5 :update<CR>:!python %<CR>
     autocmd BufRead,BufNewFile *.js nmap <Leader>5 :update<CR>:!node %<CR>

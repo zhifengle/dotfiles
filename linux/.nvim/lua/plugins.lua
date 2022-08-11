@@ -2,10 +2,12 @@ local utils = require("utils")
 local fn = vim.fn
 
 vim.g.package_home = fn.stdpath("data") .. "/site/pack/packer/"
-local packer_install_dir = vim.g.package_home .. "/opt/packer.nvim"
+local install_path = vim.g.package_home .. "/start/packer.nvim"
 
--- Load packer.nvim
-vim.cmd("packadd packer.nvim")
+if fn.empty(fn.glob(install_path)) > 0 then
+  packer_bootstrap = fn.system({'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path})
+  vim.cmd [[packadd packer.nvim]]
+end
 
 local packer = require("packer")
 local packer_util = require('packer.util')
@@ -14,35 +16,29 @@ packer.startup({
   function(use)
     -- it is recommened to put impatient.nvim before any other plugins
     use {'lewis6991/impatient.nvim', config = [[require('impatient')]]}
-
-    use({"wbthomason/packer.nvim", opt = true})
-    use 'tpope/vim-surround'
-    use 'tpope/vim-repeat'
-    use 'tpope/vim-fugitive'
-    use 'junegunn/gv.vim'
-    use 'tpope/vim-rsi'
-    use 'easymotion/vim-easymotion'
-    use 'preservim/nerdcommenter'
-    use { 'preservim/nerdtree', cmd = { 'NERDTreeToggle' } }
-    use { 'godlygeek/tabular', cmd = { 'Tabularize' } }
-    use { 'vim-airline/vim-airline', cmd = { 'AirlineToggle' } }
-    use 'jiangmiao/auto-pairs'
-    use 'sickill/vim-pasta'
-    --use 'SirVer/ultisnips'
-    --use 'honza/vim-snippets'
-    use 'andymass/vim-matchup'
-    use 'lifepillar/vim-solarized8'
-    use 'vimwiki/vimwiki'
-    use { 'editorconfig/editorconfig-vim', cmd = { 'EditorConfigReload' } }
+    use 'wbthomason/packer.nvim'
+    use { 'mattn/emmet-vim', opt = true, cmd = { 'EmmetInstall' } }
+    use {'kevinhwang91/nvim-bqf'}
+    use { 'liuchengxu/vista.vim' }
 
     use {
           'nvim-treesitter/nvim-treesitter',
           config = [[require('config.treesitter')]],
           run = function() require('nvim-treesitter.install').update({ with_sync = true }) end,
     }
-    use 'ctrlpvim/ctrlp.vim'
-    use { 'vim-autoformat/vim-autoformat', cmd = { 'Autoformat' } }
-	
+
+    -- replacement of easymotion
+    use {
+      'phaazon/hop.nvim',
+      event = "VimEnter",
+      config = function()
+        vim.defer_fn(function() require('config.nvim_hop') end, 2000)
+      end
+    }
+
+    if packer_bootstrap then
+      require('packer').sync()
+    end
   end,
   config = {
     max_jobs = 16,
@@ -58,3 +54,8 @@ end
 require("nvim-treesitter.install").command_extra_args = {
   curl = { "--proxy", "http://127.0.0.1:10809" },
 }
+--vim.cmd('source core/plugins.vim')
+-- VimScript setting {{{
+--vim.cmd([[
+--]])
+-- }}}

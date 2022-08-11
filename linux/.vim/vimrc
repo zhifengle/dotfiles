@@ -43,12 +43,10 @@ set termguicolors
 " packages {{{
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
-Plug 'tpope/vim-fugitive'
-Plug 'junegunn/gv.vim'
+Plug 'tpope/vim-fugitive' | Plug 'junegunn/gv.vim'
 Plug 'tpope/vim-rsi'
 Plug 'tpope/vim-obsession'
-Plug 'easymotion/vim-easymotion'
-Plug 'mattn/emmet-vim'
+Plug 'ctrlpvim/ctrlp.vim'
 Plug 'preservim/nerdcommenter'
 Plug 'preservim/nerdtree', { 'on':  'NERDTreeToggle' } | Plug '22earth/nerdtree-execute', { 'on':  'NERDTreeToggle' }
 Plug 'vimwiki/vimwiki'
@@ -74,10 +72,11 @@ Plug 'nathanaelkane/vim-indent-guides', { 'on': 'IndentGuidesToggle' }
 Plug 'lifepillar/vim-solarized8'
 Plug 'rakr/vim-one'
 
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 if has("nvim")
-    Plug 'neoclide/coc.nvim', {'branch': 'release'}
-    Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+    "Plug 'mattn/emmet-vim', { 'on': 'EmmetInstall' }
 else
+    Plug 'easymotion/vim-easymotion'
     Plug 'sheerun/vim-polyglot'
 endif
 call plug#end()
@@ -97,16 +96,9 @@ for s:fname in s:core_conf_files
 endfor
 " core config }}}
 
-" setting for gvim or terminal {{{
-if has("gui_running")
-    set guioptions=
-    set lines=36
-    set columns=90
-    let &guifont='DejaVuSansMono NF:h14:cANSI'
-    "language messages zh_CN.utf-8
+if !has("nvim")
+ let g:coc_start_at_startup = v:false
 endif
-" gvim }}}
-
 " web development setting{{{
 func! ToggleJsFiletype() "{{{
     if &filetype == 'javascript'
