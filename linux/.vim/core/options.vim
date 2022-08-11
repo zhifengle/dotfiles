@@ -65,6 +65,8 @@ if has("gui_running")
     set lines=36
     set columns=90
     let &guifont='DejaVuSansMono NF:h14:cANSI'
+    let &guifontwide='Microsoft YaHei Mono:h14:cGB2312'
+    "let &guifontwide='等距更纱黑体 SC:cGB2312'
     "language messages zh_CN.utf-8
 endif
 " gvim }}}

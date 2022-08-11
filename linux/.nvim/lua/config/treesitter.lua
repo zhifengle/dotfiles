@@ -6,3 +6,7 @@ require("nvim-treesitter.configs").setup({
     disable = {}, -- list of language that will be disabled
   },
 })
+
+require("nvim-treesitter.install").command_extra_args = {
+  curl = { "--proxy", "http://127.0.0.1:10809" },
+}

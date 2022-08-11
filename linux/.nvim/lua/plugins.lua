@@ -19,15 +19,12 @@ packer.startup({
     use 'wbthomason/packer.nvim'
     use { 'mattn/emmet-vim', opt = true, cmd = { 'EmmetInstall' } }
     use {'kevinhwang91/nvim-bqf'}
-    use { 'liuchengxu/vista.vim' }
 
     use {
           'nvim-treesitter/nvim-treesitter',
           config = [[require('config.treesitter')]],
           run = function() require('nvim-treesitter.install').update({ with_sync = true }) end,
     }
-
-    -- replacement of easymotion
     use {
       'phaazon/hop.nvim',
       event = "VimEnter",
@@ -35,7 +32,19 @@ packer.startup({
         vim.defer_fn(function() require('config.nvim_hop') end, 2000)
       end
     }
+    -- copy jdhao/nvim-config{{{
+    use {'kyazdani42/nvim-web-devicons', event = 'VimEnter'}
 
+    use {
+      'nvim-lualine/lualine.nvim',
+      event = 'VimEnter',
+      config = [[require('config_jdhao.statusline')]]
+    }
+
+    use({ "akinsho/bufferline.nvim", event = "VimEnter", config = [[require('config_jdhao.bufferline')]] })
+
+    use { 'ii14/emmylua-nvim', ft = 'lua' }
+    -- }}}
     if packer_bootstrap then
       require('packer').sync()
     end
@@ -50,10 +59,6 @@ local status, _ = pcall(require, 'packer_compiled')
 if not status then
   vim.notify("Error requiring packer_compiled.lua: run PackerSync to fix!")
 end
-
-require("nvim-treesitter.install").command_extra_args = {
-  curl = { "--proxy", "http://127.0.0.1:10809" },
-}
 --vim.cmd('source core/plugins.vim')
 -- VimScript setting {{{
 --vim.cmd([[

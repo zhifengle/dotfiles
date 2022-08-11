@@ -1,6 +1,6 @@
--- vim.cmd[[ hi HopNextKey cterm=bold ctermfg=176 gui=bold guibg=#ff00ff guifg=#ffffff ]]
--- vim.cmd[[ hi HopNextKey1 cterm=bold ctermfg=176 gui=bold guibg=#ff00ff guifg=#ffffff ]]
--- vim.cmd[[ hi HopNextKey2 cterm=bold ctermfg=176 gui=bold guibg=#ff00ff guifg=#ffffff ]]
+-- ref: vscodevim easymotionMarkerForegroundColorTwoCharFirst  easymotionMarkerForegroundColorTwoCharSecond
+vim.api.nvim_command('highlight default HopNextKey1  guifg=#ffb400 gui=bold ctermfg=198 cterm=bold')
+vim.api.nvim_command('highlight default HopNextKey2  guifg=#b98300 gui=bold ctermfg=198 cterm=bold')
 
 require('hop').setup({
   case_insensitive = true,
@@ -13,6 +13,7 @@ vim.api.nvim_set_keymap("n", "<Leader><Leader>b", "<cmd>HopWordBC<CR>", {noremap
 vim.api.nvim_set_keymap("n", "<Leader><Leader>w", "<cmd>HopWordAC<CR>", {noremap=true})
 vim.api.nvim_set_keymap("n", "<Leader><Leader>j", "<cmd>HopLineAC<CR>", {noremap=true})
 vim.api.nvim_set_keymap("n", "<Leader><Leader>k", "<cmd>HopLineBC<CR>", {noremap=true})
+vim.api.nvim_set_keymap("n", "<Leader><Leader>f", "<cmd>HopChar2<CR>", {noremap=true})
 
 -- visual mode (easymotion-like)
 vim.api.nvim_set_keymap("v", "<Leader><Leader>w", "<cmd>HopWordAC<CR>", {noremap=true})

@@ -12,9 +12,12 @@ let wiki_2.ext = '.md'
 
 let g:vimwiki_list = [wiki_2]
 augroup e_plugins_setting
+    autocmd!
     autocmd FileType vimwiki map <F8> :Calendar<CR>
     " no auto indent when pasting
     autocmd FileType vimwiki nnoremap <Leader>p moo<Esc>"+p`o
+    " close keep change buffer
+    autocmd FileType vimwiki set hidden
     " 自定义 hi; syn keyword
     highlight MyEmoji guifg=#FFF80A
     "autocmd Syntax vimwiki syn keyword pEmoji 💡 📌
@@ -51,6 +54,17 @@ let g:UltiSnipsSnippetDirectories=["UltiSnips", "mycoolsnippets"]
 
 
 nnoremap <Leader>2 :NERDTreeToggle<CR>
+nnoremap <silent> <Leader>3 :<C-U>Vista!!<CR>
+let g:vista#renderer#icons = {
+      \ 'member': '',
+      \ }
+
+let g:vista_sidebar_position = 'vertical topleft'
+" Do not echo message on command line
+let g:vista_echo_cursor = 0
+" Stay in current window when vista window is opened
+let g:vista_stay_on_open = 0
+
 
 nnoremap <Leader>b :CtrlPBuffer<CR>
 nnoremap <Leader>fl :CtrlPLine<CR>
@@ -59,8 +73,9 @@ let g:ctrlp_custom_ignore = {
             \ 'file': '\v\.(exe|so|dll)$',
             \ 'link': 'SOME_BAD_SYMBOLIC_LINKS',
             \ }
-let g:AutoPairsFlyMode = 1
 
+
+let g:AutoPairsFlyMode = 1
 autocmd filetype javascript let g:NERDSpaceDelims = 1
 let g:NERDDefaultAlign = 'left'
 " Allow commenting and inverting empty lines (useful when commenting a region)

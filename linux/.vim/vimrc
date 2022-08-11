@@ -3,13 +3,12 @@
 " https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 " key bind
 " leader 2 nerdtree, leader 3 tagbar
+" install universal-ctags
 " cpp: leader 5 make, leader 6 run demo
 " python: F5 use python in environment, F6 use user defined python path
 " use config file in another machine need to do some modification
 " linux {{{
-" font: DejaVu\ Sans\ Mono\
-" DejaVuSansMono
-" install ctags
+" DejaVuSansMono NF
 " fzf need install ripgrep
     " config: export FZF_DEFAULT_COMMAND='rg --files'
 " }}}
@@ -43,18 +42,24 @@ set termguicolors
 " packages {{{
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
-Plug 'tpope/vim-fugitive' | Plug 'junegunn/gv.vim'
+Plug 'tpope/vim-fugitive'
+    \ | Plug 'junegunn/gv.vim', {'on': 'GV'}
+    \ | Plug 'christoomey/vim-conflicted', {'on': 'Conflicted'}
+    \ | Plug 'rbong/vim-flog', { 'on': 'Flog'}
 Plug 'tpope/vim-rsi'
 Plug 'tpope/vim-obsession'
-Plug 'ctrlpvim/ctrlp.vim'
 Plug 'preservim/nerdcommenter'
 Plug 'preservim/nerdtree', { 'on':  'NERDTreeToggle' } | Plug '22earth/nerdtree-execute', { 'on':  'NERDTreeToggle' }
+"Plug 'preservim/tagbar'
+if executable("ctags")
+    Plug 'liuchengxu/vista.vim'
+endif
+Plug 'ctrlpvim/ctrlp.vim'
 Plug 'vimwiki/vimwiki'
 Plug 'mattn/calendar-vim', {'for': 'vimwiki'}
 Plug 'jiangmiao/auto-pairs'
 Plug 'godlygeek/tabular', { 'on': 'Tabularize' }
 Plug 'vim-airline/vim-airline', { 'on': 'AirlineToggle' }
-"Plug 'preservim/tagbar'
 Plug 'Valloric/ListToggle'
 Plug 'vim-scripts/Modeliner', { 'on': 'Modeliner' }
 "Plug 'w0rp/ale'
