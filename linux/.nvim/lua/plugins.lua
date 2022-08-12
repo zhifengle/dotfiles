@@ -41,7 +41,7 @@ packer.startup({
       config = [[require('config_jdhao.statusline')]]
     }
 
-    use({ "akinsho/bufferline.nvim", event = "VimEnter", config = [[require('config_jdhao.bufferline')]] })
+    -- use({ "akinsho/bufferline.nvim", event = "VimEnter", config = [[require('config_jdhao.bufferline')]] })
 
     use { 'ii14/emmylua-nvim', ft = 'lua' }
     -- }}}

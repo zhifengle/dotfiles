@@ -49,7 +49,7 @@ Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rsi'
 Plug 'tpope/vim-obsession'
 Plug 'preservim/nerdcommenter'
-Plug 'preservim/nerdtree', { 'on':  'NERDTreeToggle' } | Plug '22earth/nerdtree-execute', { 'on':  'NERDTreeToggle' }
+Plug 'preservim/nerdtree', { 'on':  ['NERDTreeToggle', 'NERDTreeFromBookmark'] }
 "Plug 'preservim/tagbar'
 if executable("ctags")
     Plug 'liuchengxu/vista.vim'
