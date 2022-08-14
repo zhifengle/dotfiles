@@ -1,5 +1,5 @@
-nnoremap ; :
-vnoremap ; :
+"nnoremap ; :
+"vnoremap ; :
 map <C-S> :update<CR>
 vmap <C-S> <C-C>:update<CR>
 imap <C-S> <C-O>:update<CR>
