@@ -28,13 +28,16 @@ augroup e_plugins_setting
     autocmd Syntax vimwiki hi def link rEmoji WarningMsg
     autocmd Syntax vimwiki hi def link gEmoji Constant
     autocmd Syntax vimwiki match Label /💡\|📌/
-    autocmd FileType git nnoremap <silent> <Leader>j :exe <SNR>67_NextItem(v:count1)<CR>
-    autocmd FileType git nnoremap <silent> <Leader>k :exe <SNR>67_PreviousItem(v:count1)<CR>
+    autocmd FileType git,fugitive nmap <buffer> <Leader>j )
+    autocmd FileType git,fugitive nmap <buffer> <Leader>k (
+    autocmd FileType git,fugitive nmap <buffer> <C-n> )
+    autocmd FileType git,fugitive nmap <buffer> <C-p> (
 augroup END
 
 " git
 nnoremap <Leader>gs :Git<CR>
-nnoremap <Leader>gl :GV!<CR>
+nnoremap <Leader>gl :Git log<CR>
+nnoremap <Leader>gv :GV!<CR>
 
 vmap <silent> <Leader>c<Space> <Plug>NERDCommenterToggle
 nmap <silent> <Leader>c<Space> <Plug>NERDCommenterToggle

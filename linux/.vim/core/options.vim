@@ -24,7 +24,14 @@ set wildmenu
 "set cuc
 set showcmd
 "set autochdir
-set fdm=marker "marker indent
+set fdm=marker "marker indent syntax
+augroup E_fold
+    autocmd!
+    "可以在这里设置多头{rtp}/ftplugin/{thefiletype}.vim
+    autocmd FileType vim,lua,vimwiki setlocal fdm=marker
+    autocmd FileType git,fugitive setlocal fdm=syntax
+    autocmd FileType python setlocal fdm=indent | setlocal fdl=3
+augroup END
 "set nofoldenable
 "set foldlevelstart=99
 set complete-=i
@@ -51,8 +58,10 @@ set smarttab "开启新行的sta
 set autoindent "自动缩进
 set smartindent "智能自动缩进
 set diffopt+=iwhite
-
+"https://github.com/tpope/vim-fugitive/issues/523
+set diffopt+=vertical
 augroup E_indent
+    autocmd!
     autocmd FileType python setlocal ts=4 sw=4 et sta
     autocmd FileType make setlocal ts=8 sw=8 noexpandtab
     " indent for web
