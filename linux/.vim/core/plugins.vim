@@ -92,6 +92,7 @@ nnoremap <Leader>ec :call plug#load('editorconfig-vim')<CR>:EditorConfigReload<C
 if executable('rg')
     set grepprg=rg\ --vimgrep
     set grepformat=%f:%l:%c:%m
+    let g:ctrlp_user_command = 'rg %s --files --color=never --glob ""'
 endif
 
 let g:user_emmet_install_global = 0
