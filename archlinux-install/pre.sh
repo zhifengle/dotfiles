@@ -14,10 +14,17 @@ mkdir -p /mnt/boot/efi
 mount /dev/sda1 /mnt/boot/efi
 
 ### mirror
-grep -A 1 'China' /etc/pacman.d/mirrorlist | grep -v '\-\-' > mr
-cat /etc/pacman.d/mirrorlist >> mr
-cat mr >> /etc/pacman.d/mirrorlist
-pacstrap -i /mnt base base-devel
+#grep -A 1 'China' /etc/pacman.d/mirrorlist | grep -v '\-\-' > mr
+#cat /etc/pacman.d/mirrorlist >> mr
+#cat mr >> /etc/pacman.d/mirrorlist
+
+# 现在China源没有内置了
+# mirror.tuna.tsinghua.edu.cn
+vim /etc/pacman.d/mirrorlist
+
+pacman -Syy
+
+pacstrap -i /mnt linux base linux linux-firmware base-devel
 
 genfstab -U /mnt >> /mnt/etc/fstab
 
