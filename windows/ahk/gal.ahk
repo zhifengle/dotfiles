@@ -5,9 +5,18 @@ global game_path =
 global new_pid =
 global txt_path =
 global shortcut_key =
+global empty_line_key =
+global empty_line_key =
+global screenshot =
+global screenshot_key =
+global game_pic_path =
 OnExit("exit_function")
 IniRead, game_path, setting.ini, gal, game_path
 IniRead, shortcut_key, setting.ini, gal, shortcut_key
+IniRead, empty_line_key, setting.ini, gal, empty_line_key
+IniRead, screenshot_key, setting.ini, gal, screenshot_key
+IniRead, game_pic_path, setting.ini, gal, game_pic_path
+IniRead, screenshot, setting.ini, gal, screenshot
 IniRead, txt_path, setting.ini, gal, txt_path
 IniRead, enable_tool, setting.ini, gal, enable_tool
 IniRead, enable_txt, setting.ini, gal, enable_txt
@@ -38,17 +47,24 @@ GroupAdd, galgame, ahk_exe %game_exe%
 IniRead, ebwin, setting.ini, gal, ebwin
 SplitPath, ebwin, exe
 GroupAdd, ebwin, ahk_exe %exe%
+GroupAdd, galgame, ahk_exe %exe%
 ; ithvnr group
 IniRead, ithvnr, setting.ini, gal, ithvnr
-SplitPath, ithvnr, exe
-GroupAdd, ithvnr, ahk_exe %exe%
+SplitPath, ithvnr, ithvnr_exe
+GroupAdd, ithvnr, ahk_exe %ithvnr_exe%
+GroupAdd, galgame, ahk_exe %ithvnr_exe%
+; Magpie group
+IniRead, magpie, setting.ini, gal, magpie
+SplitPath, magpie, exe
+GroupAdd, magpie, ahk_exe %exe%
+
 
 Hotkey, IfWinActive, ahk_group galgame
 Hotkey,%shortcut_key%,SaveKeyExe
-Hotkey, IfWinActive, ahk_group ebwin
-Hotkey,%shortcut_key%,SaveKeyEBWin
-Hotkey, IfWinActive, ahk_group ithvnr
-Hotkey,%shortcut_key%,SaveKeyITHVNR
+Hotkey,%empty_line_key%,EmptyLineKey
+Hotkey,%screenshot_key%,ScreenshotKey
+;Hotkey, IfWinActive, ahk_group ebwin
+;Hotkey,%shortcut_key%,SaveKeyEBWin
 
 if (enable_tool = 1)
 	start_tools()
@@ -92,6 +108,18 @@ start_tools()
 		ithvnr := repalce_path_quote(ithvnr)
 		run_exe_file(ithvnr)
 	}
+	run_tool("magpie")
+	
+}
+run_tool(name)
+{
+	IniRead, exe_path, setting.ini, gal, %name%
+	exe_path := repalce_path_quote(exe_path)
+	SplitPath, exe_path, exe_name
+	IfWinNotExist, ahk_exe %exe_name%
+	{
+		run_exe_file(exe_path)
+	}
 }
 
 start_game()
@@ -134,6 +162,19 @@ append_txt()
 	if counter > 50
 		init_write_file()
 }
+append_line_txt()
+{
+    if !IsObject(file)
+    {
+        MsgBox, txt 文件不存在
+        counter := 0
+    }
+    else
+    {
+        text1 = `r
+        file.WriteLine(text1)
+    }
+}
 
 append_txt_old()
 {
@@ -151,30 +192,31 @@ append_txt_old()
 SaveKeyExe:
 append_txt()
 return
-MButton::
-;append_txt()
+EmptyLineKey:
+append_line_txt()
+return
+ScreenshotKey:
+WinGetTitle, Title, A
+SplitPath, game_path, game_exe
+target := RegExReplace(game_exe, "\.exe$", "")
+Run, %screenshot% -w "%Title%" -n "%target%", %game_pic_path%\%target%, hide, npPid
 return
 
 
 #IfWinActive ahk_group ebwin
 #include auto_copy.ahk
-SaveKeyEBWin:
-append_txt()
-return
 MButton::
-Send, ^a{BS}^v{Enter}
+; 输入单词
+ControlSetText, Edit1, %clipboard%, ahk_group ebwin
+ControlSend, Edit1, {Enter}, ahk_group ebwin
 return
 
 
 #IfWinActive ahk_group ithvnr
-SaveKeyITHVNR:
-append_txt()
-return
 MButton::
 ;MouseGetPos, xpos, ypos
 WinActivate, ahk_group ebwin
-Click, 126, 120
-Send, ^a{BS}^v{Enter}
-;MouseMove, %xpos%, %ypos%
-Click, 219, 141
+; 输入单词
+ControlSetText, Edit1, %clipboard%, ahk_group ebwin
+ControlSend, Edit1, {Enter}, ahk_group ebwin
 return

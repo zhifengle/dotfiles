@@ -1,5 +1,6 @@
 "vimwiki
 let g:vimwiki_use_mouse = 1
+let g:vimwiki_folding = 'custom'
 
 let wiki_2 = {}
 let wiki_2.path = '~/Documents/my_notes/'
