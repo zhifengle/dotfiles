@@ -19,6 +19,7 @@ IniRead, game_pic_path, setting.ini, gal, game_pic_path
 IniRead, screenshot, setting.ini, gal, screenshot
 IniRead, txt_path, setting.ini, gal, txt_path
 IniRead, enable_tool, setting.ini, gal, enable_tool
+IniRead, start_magpie, setting.ini, gal, start_magpie
 IniRead, enable_txt, setting.ini, gal, enable_txt
 
 clipboard := repalce_path_quote(clipboard)
@@ -66,6 +67,8 @@ Hotkey,%screenshot_key%,ScreenshotKey
 ;Hotkey, IfWinActive, ahk_group ebwin
 ;Hotkey,%shortcut_key%,SaveKeyEBWin
 
+if (start_magpie = 1)
+    run_tool("magpie")
 if (enable_tool = 1)
 	start_tools()
 if (enable_txt = 1)
@@ -108,7 +111,6 @@ start_tools()
 		ithvnr := repalce_path_quote(ithvnr)
 		run_exe_file(ithvnr)
 	}
-	run_tool("magpie")
 	
 }
 run_tool(name)
@@ -127,8 +129,8 @@ start_game()
 	IfWinNotExist, ahk_group galgame
 	{
 		IniRead, leproc, setting.ini, gal, leproc
-		IniRead, disable_le, setting.ini, gal, disable_le
-		if (disable_le = 1)
+		IniRead, enable_le, setting.ini, gal, enable_le
+		if (enable_le = 0)
 			Run, %game_path%,,, new_pid
 		else
 			Run, %leproc% %game_path%,,, new_pid
@@ -197,9 +199,13 @@ append_line_txt()
 return
 ScreenshotKey:
 WinGetTitle, Title, A
+WinGetClass, class, A
 SplitPath, game_path, game_exe
 target := RegExReplace(game_exe, "\.exe$", "")
-Run, %screenshot% -w "%Title%" -n "%target%", %game_pic_path%\%target%, hide, npPid
+pic_folder = %game_pic_path%\%target%
+if !FileExist(pic_folder)
+    FileCreateDir, %pic_folder%
+Run, %screenshot% -w "%Title%" -c "%class%" -n "%target%", %game_pic_path%\%target%, hide, npPid
 return
 
 
