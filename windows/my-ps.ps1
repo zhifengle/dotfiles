@@ -9,7 +9,7 @@ Function ssh_iop {
 }
 Function git_g {
     git config user.email  "zhifengle@gmail.com"
-    git config user.name "22earth"
+    git config user.name "zhifengle"
 }
 
 Function upload_iop_server() {

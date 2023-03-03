@@ -55,7 +55,7 @@ if executable("ctags")
     Plug 'liuchengxu/vista.vim'
 endif
 Plug 'ctrlpvim/ctrlp.vim'
-Plug 'vimwiki/vimwiki'
+Plug 'vimwiki/vimwiki', {'branch': 'dev'}
 Plug 'mattn/calendar-vim', {'for': 'vimwiki'}
 Plug 'jiangmiao/auto-pairs'
 Plug 'godlygeek/tabular', { 'on': 'Tabularize' }
@@ -101,8 +101,9 @@ for s:fname in s:core_conf_files
 endfor
 " core config }}}
 
+let g:coc_start_at_startup = 0
 if !has("nvim")
- let g:coc_start_at_startup = v:false
+    let g:coc_start_at_startup = 0
 endif
 " web development setting{{{
 func! ToggleJsFiletype() "{{{

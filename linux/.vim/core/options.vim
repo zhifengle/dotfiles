@@ -18,7 +18,9 @@ set number
 "set cc=80
 syntax on "打开高亮
 set autoread                                                                                                                                                                                    
-au CursorHold * checktime  
+"自动读取修改  
+"au CursorHold,CursorHoldI * silent! checktime
+au CursorHold * if getcmdwintype() == '' | checktime | endif
 set wildmenu
 "set cul "高亮光标所在行
 "set cuc
