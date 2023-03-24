@@ -18,7 +18,8 @@ sudo apt install caddy
 #tar -xf caddy-forwardproxy-naive.tar.xz
 #cd caddy-forwardproxy-naive
 
-wget https://github.com/zhifengle/gm_scripts/releases/download/v0.4.0/caddy-linux-amd64.tar.gz
+curl -sLf https://github.com/zhifengle/gm_scripts/releases/download/v0.4.0/caddy-linux-amd64.tar.gz -o caddy-linux-amd64.tar.gz
+mkdir caddy-linux-amd64
 tar -xf caddy-linux-amd64.tar.gz -C ./caddy-linux-amd64
 cd caddy-linux-amd64
 

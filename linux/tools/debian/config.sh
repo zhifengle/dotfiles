@@ -1,16 +1,19 @@
 #!/bin/bash
 
+apps_list = ""
 
 if ! command -v sudo &> /dev/null
 then
-    echo "sudo could not be found. Installing sudo..."
-    sudo apt-get update
-    sudo apt-get -y install sudo
-    echo "sudo has been installed."
+    apt-get update
+    apt-get -y install sudo
 else
     echo "sudo is already installed."
 fi
 
-echo "set mouse=
+sudo apt-get update
+sudo apt-get -y install "curl vim $apps_list"
+
+sudo tee -a /etc/vim/vimrc << EOF
 set ttymouse=
-" | sudo tee /etc/vim/vimrc
+set mouse=
+EOF
