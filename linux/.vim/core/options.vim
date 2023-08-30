@@ -3,9 +3,6 @@ colorscheme solarized8_flat "solarized8_flat desert molokai one
 "set termguicolors  "已在 vimrc 设置
 let mapleader="\<Space>"
 let maplocalleader="\<Space>"
-if has('autocmd')
-    filetype plugin indent on
-endif
 if has('syntax') && !exists('g:syntax_on')
     syntax enable
 endif
@@ -47,9 +44,6 @@ set ruler
 set hls
 set incsearch "在输入要搜索的文字时，vim会实时匹配
 set fileformats=unix,dos
-" colorscheme
-"set background=light
-"colorscheme one "solarized8_flat desert molokai one
 "缩进设置
 filetype indent on
 set tabstop=4 "让一个tab等于4个空格
@@ -57,8 +51,8 @@ set shiftwidth=4 "sw=4
 set expandtab "插入tab时以空格替换et
 "set softtabstop=4 "sts
 set smarttab "开启新行的sta
-set autoindent "自动缩进
-set smartindent "智能自动缩进
+set autoindent
+filetype plugin indent on
 set diffopt+=iwhite
 "https://github.com/tpope/vim-fugitive/issues/523
 set diffopt+=vertical
