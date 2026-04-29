@@ -114,11 +114,6 @@ func! ToggleJsFiletype() "{{{
     endif
 endfunc
 "}}}
-fun! EnableALEFix() "{{{
-    let g:ale_fix_on_save = 1
-endfunc
-command! -nargs=* EnableALEFix call EnableALEFix()
-"}}}
 let g:jsx_ext_required = 0
 autocmd BufRead,BufNewFile *.js nnoremap <F6> :%s/class=/className=/g<CR>
 "autocmd BufRead,BufNewFile *.js nmap <F7> :call ToggleJsFiletype()<CR>

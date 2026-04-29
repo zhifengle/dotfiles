@@ -51,7 +51,7 @@ set shiftwidth=4 "sw=4
 set expandtab "插入tab时以空格替换et
 "set softtabstop=4 "sts
 set smarttab "开启新行的sta
-set autoindent
+set autoindent "自动缩进
 filetype plugin indent on
 set diffopt+=iwhite
 "https://github.com/tpope/vim-fugitive/issues/523
@@ -69,8 +69,10 @@ if has("gui_running")
     set guioptions=
     set lines=36
     set columns=90
-    let &guifont='DejaVuSansMono NF:h14:cANSI'
-    let &guifontwide='Microsoft YaHei Mono:h14:cGB2312'
+    "let &guifont='DejaVuSansMonoM Nerd Font Mono:h14:cANSI'
+    "set guifont=Consolas:h12      "字体与字号
+    set guifont=DejaVuSansM\ Nerd\ Font\ Mono:h14      "字体与字号
+    "let &guifontwide='Microsoft YaHei Mono:h14:cGB2312'
     "let &guifontwide='等距更纱黑体 SC:cGB2312'
     "language messages zh_CN.utf-8
 endif

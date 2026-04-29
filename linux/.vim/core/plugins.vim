@@ -19,6 +19,7 @@ augroup e_plugins_setting
     autocmd FileType vimwiki nnoremap <Leader>p moo<Esc>"+p`o
     " close keep change buffer
     autocmd FileType vimwiki set hidden
+    autocmd FileType vimwiki set hidden
     " 自定义 hi; syn keyword
     highlight MyEmoji guifg=#FFF80A
     "autocmd Syntax vimwiki syn keyword pEmoji 💡 📌
@@ -87,13 +88,47 @@ let g:NERDCommentEmptyLines = 1
 " Enable trimming of trailing whitespace when uncommenting
 let g:NERDTrimTrailingWhitespace = 1
 
+" oxfmt setting {{{
+function! BuildOxfmtCmd() abort
+    let l:file = shellescape(expand('%:p'))
+    if executable('oxfmt')
+        return 'oxfmt --stdin-filepath ' . l:file
+    endif
+    return 'npx --no-install oxfmt --stdin-filepath ' . l:file
+endfunction
+let g:formatdef_oxfmt = 'BuildOxfmtCmd()'
+let g:formatters_javascript = ['oxfmt']
+let g:formatters_javascript_jsx = ['oxfmt']
+let g:formatters_javascriptreact = ['oxfmt']
+let g:formatters_typescript = ['oxfmt']
+let g:formatters_typescript_tsx = ['oxfmt']
+let g:formatters_typescriptreact = ['oxfmt']
+let g:formatters_json = ['oxfmt']
+let g:formatters_jsonc = ['oxfmt']
+let g:formatters_json5 = ['oxfmt']
+let g:formatters_yaml = ['oxfmt']
+let g:formatters_toml = ['oxfmt']
+let g:formatters_html = ['oxfmt']
+let g:formatters_vue = ['oxfmt']
+let g:formatters_css = ['oxfmt']
+let g:formatters_scss = ['oxfmt']
+let g:formatters_less = ['oxfmt']
+let g:formatters_markdown = ['oxfmt']
+let g:formatters_markdown_mdx = ['oxfmt']
+let g:formatters_mdx = ['oxfmt']
+let g:formatters_graphql = ['oxfmt']
+let g:formatters_handlebars = ['oxfmt']
+let g:formatters_hbs = ['oxfmt']
+command! -nargs=0 Oxfmt Autoformat
+" }}}
+
 nnoremap <Leader>ef :Autoformat<CR>
 nnoremap <Leader>ec :call plug#load('editorconfig-vim')<CR>:EditorConfigReload<CR>:e! %<CR>
 
 if executable('rg')
     set grepprg=rg\ --vimgrep
     set grepformat=%f:%l:%c:%m
-    let g:ctrlp_user_command = 'rg %s --files --color=never --glob ""'
+    "let g:ctrlp_user_command = 'rg %s --files --color=never --glob ""'
 endif
 
 let g:user_emmet_install_global = 0
@@ -247,7 +282,7 @@ if exists('g:plugs["coc.nvim"]')
     autocmd FileType vimwiki,markdown let b:coc_suggest_disable = 1
     nnoremap <silent> <Leader>k :call <SID>show_documentation()<CR>
     " overwrite Autoformat;
-    autocmd FileType javascript,typescript,typescriptreact,json,javascriptreact,typescript.tsx nnoremap <Leader>ef :Prettier<CR>
+    "autocmd FileType javascript,typescript,typescriptreact,json,javascriptreact,typescript.tsx nnoremap <Leader>ef :Prettier<CR>
     "}}}
 endif
 " }}}
